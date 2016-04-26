@@ -10,7 +10,7 @@
 #   cjdaly - initial API and implementation
 ####
 
-COMPUCANVAS_HOME=/home/pi/CompuCanvas
+COMPUCANVAS_HOME=/home/pi/CompuCanvas-code/CompuCanvas-scripts
 
 apt-get update
 apt-get upgrade -y
