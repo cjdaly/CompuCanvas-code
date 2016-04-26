@@ -20,11 +20,11 @@ blinkstick --add-udev-rule
 
 if [ ! -f /etc/modprobe.d/alsa-base.conf ]; then
   echo "Copying alsa-base.conf to /etc/modprobe.d ..."
-  cp "$COMPUCANVAS_HOME/code/alsa-base.conf" /etc/modprobe.d
+  cp "$COMPUCANVAS_HOME/alsa-base.conf" /etc/modprobe.d
 fi
 
 if ! grep "boot-sequence" /etc/rc.local
 then
   echo "Adding boot-sequence script to /etc/rc.local ..."
-  sed -i -e "s:^exit 0$:$COMPUCANVAS_HOME/code/boot-sequence.sh\n\nexit 0:" /etc/rc.local
+  sed -i -e "s:^exit 0$:$COMPUCANVAS_HOME/boot-sequence.sh\n\nexit 0:" /etc/rc.local
 fi
