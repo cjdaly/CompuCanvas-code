@@ -15,3 +15,4 @@ pip install ino
 
 git clone https://github.com/cjdaly/Show2-Eboogaloo.git ~/Show2-Eboogaloo
 ant -f ~/Show2-Eboogaloo/Show2-Eboogaloo-SETUP/setup.xml
+
