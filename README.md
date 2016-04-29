@@ -31,7 +31,7 @@ Burn Raspbian Jessie image onto microSD, boot and login (`user:pi ; pw:raspberry
 
     sudo passwd pi
 
-and set new password.  Now do:
+and set a new password.  Now do:
 
     sudo raspi-config
 
