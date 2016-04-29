@@ -38,9 +38,9 @@ For CompuCanvas systems that incorporate a USB connected Maxbotix Ultrasonic Ran
     ( stty -F /dev/ttyUSB0 57600 ; cat /dev/ttyUSB0 > foo.txt ) &
     tail -f foo.txt
 
-Use `jobs` to later find and kill the process (e.g. `kill %1`) creating a very large file.
+Use `jobs` to later find and kill the process (e.g. `kill %1`) appending to the file.
 
-### initial system configuration
+### new system configuration
 
 Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi ; pw:raspberry`), then do:
 
