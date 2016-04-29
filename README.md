@@ -27,7 +27,7 @@ The `mpg321` program has been installed for playing audio files.  Run `mpg321 --
 
 ### initial system configuration
 
-Burn Raspbian Jessie image onto microSD, boot and login (`user:pi ; pw:raspberry`), then do:
+Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi ; pw:raspberry`), then do:
 
     sudo passwd pi
 
