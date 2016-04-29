@@ -25,6 +25,21 @@ The `mpg321` program has been installed for playing audio files.  Run `mpg321 --
 
     mpg321 song.mp3
 
+#### Show2 with Weatherboard
+
+For CompuCanvas systems that incorporate the ODROID Show2 with WeatherBoard, see the [Show2-Eboogaloo repo](https://github.com/cjdaly/Show2-Eboogaloo).  When the Show2 is placed behind the canvas, the text needs to be _big_ to be readable.  For example:
+
+    show2.sh siz8 /0/Hello fg3 /1/World
+
+#### Maxbotix Ultrasonic Rangefinder
+
+For CompuCanvas systems that incorporate a USB connected Maxbotix Ultrasonic Rangefinder (like [from Adafruit](https://www.adafruit.com/products/1343)), try this to get the raw range data:
+
+    ( stty -F /dev/ttyUSB0 57600 ; cat /dev/ttyUSB0 > foo.txt ) &
+    tail -f foo.txt
+
+Use `jobs` to later find and kill the process (e.g. `kill %1`) creating a very large file.
+
 ### initial system configuration
 
 Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi ; pw:raspberry`), then do:
