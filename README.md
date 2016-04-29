@@ -42,7 +42,7 @@ and choose the option to expand filesystem.  May also want to go into internatio
 After the reboot, login again and do:
 
     git clone https://github.com/cjdaly/CompuCanvas-code.git
-    cd CompuCanvas/code
+    cd CompuCanvas-code/CompuCanvas-scripts/setup
     sudo ./sudo-setup.sh
     sudo reboot
     
