@@ -27,10 +27,10 @@ The `mpg321` program has been installed for playing audio files.  Run `mpg321 --
 
 #### Show2 with Weatherboard
 
-For CompuCanvas systems that incorporate the ODROID Show2 with WeatherBoard, see the [Show2-Eboogaloo repo](https://github.com/cjdaly/Show2-Eboogaloo).  When the Show2 is placed behind the canvas, the text needs to be _big_ to be readable.  For example:
+For CompuCanvas systems that incorporate the ODROID Show2 with WeatherBoard, see the [Show2-Eboogaloo repo](https://github.com/cjdaly/Show2-Eboogaloo).  When the Show2 is placed behind the canvas, the text needs to be _big_ to be readable.  It also helps to turn up the LCD backlight intensity.  For example:
 
     cd ~/Show2-Eboogaloo
-    ./show2.sh siz7 fg2 /0/Hello fg3 /1/World
+    ./show2.sh siz7 blt255 fg2 /0/Hello fg3 /1/World
 
 #### Maxbotix Ultrasonic Rangefinder
 
