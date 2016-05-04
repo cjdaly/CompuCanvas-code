@@ -1,0 +1,6 @@
+
+/c3.log
+/c3.PID
+
+/eclipse/configuration/org.eclipse.*/
+!/eclipse/configuration/org.eclipse.equinox.simpleconfigurator/

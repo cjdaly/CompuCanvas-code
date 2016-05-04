@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CompuCanvas Controller server
+Bundle-SymbolicName: net.locosoft.CompuCanvas.controller.server;singleton:=true
+Bundle-Version: 0.1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: javax.servlet,
+ javax.xml,
+ org.eclipse.osgi.services,
+ org.eclipse.equinox.http.jetty,
+ org.eclipse.equinox.http.registry,
+ org.eclipse.equinox.http.servlet
