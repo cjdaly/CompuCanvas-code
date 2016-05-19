@@ -9,28 +9,24 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.server.internal;
+package net.locosoft.CompuCanvas.controller.core;
 
-import java.io.IOException;
-import java.net.URL;
+public abstract class AbstractC3Service implements IC3ServiceInternal {
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+	private String _id;
 
-import org.osgi.service.http.HttpContext;
-
-public class C3HttpContext implements HttpContext {
-
-	public boolean handleSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		return true;
+	public String getServiceId() {
+		return _id;
 	}
 
-	public URL getResource(String name) {
-		return null;
+	public void serviceRegister(String id) {
+		_id = id;
 	}
 
-	public String getMimeType(String name) {
-		return null;
+	public void serviceStart() {
+	}
+
+	public void serviceStop() {
 	}
 
 }

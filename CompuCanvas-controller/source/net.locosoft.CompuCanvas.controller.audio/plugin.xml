@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="net.locosoft.CompuCanvas.controller.core.C3Service">
+      <C3Service
+            id="audio"
+            implementation="net.locosoft.CompuCanvas.controller.audio.internal.AudioService">
+      </C3Service>
+   </extension>
+
+</plugin>
