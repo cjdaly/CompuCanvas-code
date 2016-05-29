@@ -24,7 +24,8 @@ public interface IBlinkStick {
 	public enum Mode {
 		Directed, //
 		Random1, //
-		Random2
+		Random2, //
+		Random3
 	}
 
 	public String getSerial();

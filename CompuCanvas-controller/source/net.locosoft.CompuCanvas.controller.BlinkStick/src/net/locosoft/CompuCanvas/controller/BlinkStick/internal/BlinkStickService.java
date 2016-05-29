@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
-import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick.Mode;
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStickService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
@@ -149,15 +148,26 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 			if (random(100) >= _randomBlinkThreshold) {
 				int randomBlinkStickIndex = random(getBlinkStickCount());
 				IBlinkStick blinkStick = getBlinkStick(randomBlinkStickIndex);
-				if (blinkStick.getMode() == Mode.Random1) {
+
+				int limit = random(50) + 5;
+				String color = _BasicColors[random(_BasicColors.length)];
+
+				switch (blinkStick.getMode()) {
+				case Random1:
 					int index = random(blinkStick.getLEDCount());
-					int limit = random(80) + 5;
-					String color = _BasicColors[random(_BasicColors.length)];
 					blinkStick.setLED(index, color, limit);
-				} else if (blinkStick.getMode() == Mode.Random2) {
-					int limit = random(60) + 5;
-					String color = _BasicColors[random(_BasicColors.length)];
+					break;
+				case Random2:
 					blinkStick.setLED(-1, color, limit);
+					break;
+				case Random3:
+					int firstIndex = random(2) * (blinkStick.getLEDCount() / 2);
+					int lastIndex = firstIndex + (blinkStick.getLEDCount() / 2);
+					for (int i = firstIndex; i < lastIndex; i++) {
+						blinkStick.setLED(i, color, limit);
+					}
+					break;
+				default:
 				}
 			}
 

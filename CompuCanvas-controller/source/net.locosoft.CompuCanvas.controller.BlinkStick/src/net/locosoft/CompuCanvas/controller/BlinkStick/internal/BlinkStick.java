@@ -47,7 +47,7 @@ public class BlinkStick implements IBlinkStick {
 			_kind = Kind.Unknown;
 		}
 
-		_mode = Mode.Random2;
+		_mode = Mode.Random3;
 
 		switch (_kind) {
 		case Square:
