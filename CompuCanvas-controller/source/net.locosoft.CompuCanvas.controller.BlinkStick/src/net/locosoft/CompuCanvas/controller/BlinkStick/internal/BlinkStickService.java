@@ -149,11 +149,15 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 			if (random(100) >= _randomBlinkThreshold) {
 				int randomBlinkStickIndex = random(getBlinkStickCount());
 				IBlinkStick blinkStick = getBlinkStick(randomBlinkStickIndex);
-				if (blinkStick.getMode() == Mode.Random) {
+				if (blinkStick.getMode() == Mode.Random1) {
 					int index = random(blinkStick.getLEDCount());
 					int limit = random(80) + 5;
 					String color = _BasicColors[random(_BasicColors.length)];
 					blinkStick.setLED(index, color, limit);
+				} else if (blinkStick.getMode() == Mode.Random2) {
+					int limit = random(60) + 5;
+					String color = _BasicColors[random(_BasicColors.length)];
+					blinkStick.setLED(-1, color, limit);
 				}
 			}
 
