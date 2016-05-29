@@ -21,7 +21,8 @@ import java.io.OutputStreamWriter;
 
 public class ExecUtil {
 
-	public static int execCommand(String command, String processIn, OutputStream processOut) throws IOException {
+	public static int execCommand(String command, String processIn, OutputStream processOut, OutputStream processErr)
+			throws IOException {
 		int status = -1;
 
 		Process process = Runtime.getRuntime().exec(command);
@@ -31,13 +32,19 @@ public class ExecUtil {
 		outputStreamWriter.flush();
 		outputStreamWriter.close();
 
-		InputStream inputStream = process.getInputStream();
+		InputStream outStream = process.getInputStream();
+		InputStream errStream = process.getErrorStream();
 
 		byte[] buffer = new byte[1024];
 		int bytesRead;
-		while ((bytesRead = inputStream.read(buffer)) != -1) {
+
+		while ((bytesRead = outStream.read(buffer)) != -1) {
 			processOut.write(buffer, 0, bytesRead);
 		}
+		while ((bytesRead = errStream.read(buffer)) != -1) {
+			processErr.write(buffer, 0, bytesRead);
+		}
+
 		try {
 			status = process.waitFor();
 		} catch (InterruptedException ex) {
@@ -47,16 +54,28 @@ public class ExecUtil {
 		return status;
 	}
 
-	public static int execCommand(String command, StringBuilder processOut) {
+	public static int execCommand(String command, StringBuilder processOut, StringBuilder processErr) {
 		int status = -1;
 		if (processOut == null)
 			processOut = new StringBuilder();
+		if (processErr == null) {
+			processErr = new StringBuilder();
+		}
+
 		try {
 			Process process = Runtime.getRuntime().exec(command);
-			ProcessStreamReader reader = new ProcessStreamReader(process.getInputStream(), processOut);
-			reader.start();
+
+			ProcessStreamReader outReader = new ProcessStreamReader(process.getInputStream(), processOut);
+			ProcessStreamReader errReader = new ProcessStreamReader(process.getErrorStream(), processErr);
+
+			outReader.start();
+			errReader.start();
+
 			status = process.waitFor();
-			reader.join();
+
+			outReader.join();
+			errReader.join();
+
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (InterruptedException ex) {

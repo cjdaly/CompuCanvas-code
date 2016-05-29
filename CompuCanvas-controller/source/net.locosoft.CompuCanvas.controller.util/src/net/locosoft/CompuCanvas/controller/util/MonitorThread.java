@@ -30,22 +30,39 @@ public abstract class MonitorThread implements Runnable {
 	}
 
 	public void stop() {
-		_stopping = true;
+		stop(false);
 	}
 
-	public boolean isRunning() {
-		return !(_stopped || _stopping);
+	public void stop(boolean waitForStop) {
+		_stopping = true;
+
+		if (waitForStop) {
+			while (!isStopped()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					//
+				}
+			}
+		}
+	}
+
+	public boolean isStopped() {
+		return _stopped;
 	}
 
 	public void run() {
 		try {
+			_stopped = false;
 			while (!_stopping) {
 				long preSleepTime = getPreSleepTime();
 				if (preSleepTime >= 0) {
 					Thread.sleep(preSleepTime);
 				}
 
-				_stopping = !cycle();
+				if (!_stopping) {
+					_stopping = !cycle();
+				}
 
 				if (!_stopping) {
 					long postSleepTime = getPostSleepTime();
