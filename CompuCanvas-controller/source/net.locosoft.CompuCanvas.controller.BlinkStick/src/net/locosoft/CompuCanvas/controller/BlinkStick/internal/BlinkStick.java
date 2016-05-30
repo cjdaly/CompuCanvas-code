@@ -39,15 +39,8 @@ public class BlinkStick implements IBlinkStick {
 		matcher = _descriptionPattern.matcher(_infoText);
 		_description = matcher.find() ? matcher.group(1) : "?";
 
-		if (_description.contains("Nano")) {
-			_kind = Kind.Nano;
-		} else if (_description.contains("BlinkStick")) {
-			_kind = Kind.Squip;
-		} else {
-			_kind = Kind.Unknown;
-		}
-
-		_mode = Mode.Random3;
+		_kind = initKind();
+		_mode = initMode();
 
 		switch (_kind) {
 		case Square:
@@ -62,6 +55,46 @@ public class BlinkStick implements IBlinkStick {
 		default:
 			_ledCount = 1;
 		}
+	}
+
+	private Kind initKind() {
+		String configKind = getDeviceConfig("kind", null);
+		if (configKind != null) {
+			try {
+				return Kind.valueOf(configKind);
+			} catch (IllegalArgumentException ex) {
+				//
+			}
+		}
+
+		String description = getDescription();
+		if (description.contains("Nano")) {
+			return Kind.Nano;
+		} else if (description.contains("BlinkStick")) {
+			return Kind.Squip;
+		} else {
+			return Kind.Unknown;
+		}
+	}
+
+	private Mode initMode() {
+		String configMode = getDeviceConfig("initMode", null);
+		if (configMode != null) {
+			try {
+				return Mode.valueOf(configMode);
+			} catch (IllegalArgumentException ex) {
+				//
+			}
+		}
+		return Mode.Random3;
+	}
+
+	private static final String _deviceConfigPrefix = "c3.service.BlinkStick.device.";
+
+	private String getDeviceConfig(String keySuffix, String defaultValue) {
+		String config = _blinkStickService.getCoreService()
+				.getModelConfig(_deviceConfigPrefix + getSerial() + "." + keySuffix);
+		return (config == null) ? defaultValue : config;
 	}
 
 	public String getSerial() {

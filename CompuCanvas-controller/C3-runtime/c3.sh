@@ -33,7 +33,7 @@ case "$1" in
     
     # CompuCanvas model
     if [ -z "$2" ]; then
-      CC_MODEL_ID="A0"
+      CC_MODEL_ID="CCd"
     else
       CC_MODEL_ID="$2"
     fi

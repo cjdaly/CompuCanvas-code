@@ -17,4 +17,6 @@ public interface ICoreService extends IC3Service {
 
 	public <C3S extends IC3Service> IC3Service getService(Class<C3S> serviceInterface);
 
+	public String getModelConfig(String key);
+
 }

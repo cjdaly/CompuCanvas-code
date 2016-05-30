@@ -17,4 +17,5 @@ public interface IC3Service {
 
 	public Class<? extends IC3Service> getServiceInterface();
 
+	public ICoreService getCoreService();
 }

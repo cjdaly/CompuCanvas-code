@@ -14,19 +14,32 @@ package net.locosoft.CompuCanvas.controller.core;
 public abstract class AbstractC3Service implements IC3ServiceInternal {
 
 	private String _id;
+	private ICoreService _coreService;
 
 	public String getServiceId() {
 		return _id;
+	}
+
+	public ICoreService getCoreService() {
+		return _coreService;
 	}
 
 	public void serviceRegister(String id) {
 		_id = id;
 	}
 
+	public void serviceInit(ICoreService coreService) {
+		_coreService = coreService;
+	}
+
 	public void serviceStart() {
 	}
 
 	public void serviceStop() {
+	}
+
+	public <C3S extends IC3Service> IC3Service serviceLookup(Class<C3S> serviceInterface) {
+		return getCoreService().getService(serviceInterface);
 	}
 
 }

@@ -18,6 +18,10 @@ import org.eclipse.core.runtime.Path;
 
 public class C3Util {
 
+	public static String getCompuCanvasModelId() {
+		return System.getProperty("net.locosoft.CompuCanvas.modelId");
+	}
+
 	public static String getC3InternalVersion() {
 		return System.getProperty("net.locosoft.CompuCanvas.controller.internalVersion");
 	}

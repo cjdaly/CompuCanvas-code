@@ -89,7 +89,8 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				_blinkStickArray.add(blinkStick);
 				System.out.println("BlinkStick detected: " + //
 						blinkStick.getSerial() + //
-						" (" + blinkStick.getKind() + ")");
+						" (kind: " + blinkStick.getKind() + //
+						", mode:" + blinkStick.getMode() + ")");
 				infoTmp = infoTmp.substring(0, index);
 				index = infoTmp.lastIndexOf("Found device:");
 			}
@@ -116,6 +117,10 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 			return _commandQueue.getFirst();
 	}
 
+	synchronized int countCommands() {
+		return _commandQueue.size();
+	}
+
 	synchronized void clearCommands() {
 		_commandQueue.clear();
 	}
@@ -133,6 +138,11 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 					System.out.println(" stdout: " + blinkStickOut);
 					System.out.println(" stderr: " + blinkStickErr);
 				}
+			}
+
+			if (countCommands() > 32) {
+				System.out.println("BlinkStick service dumping command queue!");
+				clearCommands();
 			}
 
 			return true;

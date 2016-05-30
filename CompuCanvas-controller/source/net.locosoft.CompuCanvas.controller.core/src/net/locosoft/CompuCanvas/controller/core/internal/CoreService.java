@@ -11,7 +11,9 @@
 
 package net.locosoft.CompuCanvas.controller.core.internal;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.TreeMap;
 
 import org.osgi.framework.BundleContext;
@@ -21,6 +23,7 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3ServiceInternal;
 import net.locosoft.CompuCanvas.controller.core.ICoreService;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
+import net.locosoft.CompuCanvas.controller.util.FileUtil;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class CoreService extends AbstractC3Service implements ICoreService {
@@ -33,6 +36,11 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	public <C3S extends IC3Service> IC3Service getService(Class<C3S> serviceInterface) {
 		return _ifaceToService.get(serviceInterface);
+	}
+
+	public String getModelConfig(String key) {
+		return (_modelConfig == null) ? null //
+				: _modelConfig.getProperty(key);
 	}
 
 	// IC3Service
@@ -52,8 +60,20 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	void activatorStart() {
 		System.out.println("Starting c3...");
+		System.out.println("C3 internal version: " + C3Util.getC3InternalVersion());
+		System.out.println("CompuCanvas model: " + C3Util.getCompuCanvasModelId());
+
+		String modelConfigFilePath = C3Util.getC3ConfigDir() + "/model/" + C3Util.getCompuCanvasModelId()
+				+ ".properties";
+		File modelConfigFile = new File(modelConfigFilePath);
+		if (modelConfigFile.exists()) {
+			_modelConfig = FileUtil.loadPropertiesFile(modelConfigFilePath);
+			System.out.println("Loaded config: " + modelConfigFilePath);
+		}
+
 		for (IC3ServiceInternal c3Service : _idToService.values()) {
 			System.out.println("Starting service [" + c3Service.getServiceId() + "] ...");
+			c3Service.serviceInit(this);
 			c3Service.serviceStart();
 			System.out.println("Service [" + c3Service.getServiceId() + "] started.");
 		}
@@ -96,4 +116,5 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	private TreeMap<String, IC3ServiceInternal> _idToService;
 	private HashMap<Class<? extends IC3Service>, IC3ServiceInternal> _ifaceToService;
 
+	private Properties _modelConfig;
 }

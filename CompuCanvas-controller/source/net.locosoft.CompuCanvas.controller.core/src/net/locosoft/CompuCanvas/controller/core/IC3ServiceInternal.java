@@ -15,8 +15,12 @@ public interface IC3ServiceInternal extends IC3Service {
 
 	public void serviceRegister(String id);
 
+	public void serviceInit(ICoreService coreService);
+
 	public void serviceStart();
 
 	public void serviceStop();
+
+	public <C3S extends IC3Service> IC3Service serviceLookup(Class<C3S> serviceInterface);
 
 }
