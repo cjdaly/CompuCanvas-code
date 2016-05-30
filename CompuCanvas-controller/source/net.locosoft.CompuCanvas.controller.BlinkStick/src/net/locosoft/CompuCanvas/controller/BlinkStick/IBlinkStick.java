@@ -38,6 +38,10 @@ public interface IBlinkStick {
 
 	public void setMode(Mode mode);
 
+	public int getLimitMin();
+
+	public int getLimitMax();
+
 	public int getLEDCount();
 
 	public void setLED(int index, String color);

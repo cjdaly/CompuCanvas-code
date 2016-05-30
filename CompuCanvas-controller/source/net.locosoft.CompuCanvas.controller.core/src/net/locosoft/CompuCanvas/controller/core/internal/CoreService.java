@@ -72,10 +72,10 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		}
 
 		for (IC3ServiceInternal c3Service : _idToService.values()) {
-			System.out.println("Starting service [" + c3Service.getServiceId() + "] ...");
+			System.out.println("Starting service '" + c3Service.getServiceId() + "' ...");
 			c3Service.serviceInit(this);
 			c3Service.serviceStart();
-			System.out.println("Service [" + c3Service.getServiceId() + "] started.");
+			System.out.println("Service '" + c3Service.getServiceId() + "' started.");
 		}
 		_coreMonitor.start();
 	}
@@ -102,9 +102,9 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 			System.out.println("Stopping c3...");
 
 			for (IC3ServiceInternal c3Service : _idToService.values()) {
-				System.out.println("Stopping service [" + c3Service.getServiceId() + "] ...");
+				System.out.println("Stopping service '" + c3Service.getServiceId() + "' ...");
 				c3Service.serviceStop();
-				System.out.println("Service [" + c3Service.getServiceId() + "] stopped.");
+				System.out.println("Service '" + c3Service.getServiceId() + "' stopped.");
 			}
 
 			System.out.println("All c3 services stopped.");

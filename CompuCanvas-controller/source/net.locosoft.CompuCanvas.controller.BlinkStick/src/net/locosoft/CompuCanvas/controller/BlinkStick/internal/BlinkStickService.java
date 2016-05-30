@@ -151,7 +151,7 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 
 	private MonitorThread _randomEnqueuer = new MonitorThread() {
 		protected long getPreSleepTime() {
-			return 200;
+			return 400;
 		}
 
 		public boolean cycle() throws Exception {
@@ -159,8 +159,8 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				int randomBlinkStickIndex = random(getBlinkStickCount());
 				IBlinkStick blinkStick = getBlinkStick(randomBlinkStickIndex);
 
-				int limit = random(50) + 5;
-				String color = _BasicColors[random(_BasicColors.length)];
+				int limit = random(blinkStick.getLimitMin(), blinkStick.getLimitMax() + 1);
+				String color = _BasicColors[random(3, _BasicColors.length)];
 
 				switch (blinkStick.getMode()) {
 				case Random1:
@@ -186,6 +186,10 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 
 		private int random(int range) {
 			return ThreadLocalRandom.current().nextInt(range);
+		}
+
+		private int random(int minInclusive, int maxExclusive) {
+			return ThreadLocalRandom.current().nextInt(minInclusive, maxExclusive);
 		}
 
 		private int _randomBlinkThreshold = 70; // 0 - 100
