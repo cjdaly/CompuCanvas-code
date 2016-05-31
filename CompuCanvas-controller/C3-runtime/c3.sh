@@ -33,7 +33,11 @@ case "$1" in
     
     # CompuCanvas model
     if [ -z "$2" ]; then
-      CC_MODEL_ID="CCd"
+      if [ -f "$C3_HOME/data/CC.id" ]; then
+        CC_MODEL_ID=`cat $C3_HOME/data/CC.id`
+      else
+        CC_MODEL_ID="CCd"
+      fi
     else
       CC_MODEL_ID="$2"
     fi
