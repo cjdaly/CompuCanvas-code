@@ -11,10 +11,10 @@
 ####
 
 # CompuCanvas model
-if [ -z "$2" ]; then
+if [ -z "$1" ]; then
   CC_MODEL_ID="CCd"
 else
-  CC_MODEL_ID="$2"
+  CC_MODEL_ID="$1"
 fi
 
 COMPUCANVAS_SCRIPTS_HOME=/home/pi/CompuCanvas-code/CompuCanvas-scripts
