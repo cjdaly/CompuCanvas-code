@@ -44,8 +44,8 @@ public class BlinkStick implements IBlinkStick {
 		_kind = initKind();
 		_mode = initMode();
 
-		_limitMin = initInt("limitMin", 10);
-		_limitMax = initInt("limitMax", 60);
+		_limitMin = getDeviceConfigInt("limitMin", 10);
+		_limitMax = getDeviceConfigInt("limitMax", 60);
 
 		switch (_kind) {
 		case Square:
@@ -94,23 +94,12 @@ public class BlinkStick implements IBlinkStick {
 		return Mode.Random3;
 	}
 
-	private int initInt(String keySuffix, int defaultValue) {
-		String configValue = getDeviceConfig(keySuffix, null);
-		if (configValue == null)
-			return defaultValue;
-		try {
-			return Integer.parseInt(configValue);
-		} catch (NumberFormatException ex) {
-			return defaultValue;
-		}
+	private String getDeviceConfig(String keySuffix, String defaultValue) {
+		return _blinkStickService.serviceGetConfig("device." + getSerial() + "." + keySuffix, defaultValue);
 	}
 
-	private static final String _deviceConfigPrefix = "c3.service.BlinkStick.device.";
-
-	private String getDeviceConfig(String keySuffix, String defaultValue) {
-		String config = _blinkStickService.getCoreService()
-				.getModelConfig(_deviceConfigPrefix + getSerial() + "." + keySuffix);
-		return (config == null) ? defaultValue : config;
+	private int getDeviceConfigInt(String keySuffix, int defaultValue) {
+		return _blinkStickService.serviceGetConfigInt("device." + getSerial() + "." + keySuffix, defaultValue);
 	}
 
 	public String getSerial() {

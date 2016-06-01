@@ -42,4 +42,19 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		return getCoreService().getService(serviceInterface);
 	}
 
+	public String serviceGetConfig(String keySuffix, String defaultValue) {
+		String key = "c3.service." + getServiceId() + "." + keySuffix;
+		return getCoreService().getModelConfig(key);
+	}
+
+	public int serviceGetConfigInt(String keySuffix, int defaultValue) {
+		String key = "c3.service." + getServiceId() + "." + keySuffix;
+		String value = getCoreService().getModelConfig(key);
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException ex) {
+			return defaultValue;
+		}
+	}
+
 }

@@ -23,4 +23,8 @@ public interface IC3ServiceInternal extends IC3Service {
 
 	public <C3S extends IC3Service> IC3Service serviceLookup(Class<C3S> serviceInterface);
 
+	public String serviceGetConfig(String keySuffix, String defaultValue);
+
+	public int serviceGetConfigInt(String keySuffix, int defaultValue);
+
 }

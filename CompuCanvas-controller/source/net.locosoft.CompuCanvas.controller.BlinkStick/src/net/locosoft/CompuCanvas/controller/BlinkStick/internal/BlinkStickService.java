@@ -150,12 +150,20 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 	};
 
 	private MonitorThread _randomEnqueuer = new MonitorThread() {
-		protected long getPreSleepTime() {
-			return 400;
+		private int _randomSkipPercent;
+		private int _randomDelayMillis;
+
+		protected void init() {
+			_randomSkipPercent = serviceGetConfigInt("random.skipPercent", 70);
+			_randomDelayMillis = serviceGetConfigInt("random.delayMillis", 500);
+		}
+
+		protected long getPreSleepMillis() {
+			return _randomDelayMillis;
 		}
 
 		public boolean cycle() throws Exception {
-			if (random(100) >= _randomBlinkThreshold) {
+			if (random(100) >= _randomSkipPercent) {
 				int randomBlinkStickIndex = random(getBlinkStickCount());
 				IBlinkStick blinkStick = getBlinkStick(randomBlinkStickIndex);
 
@@ -191,9 +199,6 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 		private int random(int minInclusive, int maxExclusive) {
 			return ThreadLocalRandom.current().nextInt(minInclusive, maxExclusive);
 		}
-
-		private int _randomBlinkThreshold = 70; // 0 - 100
-
 	};
 
 }

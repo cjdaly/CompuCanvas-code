@@ -17,15 +17,19 @@ public abstract class MonitorThread implements Runnable {
 	private boolean _stopping = false;
 	private boolean _stopped = true;
 
-	protected long getPreSleepTime() {
+	protected long getPreSleepMillis() {
 		return -1;
 	}
 
-	protected long getPostSleepTime() {
+	protected long getPostSleepMillis() {
 		return 100;
 	}
 
+	protected void init() {
+	}
+
 	public void start() {
+		init();
 		_thread.start();
 	}
 
@@ -55,9 +59,9 @@ public abstract class MonitorThread implements Runnable {
 		try {
 			_stopped = false;
 			while (!_stopping) {
-				long preSleepTime = getPreSleepTime();
-				if (preSleepTime >= 0) {
-					Thread.sleep(preSleepTime);
+				long preSleepMillis = getPreSleepMillis();
+				if (preSleepMillis >= 0) {
+					Thread.sleep(preSleepMillis);
 				}
 
 				if (!_stopping) {
@@ -65,9 +69,9 @@ public abstract class MonitorThread implements Runnable {
 				}
 
 				if (!_stopping) {
-					long postSleepTime = getPostSleepTime();
-					if (postSleepTime >= 0) {
-						Thread.sleep(postSleepTime);
+					long postSleepMillis = getPostSleepMillis();
+					if (postSleepMillis >= 0) {
+						Thread.sleep(postSleepMillis);
 					}
 				}
 			}

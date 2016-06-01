@@ -29,8 +29,9 @@ blinkstick --add-udev-rule
 echo "Copying alsa-base.conf to /etc/modprobe.d ..."
 cp "$COMPUCANVAS_SCRIPTS_HOME/setup/alsa-base.conf" /etc/modprobe.d
 
-echo "Setting CompuCanvas model '$CC_MODEL_ID' in $COMPUCANVAS_C3_HOME/data/CC.id"
-echo "$CC_MODEL_ID" > $COMPUCANVAS_C3_HOME/data/CC.id
+echo "Setting CompuCanvas model '$CC_MODEL_ID' in $COMPUCANVAS_C3_HOME/config/CC.id"
+sudo -u pi touch "$COMPUCANVAS_C3_HOME/config/CC.id"
+echo "$CC_MODEL_ID" > "$COMPUCANVAS_C3_HOME/config/CC.id"
 
 echo "Adding startup callouts to /etc/rc.local ..."
 sed -i -e "s:^exit 0$:$COMPUCANVAS_SCRIPTS_HOME/boot-sequence.sh\n\nexit 0:" /etc/rc.local

@@ -89,7 +89,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	private MonitorThread _coreMonitor = new MonitorThread() {
 
-		protected long getPreSleepTime() {
+		protected long getPreSleepMillis() {
 			return 1000;
 		}
 
