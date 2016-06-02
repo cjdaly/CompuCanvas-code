@@ -11,7 +11,8 @@
          point="net.locosoft.CompuCanvas.controller.core.C3Service">
       <C3Service
             id="core"
-            implementation="net.locosoft.CompuCanvas.controller.core.internal.CoreService">
+            implementation="net.locosoft.CompuCanvas.controller.core.internal.CoreService"
+            priority="100">
       </C3Service>
    </extension>
 </plugin>

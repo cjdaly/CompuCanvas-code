@@ -11,24 +11,36 @@
 
 package net.locosoft.CompuCanvas.controller.core;
 
+import net.locosoft.CompuCanvas.controller.util.C3Util;
+
 public abstract class AbstractC3Service implements IC3ServiceInternal {
 
 	private String _id;
+	private int _priority;
 	private ICoreService _coreService;
 
-	public String getServiceId() {
+	// IC3Service
+
+	public final String getServiceId() {
 		return _id;
 	}
 
-	public ICoreService getCoreService() {
+	public final ICoreService getCoreService() {
 		return _coreService;
 	}
 
-	public void serviceRegister(String id) {
-		_id = id;
+	// IC3ServiceInternal
+
+	public final int serviceGetPriority() {
+		return _priority;
 	}
 
-	public void serviceInit(ICoreService coreService) {
+	public final void serviceRegister(String id, int priority) {
+		_id = id;
+		_priority = priority;
+	}
+
+	public final void serviceInit(ICoreService coreService) {
 		_coreService = coreService;
 	}
 
@@ -38,23 +50,19 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 	public void serviceStop() {
 	}
 
-	public <C3S extends IC3Service> IC3Service serviceLookup(Class<C3S> serviceInterface) {
+	public final <C3S extends IC3Service> IC3Service serviceLookup(Class<C3S> serviceInterface) {
 		return getCoreService().getService(serviceInterface);
 	}
 
-	public String serviceGetConfig(String keySuffix, String defaultValue) {
+	public final String serviceGetConfig(String keySuffix, String defaultValue) {
 		String key = "c3.service." + getServiceId() + "." + keySuffix;
 		return getCoreService().getModelConfig(key);
 	}
 
-	public int serviceGetConfigInt(String keySuffix, int defaultValue) {
+	public final int serviceGetConfigInt(String keySuffix, int defaultValue) {
 		String key = "c3.service." + getServiceId() + "." + keySuffix;
 		String value = getCoreService().getModelConfig(key);
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException ex) {
-			return defaultValue;
-		}
+		return C3Util.parseInt(value, defaultValue);
 	}
 
 }

@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.core.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -23,6 +24,7 @@ import org.osgi.framework.BundleContext;
 
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3ServiceInternal;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class CoreActivator implements BundleActivator {
 
@@ -40,6 +42,7 @@ public class CoreActivator implements BundleActivator {
 	private CoreService registerC3Services(BundleContext bundleContext) {
 		TreeMap<String, IC3ServiceInternal> idToService = new TreeMap<String, IC3ServiceInternal>();
 		HashMap<Class<? extends IC3Service>, IC3ServiceInternal> ifaceToService = new HashMap<Class<? extends IC3Service>, IC3ServiceInternal>();
+		ArrayList<IC3ServiceInternal> orderedServices = new ArrayList<IC3ServiceInternal>();
 		CoreService coreService = null;
 
 		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
@@ -48,17 +51,20 @@ public class CoreActivator implements BundleActivator {
 		for (IConfigurationElement configurationElement : configurationElements) {
 			try {
 				String id = configurationElement.getAttribute("id");
+				int priority = C3Util.parseInt(configurationElement.getAttribute("priority"), 0);
+
 				Object extension = configurationElement.createExecutableExtension("implementation");
 
 				IC3ServiceInternal c3Service = (IC3ServiceInternal) extension;
-				c3Service.serviceRegister(id);
+				c3Service.serviceRegister(id, priority);
 
 				idToService.put(id, c3Service);
 				ifaceToService.put(c3Service.getServiceInterface(), c3Service);
+				orderedServices.add(c3Service);
 
 				if (c3Service instanceof CoreService) {
 					coreService = (CoreService) c3Service;
-					coreService.activatorInit(bundleContext, idToService, ifaceToService);
+					coreService.activatorInit(bundleContext, idToService, ifaceToService, orderedServices);
 				}
 
 			} catch (ClassCastException ex) {

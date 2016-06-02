@@ -90,7 +90,7 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				System.out.println("BlinkStick detected: " + //
 						blinkStick.getSerial() + //
 						" (kind: " + blinkStick.getKind() + //
-						", mode:" + blinkStick.getMode() + ")");
+						", mode: " + blinkStick.getMode() + ")");
 				infoTmp = infoTmp.substring(0, index);
 				index = infoTmp.lastIndexOf("Found device:");
 			}

@@ -58,10 +58,14 @@ public class C3Util {
 	public static int getC3Pid() {
 		String c3HomeDir = getC3HomeDir();
 		String c3PIDFile = FileUtil.readFileToString(c3HomeDir + "/c3.PID", false);
+		return parseInt(c3PIDFile.trim(), -1);
+	}
+
+	public static int parseInt(String value, int defaultValue) {
 		try {
-			return Integer.parseInt(c3PIDFile.trim());
+			return Integer.parseInt(value);
 		} catch (NumberFormatException ex) {
-			return -1;
+			return defaultValue;
 		}
 	}
 

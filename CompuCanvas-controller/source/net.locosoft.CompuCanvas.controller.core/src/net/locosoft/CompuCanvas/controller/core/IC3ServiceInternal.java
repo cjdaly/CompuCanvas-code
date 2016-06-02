@@ -13,7 +13,9 @@ package net.locosoft.CompuCanvas.controller.core;
 
 public interface IC3ServiceInternal extends IC3Service {
 
-	public void serviceRegister(String id);
+	public int serviceGetPriority();
+
+	public void serviceRegister(String id, int priority);
 
 	public void serviceInit(ICoreService coreService);
 

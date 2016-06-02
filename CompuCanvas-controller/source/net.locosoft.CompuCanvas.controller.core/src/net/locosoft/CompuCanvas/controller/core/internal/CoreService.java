@@ -12,6 +12,9 @@
 package net.locosoft.CompuCanvas.controller.core.internal;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -52,10 +55,12 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	// for CoreActivator
 
 	void activatorInit(BundleContext bundleContext, TreeMap<String, IC3ServiceInternal> idToService,
-			HashMap<Class<? extends IC3Service>, IC3ServiceInternal> ifaceToService) {
+			HashMap<Class<? extends IC3Service>, IC3ServiceInternal> ifaceToService,
+			ArrayList<IC3ServiceInternal> orderedServices) {
 		_bundleContext = bundleContext;
 		_idToService = idToService;
 		_ifaceToService = ifaceToService;
+		_orderedServices = orderedServices;
 	}
 
 	void activatorStart() {
@@ -71,12 +76,33 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 			System.out.println("Loaded config: " + modelConfigFilePath);
 		}
 
-		for (IC3ServiceInternal c3Service : _idToService.values()) {
-			System.out.println("Starting service '" + c3Service.getServiceId() + "' ...");
+		// order services
+		Collections.sort(_orderedServices, new Comparator<IC3ServiceInternal>() {
+			public int compare(IC3ServiceInternal s1, IC3ServiceInternal s2) {
+				return s1.serviceGetPriority() - s2.serviceGetPriority();
+			}
+		});
+
+		// initialize services
+		System.out.print("Initializing services: ");
+		for (int i = _orderedServices.size() - 1; i >= 0; i--) {
+			IC3ServiceInternal c3Service = _orderedServices.get(i);
+			System.out.print(c3Service.getServiceId());
+			if (i != 0) {
+				System.out.print(", ");
+			}
 			c3Service.serviceInit(this);
+		}
+		System.out.println(".");
+
+		// start services
+		for (int i = _orderedServices.size() - 1; i >= 0; i--) {
+			IC3ServiceInternal c3Service = _orderedServices.get(i);
+			System.out.println("Starting service '" + c3Service.getServiceId() + "' ...");
 			c3Service.serviceStart();
 			System.out.println("Service '" + c3Service.getServiceId() + "' started.");
 		}
+
 		_coreMonitor.start();
 	}
 
@@ -101,7 +127,9 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		public void endCycle() throws Exception {
 			System.out.println("Stopping c3...");
 
-			for (IC3ServiceInternal c3Service : _idToService.values()) {
+			// stop services
+			for (int i = 0; i < _orderedServices.size(); i++) {
+				IC3ServiceInternal c3Service = _orderedServices.get(i);
 				System.out.println("Stopping service '" + c3Service.getServiceId() + "' ...");
 				c3Service.serviceStop();
 				System.out.println("Service '" + c3Service.getServiceId() + "' stopped.");
@@ -115,6 +143,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	private BundleContext _bundleContext;
 	private TreeMap<String, IC3ServiceInternal> _idToService;
 	private HashMap<Class<? extends IC3Service>, IC3ServiceInternal> _ifaceToService;
+	private ArrayList<IC3ServiceInternal> _orderedServices;
 
 	private Properties _modelConfig;
 }
