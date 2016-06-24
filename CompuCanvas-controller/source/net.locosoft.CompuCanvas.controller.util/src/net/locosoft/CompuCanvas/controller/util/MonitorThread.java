@@ -58,6 +58,7 @@ public abstract class MonitorThread implements Runnable {
 	public void run() {
 		try {
 			_stopped = false;
+			beginCycle();
 			while (!_stopping) {
 				long preSleepMillis = getPreSleepMillis();
 				if (preSleepMillis >= 0) {
@@ -88,6 +89,9 @@ public abstract class MonitorThread implements Runnable {
 	 * @return <code>true</code> to continue cycling, <code>false</code> to stop
 	 */
 	public abstract boolean cycle() throws Exception;
+
+	public void beginCycle() throws Exception {
+	}
 
 	public void endCycle() throws Exception {
 	}

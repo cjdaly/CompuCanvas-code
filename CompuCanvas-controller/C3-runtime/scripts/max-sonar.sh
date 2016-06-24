@@ -1,3 +1,4 @@
+#!/bin/bash
 ####
 # Copyright (c) 2016 Chris J Daly (github user cjdaly)
 # All rights reserved. This program and the accompanying materials
@@ -9,12 +10,12 @@
 #   cjdaly - initial API and implementation
 ####
 
-c3.service.BlinkStick.random.skipPercent=50
-c3.service.BlinkStick.random.delayMillis=2000
+if [ -z "$2" ]; then
+  MAX_SONAR_DEV=/dev/ttyUSB0
+else
+  MAX_SONAR_DEV=$2
+fi
 
-c3.service.BlinkStick.device.BS004490-3.0.kind=Square
-c3.service.BlinkStick.device.BS004490-3.0.limitMin=20
-c3.service.BlinkStick.device.BS004490-3.0.limitMax=80
+echo "MaxSonar: device=$MAX_SONAR_DEV"
 
-c3.service.Show2.devicePath=/dev/ttyUSB0
-c3.service.Show2.defaultRotation=3
+( echo "MaxSonar: PID=$$" ; stty -F $MAX_SONAR_DEV 57600 ; cat $MAX_SONAR_DEV )

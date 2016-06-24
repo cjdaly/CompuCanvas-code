@@ -15,4 +15,6 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public interface IAudioService extends IC3Service {
 
+	void speak(String message);
+
 }

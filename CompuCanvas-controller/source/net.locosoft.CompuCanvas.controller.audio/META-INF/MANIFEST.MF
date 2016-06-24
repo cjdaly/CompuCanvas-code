@@ -5,6 +5,7 @@ Bundle-SymbolicName: net.locosoft.CompuCanvas.controller.audio;singleton:=true
 Bundle-Version: 0.1.0
 Require-Bundle: org.eclipse.osgi,
  org.eclipse.core.runtime,
- net.locosoft.CompuCanvas.controller.core
+ net.locosoft.CompuCanvas.controller.core,
+ net.locosoft.CompuCanvas.controller.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: net.locosoft.CompuCanvas.controller.audio

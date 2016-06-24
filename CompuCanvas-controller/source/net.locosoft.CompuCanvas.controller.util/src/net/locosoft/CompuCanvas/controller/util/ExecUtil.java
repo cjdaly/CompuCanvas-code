@@ -108,4 +108,78 @@ public class ExecUtil {
 		}
 	}
 
+	//
+
+	public static interface LineReader {
+		public boolean isDone();
+
+		public void readLine(String line);
+	}
+
+	public static class IgnoreLineReader implements LineReader {
+
+		public boolean isDone() {
+			return false;
+		}
+
+		public void readLine(String line) {
+		}
+	}
+
+	public static class ErrorLineReader implements LineReader {
+		public boolean isDone() {
+			return false;
+		}
+
+		public void readLine(String line) {
+			System.err.println(line);
+		}
+	}
+
+	public static void execCommand(String command, LineReader outputLineReader, LineReader errorLineReader) {
+		if (outputLineReader == null) {
+			outputLineReader = new IgnoreLineReader();
+		}
+		if (errorLineReader == null) {
+			errorLineReader = new ErrorLineReader();
+		}
+
+		try {
+			Process process = Runtime.getRuntime().exec(command);
+			ProcessLineReader outReader = new ProcessLineReader(process.getInputStream(), outputLineReader);
+			ProcessLineReader errReader = new ProcessLineReader(process.getErrorStream(), errorLineReader);
+			outReader.start();
+			errReader.start();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static class ProcessLineReader extends Thread {
+		private InputStream _inputStream;
+		private LineReader _lineReader;
+
+		ProcessLineReader(InputStream inputStream, LineReader lineReader) {
+			_inputStream = inputStream;
+			_lineReader = lineReader;
+		}
+
+		public void run() {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(_inputStream))) {
+				do {
+					String line = reader.readLine();
+					if (line != null) {
+						_lineReader.readLine(line);
+					}
+					Thread.sleep(10);
+				} while (!_lineReader.isDone());
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	}
+
 }

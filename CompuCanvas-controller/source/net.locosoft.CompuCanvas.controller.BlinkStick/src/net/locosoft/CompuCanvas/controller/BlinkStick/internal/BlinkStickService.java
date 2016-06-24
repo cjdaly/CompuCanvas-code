@@ -12,13 +12,13 @@
 package net.locosoft.CompuCanvas.controller.BlinkStick.internal;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStickService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
+import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
@@ -49,21 +49,21 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 	public void serviceStop() {
 		_randomEnqueuer.stop(true);
 
-		clearCommands();
+		_commandLineQueue.clearCommands();
 
 		for (int i = 0; i < getBlinkStickCount(); i++) {
 			IBlinkStick blinkStick = getBlinkStick(i);
 			blinkStick.setLED(-1, "off");
 		}
 
-		String nextCommand = peekCommand();
+		String nextCommand = _commandLineQueue.peekCommand();
 		while (nextCommand != null) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				//
 			}
-			nextCommand = peekCommand();
+			nextCommand = _commandLineQueue.peekCommand();
 		}
 
 		_blinkStickFeeder.stop();
@@ -97,38 +97,16 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 		}
 	}
 
-	private LinkedList<String> _commandQueue = new LinkedList<String>();
+	private CommandLineQueue _commandLineQueue = new CommandLineQueue();
 
-	synchronized void enqueueCommand(String command) {
-		_commandQueue.add(command);
-	}
-
-	synchronized String dequeueCommand() {
-		if (_commandQueue.isEmpty())
-			return null;
-		else
-			return _commandQueue.removeFirst();
-	}
-
-	synchronized String peekCommand() {
-		if (_commandQueue.isEmpty())
-			return null;
-		else
-			return _commandQueue.getFirst();
-	}
-
-	synchronized int countCommands() {
-		return _commandQueue.size();
-	}
-
-	synchronized void clearCommands() {
-		_commandQueue.clear();
+	void enqueueCommand(String command) {
+		_commandLineQueue.enqueueCommand(command);
 	}
 
 	private MonitorThread _blinkStickFeeder = new MonitorThread() {
 
 		public boolean cycle() throws Exception {
-			String blinkStickCommand = dequeueCommand();
+			String blinkStickCommand = _commandLineQueue.dequeueCommand();
 			if (blinkStickCommand != null) {
 				StringBuilder blinkStickOut = new StringBuilder();
 				StringBuilder blinkStickErr = new StringBuilder();
@@ -140,9 +118,9 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				}
 			}
 
-			if (countCommands() > 32) {
+			if (_commandLineQueue.countCommands() > 32) {
 				System.out.println("BlinkStick service dumping command queue!");
-				clearCommands();
+				_commandLineQueue.clearCommands();
 			}
 
 			return true;
