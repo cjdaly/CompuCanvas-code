@@ -39,7 +39,8 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 					if (line.startsWith("MaxSonar: ")) {
 						System.out.println("MaxSonar init: " + line.substring("MaxSonar: ".length()));
 					} else if (line.startsWith("R")) {
-						System.out.println("MaxSonar range: " + line.substring(1));
+						// System.out.println("MaxSonar range: " +
+						// line.substring(1));
 					}
 				}
 

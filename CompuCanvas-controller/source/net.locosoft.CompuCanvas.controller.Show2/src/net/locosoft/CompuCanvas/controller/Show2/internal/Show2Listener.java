@@ -33,7 +33,7 @@ public class Show2Listener extends MonitorThread {
 			Matcher matcher = _SensorDataPattern.matcher(line);
 			if (matcher.matches()) {
 
-				System.out.println("Show2: " + line);
+				// System.out.println("Show2: " + line);
 
 				// String sensorId = matcher.group(1);
 				// HashMap<String, Object> vitalsData = new HashMap<String,
