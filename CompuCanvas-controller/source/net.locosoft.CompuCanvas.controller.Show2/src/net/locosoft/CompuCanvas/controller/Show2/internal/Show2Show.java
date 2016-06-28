@@ -55,7 +55,7 @@ public abstract class Show2Show {
 				commands.addCommand("bg4");
 
 				commands.addCommand("fg7");
-				commands.addCommand("/0/" + hour + " ");
+				commands.addCommand("/0/" + hour + ":");
 				commands.addCommand("/1/:" + minute);
 
 				commands.addCommand("fg6");
