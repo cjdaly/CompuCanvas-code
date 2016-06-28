@@ -19,7 +19,7 @@ import net.locosoft.Show2Eboogaloo.Show2Commands;
 public abstract class Show2Show {
 
 	public static Show2Show nextShow() {
-		int i = ThreadLocalRandom.current().nextInt(4);
+		int i = ThreadLocalRandom.current().nextInt(3);
 		switch (i) {
 		case 0:
 			return new Date();
@@ -51,32 +51,27 @@ public abstract class Show2Show {
 			amPm = amPm.toLowerCase();
 
 			if (isVertical(rotation)) {
-				commands.addCommand("siz14");
+				commands.addCommand("siz13");
 				commands.addCommand("bg4");
 
 				commands.addCommand("fg7");
-				commands.addCommand("/0/" + hour);
+				commands.addCommand("/0/" + hour + " ");
+				commands.addCommand("/1/:" + minute);
 
 				commands.addCommand("fg5");
-				commands.addCommand("/1/" + amPm);
-
-				commands.addCommand("fg7");
-				commands.addCommand("/2/" + minute);
+				commands.addCommand("/2/" + amPm + " ");
 			} else {
 				commands.addCommand("siz16");
 				commands.addCommand("bg4");
 
 				commands.addCommand("fg7");
-				commands.addCommand("/0/" + hour.charAt(0));
-				commands.addCommand("/1/" + hour.charAt(1));
+				commands.addCommand("/0/" + hour + ":");
 
 				commands.addCommand("fg6");
-				commands.addCommand("/0,1/" + amPm.charAt(0));
-				commands.addCommand("/1,1/" + amPm.charAt(1));
+				commands.addCommand("/1/" + amPm.charAt(0));
 
 				commands.addCommand("fg7");
-				commands.addCommand("/0,2/" + minute.charAt(0));
-				commands.addCommand("/1,2/" + minute.charAt(1));
+				commands.addCommand("/1,1/" + minute);
 			}
 
 		}
