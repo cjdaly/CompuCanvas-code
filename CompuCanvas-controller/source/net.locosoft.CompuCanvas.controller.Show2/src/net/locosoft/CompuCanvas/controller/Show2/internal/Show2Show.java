@@ -58,20 +58,19 @@ public abstract class Show2Show {
 				commands.addCommand("/0/" + hour + " ");
 				commands.addCommand("/1/:" + minute);
 
-				commands.addCommand("fg5");
-				commands.addCommand("/2/" + amPm + " ");
+				commands.addCommand("fg6");
+				commands.addCommand("/2/ " + amPm);
 			} else {
 				commands.addCommand("siz16");
 				commands.addCommand("bg4");
 
 				commands.addCommand("fg7");
 				commands.addCommand("/0/" + hour + ":");
+				commands.addCommand("/1/" + ":" + minute);
 
+				commands.addCommand("siz8");
 				commands.addCommand("fg6");
-				commands.addCommand("/1/" + amPm.charAt(0));
-
-				commands.addCommand("fg7");
-				commands.addCommand("/1,1/" + minute);
+				commands.addCommand("/4,1/" + amPm);
 			}
 
 		}
