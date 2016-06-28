@@ -35,18 +35,14 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 			if ((defaultRotation < 0) || (defaultRotation > 3))
 				defaultRotation = 0;
 
-			try {
-				_session = new Show2Session();
-				_session.start(false);
+			_session = new Show2Session(devicePath);
+			_session.start();
 
-				_listener = new Show2Listener(_session);
-				_listener.start();
+			_listener = new Show2Listener(_session);
+			_listener.start();
 
-				_feeder = new Show2Feeder(_session);
-				_feeder.start();
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-			}
+			_feeder = new Show2Feeder(_session, defaultRotation);
+			_feeder.start();
 		}
 	}
 

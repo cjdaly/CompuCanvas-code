@@ -18,9 +18,11 @@ import net.locosoft.Show2Eboogaloo.Show2Session;
 public class Show2Feeder extends MonitorThread {
 
 	private Show2Session _session;
+	private int _defaultRotation;
 
-	public Show2Feeder(Show2Session session) {
+	public Show2Feeder(Show2Session session, int defaultRotation) {
 		_session = session;
+		_defaultRotation = defaultRotation;
 	}
 
 	protected long getPreSleepMillis() {
@@ -35,28 +37,13 @@ public class Show2Feeder extends MonitorThread {
 		Show2Commands commands = new Show2Commands();
 		commands.addCommand("-WB");
 		commands.addCommand("blt255");
-		commands.addCommand("siz12");
 		_session.enqueueCommands(commands);
-	}
-
-	private int _fgColor = 0;
-
-	private void nextFg(Show2Commands commands) {
-		_fgColor++;
-		if (_fgColor > 7) {
-			_fgColor = 1;
-		}
-		commands.addCommand("fg" + _fgColor);
 	}
 
 	public boolean cycle() throws Exception {
 
-		Show2Commands commands = new Show2Commands();
-		commands.addCommand("cls");
-		nextFg(commands);
-		commands.addCommand("/0/ABC");
-		nextFg(commands);
-		commands.addCommand("/1/123");
+		Show2Show show = Show2Show.nextShow();
+		Show2Commands commands = show.emitCommands(_defaultRotation);
 		_session.enqueueCommands(commands);
 
 		return true;
