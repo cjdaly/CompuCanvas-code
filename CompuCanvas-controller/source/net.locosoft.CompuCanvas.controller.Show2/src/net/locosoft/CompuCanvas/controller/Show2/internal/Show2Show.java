@@ -44,7 +44,7 @@ public abstract class Show2Show {
 		void emitCommands(Show2Commands commands, int rotation) {
 			commands.addCommand("cls");
 
-			Date now = new Date();
+			java.util.Date now = new java.util.Date();
 			String hour = _HourFormat.format(now);
 			String minute = _MinuteFormat.format(now);
 			String amPm = _AmPmFormat.format(now);
@@ -90,7 +90,7 @@ public abstract class Show2Show {
 		void emitCommands(Show2Commands commands, int rotation) {
 			commands.addCommand("cls");
 
-			Date now = new Date();
+			java.util.Date now = new java.util.Date();
 			String dayOfWeek = _DayOfWeekFormat.format(now);
 			String month = _MonthFormat.format(now);
 			String day = _DayFormat.format(now);
