@@ -42,11 +42,16 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 
 	public void serviceStart() {
 		detectBlinkSticks();
-		_blinkStickFeeder.start();
-		_randomEnqueuer.start();
+		if (getBlinkStickCount() > 0) {
+			_blinkStickFeeder.start();
+			_randomEnqueuer.start();
+		}
 	}
 
 	public void serviceStop() {
+		if (getBlinkStickCount() == 0)
+			return;
+
 		_randomEnqueuer.stop(true);
 
 		_commandLineQueue.clearCommands();

@@ -34,6 +34,7 @@
       <plugin id="net.locosoft.CompuCanvas.controller.packaging"/>
       <plugin id="net.locosoft.CompuCanvas.controller.server"/>
       <plugin id="net.locosoft.CompuCanvas.controller.util"/>
+      <plugin id="net.locosoft.CompuCanvas.controller.vitals"/>
       <plugin id="net.locosoft.Show2Eboogaloo"/>
       <plugin id="org.apache.commons.codec"/>
       <plugin id="org.apache.commons.logging"/>
@@ -94,7 +95,7 @@
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <property name="eclipse.ignoreApp" value="true" />
-      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.16" />
+      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.17" />
       <property name="org.osgi.service.http.port" value="10123" />
       <property name="osgi.noShutdown" value="true" />
    </configurations>

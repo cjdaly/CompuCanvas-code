@@ -5,7 +5,8 @@
          point="net.locosoft.CompuCanvas.controller.core.C3Service">
       <C3Service
             id="audio"
-            implementation="net.locosoft.CompuCanvas.controller.audio.internal.AudioService">
+            implementation="net.locosoft.CompuCanvas.controller.audio.internal.AudioService"
+            priority="80">
       </C3Service>
    </extension>
 

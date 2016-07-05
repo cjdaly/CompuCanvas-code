@@ -1,0 +1,47 @@
+/*****************************************************************************
+ * Copyright (c) 2016 Chris J Daly (github user cjdaly)
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   cjdaly - initial API and implementation
+ ****************************************************************************/
+
+package net.locosoft.CompuCanvas.controller.vitals.internal;
+
+import java.util.ArrayList;
+
+import net.locosoft.CompuCanvas.controller.util.MonitorThread;
+
+public class VitalsReader extends MonitorThread {
+
+	private ArrayList<VitalSign> _vitalSigns = new ArrayList<VitalSign>();
+
+	public VitalsReader() {
+		_vitalSigns.add(new VitalSign.C3ProcessVmPeak());
+		_vitalSigns.add(new VitalSign.JVMTotalMemory());
+		_vitalSigns.add(new VitalSign.SystemLoad());
+		_vitalSigns.add(new VitalSign.SystemMemory());
+		_vitalSigns.add(new VitalSign.SystemStorage());
+	}
+
+	protected long getPostSleepMillis() {
+		return 5000;
+	}
+
+	private int _vitalSignIndex = 0;
+
+	public boolean cycle() throws Exception {
+		VitalSign vitalSign = _vitalSigns.get(_vitalSignIndex);
+		vitalSign.record();
+
+		_vitalSignIndex++;
+		if (_vitalSignIndex == _vitalSigns.size())
+			_vitalSignIndex = 0;
+
+		return true;
+	}
+
+}

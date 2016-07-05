@@ -98,7 +98,8 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		// start services
 		for (int i = _orderedServices.size() - 1; i >= 0; i--) {
 			IC3ServiceInternal c3Service = _orderedServices.get(i);
-			System.out.println("Starting service '" + c3Service.getServiceId() + "' ...");
+			System.out.println("Starting service '" + c3Service.getServiceId() //
+					+ "' (prio: " + c3Service.serviceGetPriority() + ") ...");
 			c3Service.serviceStart();
 			System.out.println("Service '" + c3Service.getServiceId() + "' started.");
 		}

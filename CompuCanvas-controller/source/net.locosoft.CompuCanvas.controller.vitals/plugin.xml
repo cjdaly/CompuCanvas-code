@@ -4,9 +4,9 @@
    <extension
          point="net.locosoft.CompuCanvas.controller.core.C3Service">
       <C3Service
-            id="BlinkStick"
-            implementation="net.locosoft.CompuCanvas.controller.BlinkStick.internal.BlinkStickService"
-            priority="70">
+            id="vitals"
+            implementation="net.locosoft.CompuCanvas.controller.vitals.internal.VitalsService"
+            priority="90">
       </C3Service>
    </extension>
 

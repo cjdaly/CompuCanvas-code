@@ -30,7 +30,11 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 
 	public void serviceStart() {
 		String devicePath = serviceGetConfig("devicePath", null);
-		if (devicePath != null) {
+		if (devicePath == null) {
+			System.out.println("No Show2 device configured.");
+		} else {
+			System.out.println("Show2 device configured: " + devicePath);
+
 			int defaultRotation = serviceGetConfigInt("defaultRotation", 0);
 			if ((defaultRotation < 0) || (defaultRotation > 3))
 				defaultRotation = 0;

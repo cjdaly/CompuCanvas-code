@@ -59,7 +59,7 @@ public abstract class Show2Show {
 				commands.addCommand("/1/:" + minute);
 
 				commands.addCommand("fg6");
-				commands.addCommand("/2/ " + amPm);
+				commands.addCommand("/2/" + amPm + " ");
 			} else {
 				commands.addCommand("siz16");
 				commands.addCommand("bg4");
@@ -104,7 +104,7 @@ public abstract class Show2Show {
 				commands.addCommand("siz10");
 				commands.addCommand("bg0");
 
-				commands.addCommand("fg3");
+				commands.addCommand("fg7");
 				commands.addCommand("/0/ " + dayOfWeek);
 
 				commands.addCommand("fg6");

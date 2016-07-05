@@ -10,6 +10,7 @@ net.locosoft.CompuCanvas.controller.core,0.1.0,plugins/net.locosoft.CompuCanvas.
 net.locosoft.CompuCanvas.controller.packaging,0.1.0,plugins/net.locosoft.CompuCanvas.controller.packaging_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.server,0.1.0,plugins/net.locosoft.CompuCanvas.controller.server_0.1.0.jar,4,true
 net.locosoft.CompuCanvas.controller.util,0.1.0,plugins/net.locosoft.CompuCanvas.controller.util_0.1.0.jar,4,false
+net.locosoft.CompuCanvas.controller.vitals,0.1.0,plugins/net.locosoft.CompuCanvas.controller.vitals_0.1.0.jar,4,false
 net.locosoft.Show2Eboogaloo,0.1.0,plugins/net.locosoft.Show2Eboogaloo_0.1.0.jar,4,false
 org.apache.commons.codec,1.6.0.v201305230611,plugins/org.apache.commons.codec_1.6.0.v201305230611.jar,4,false
 org.apache.commons.logging,1.1.1.v201101211721,plugins/org.apache.commons.logging_1.1.1.v201101211721.jar,4,false

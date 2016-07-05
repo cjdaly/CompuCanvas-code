@@ -77,4 +77,28 @@ public class C3Util {
 		}
 	}
 
+	public static long parseLong(String value, long defaultValue) {
+		try {
+			return Long.parseLong(value);
+		} catch (NumberFormatException ex) {
+			return defaultValue;
+		}
+	}
+
+	public static float parseFloat(String value, float defaultValue) {
+		try {
+			return Float.parseFloat(value);
+		} catch (NumberFormatException ex) {
+			return defaultValue;
+		}
+	}
+
+	public static double parseDouble(String value, double defaultValue) {
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException ex) {
+			return defaultValue;
+		}
+	}
+
 }
