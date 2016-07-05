@@ -64,16 +64,16 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	}
 
 	void activatorStart() {
-		System.out.println("Starting c3...");
-		System.out.println("C3 internal version: " + C3Util.getC3InternalVersion());
-		System.out.println("CompuCanvas model: " + C3Util.getCompuCanvasModelId());
+		C3Util.log("Starting CompuCanvas Controller (C3) ...");
+		C3Util.log("C3 internal version: " + C3Util.getC3InternalVersion());
+		C3Util.log("CompuCanvas model: " + C3Util.getCompuCanvasModelId());
 
 		String modelConfigFilePath = C3Util.getC3ConfigDir() + "/model/" + C3Util.getCompuCanvasModelId()
 				+ ".properties";
 		File modelConfigFile = new File(modelConfigFilePath);
 		if (modelConfigFile.exists()) {
 			_modelConfig = FileUtil.loadPropertiesFile(modelConfigFilePath);
-			System.out.println("Loaded config: " + modelConfigFilePath);
+			C3Util.log("Loaded config: " + modelConfigFilePath);
 		}
 
 		// order services
@@ -84,24 +84,24 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		});
 
 		// initialize services
-		System.out.print("Initializing services: ");
+		C3Util.log("Initializing services: ", false);
 		for (int i = _orderedServices.size() - 1; i >= 0; i--) {
 			IC3ServiceInternal c3Service = _orderedServices.get(i);
-			System.out.print(c3Service.getServiceId());
+			C3Util.log(c3Service.getServiceId(), false);
 			if (i != 0) {
-				System.out.print(", ");
+				C3Util.log(", ", false);
 			}
 			c3Service.serviceInit(this);
 		}
-		System.out.println(".");
+		C3Util.log(".");
 
 		// start services
 		for (int i = _orderedServices.size() - 1; i >= 0; i--) {
 			IC3ServiceInternal c3Service = _orderedServices.get(i);
-			System.out.println("Starting service '" + c3Service.getServiceId() //
+			C3Util.log("Starting service '" + c3Service.getServiceId() //
 					+ "' (prio: " + c3Service.serviceGetPriority() + ") ...");
 			c3Service.serviceStart();
-			System.out.println("Service '" + c3Service.getServiceId() + "' started.");
+			C3Util.log("Service '" + c3Service.getServiceId() + "' started.");
 		}
 
 		_coreMonitor.start();
@@ -126,17 +126,17 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		}
 
 		public void endCycle() throws Exception {
-			System.out.println("Stopping c3...");
+			C3Util.log("Stopping c3...");
 
 			// stop services
 			for (int i = 0; i < _orderedServices.size(); i++) {
 				IC3ServiceInternal c3Service = _orderedServices.get(i);
-				System.out.println("Stopping service '" + c3Service.getServiceId() + "' ...");
+				C3Util.log("Stopping service '" + c3Service.getServiceId() + "' ...");
 				c3Service.serviceStop();
-				System.out.println("Service '" + c3Service.getServiceId() + "' stopped.");
+				C3Util.log("Service '" + c3Service.getServiceId() + "' stopped.");
 			}
 
-			System.out.println("All c3 services stopped.");
+			C3Util.log("All c3 services stopped.");
 			_bundleContext.getBundle(0).stop();
 		}
 	};

@@ -132,7 +132,7 @@ public class ExecUtil {
 		}
 
 		public void readLine(String line) {
-			System.err.println(line);
+			C3Util.log("Error: " + line);
 		}
 	}
 

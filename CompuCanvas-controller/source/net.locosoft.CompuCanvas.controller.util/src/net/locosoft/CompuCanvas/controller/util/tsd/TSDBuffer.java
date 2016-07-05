@@ -13,12 +13,14 @@ package net.locosoft.CompuCanvas.controller.util.tsd;
 
 import java.util.LinkedList;
 
+import net.locosoft.CompuCanvas.controller.util.C3Util;
+
 public class TSDBuffer {
 
 	private String _id;
 	private String _units;
 	private TSDType _type;
-	private int _size = 256;
+	private int _size;
 	private LinkedList<TSDValue> _tsdValues = new LinkedList<TSDValue>();
 
 	public TSDBuffer(String id, String units, TSDType type) {
@@ -60,14 +62,14 @@ public class TSDBuffer {
 			return;
 
 		if (tsdLatest.getTime() > tsd.getTime()) {
-			System.out.println("TSDValue older than previous latest! " //
+			C3Util.log("TSDValue older than previous latest! " //
 					+ "(buffer id: " + _id //
 					+ ", tsd: " + tsd + ")");
 			return;
 		}
 
 		if (tsdLatest.getType() != getType()) {
-			System.out.println("TSDValue type mismatch! " //
+			C3Util.log("TSDValue type mismatch! " //
 					+ "(buffer id: " + _id //
 					+ ", tsd: " + tsd + "," //
 					+ ", type: " + tsd.getType() + "," //

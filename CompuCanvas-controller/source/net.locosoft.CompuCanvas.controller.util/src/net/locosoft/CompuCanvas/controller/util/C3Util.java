@@ -69,6 +69,8 @@ public class C3Util {
 		return parseInt(c3PIDFile.trim(), -1);
 	}
 
+	//
+
 	public static int parseInt(String value, int defaultValue) {
 		try {
 			return Integer.parseInt(value);
@@ -99,6 +101,26 @@ public class C3Util {
 		} catch (NumberFormatException ex) {
 			return defaultValue;
 		}
+	}
+
+	//
+
+	public static void log(String message) {
+		log(message, true);
+	}
+
+	public static void log(String message, boolean newline) {
+		if (newline) {
+			System.out.println(message);
+		} else {
+			System.out.print(message);
+		}
+	}
+
+	public static void logExecResult(int result, String command, String out, String err) {
+		log("Error (" + result + ") from: " + command);
+		log(" stdout: " + out);
+		log(" stderr: " + err);
 	}
 
 }

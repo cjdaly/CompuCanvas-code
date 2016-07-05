@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.audio.internal;
 
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
@@ -31,9 +32,7 @@ public class AudioFeeder extends MonitorThread {
 			StringBuilder blinkStickErr = new StringBuilder();
 			int result = ExecUtil.execCommand(audioCommand, blinkStickOut, blinkStickErr);
 			if (result != 0) {
-				System.out.println("Error (" + result + ") from: " + audioCommand);
-				System.out.println(" stdout: " + blinkStickOut);
-				System.out.println(" stderr: " + blinkStickErr);
+				C3Util.logExecResult(result, audioCommand, blinkStickOut.toString(), blinkStickErr.toString());
 			}
 		} else {
 			// int hello = ThreadLocalRandom.current().nextInt(100);

@@ -14,6 +14,7 @@ package net.locosoft.CompuCanvas.controller.Show2.internal;
 import net.locosoft.CompuCanvas.controller.Show2.IShow2Service;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.Show2Eboogaloo.Show2Session;
 
 public class Show2Service extends AbstractC3Service implements IShow2Service {
@@ -31,9 +32,9 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 	public void serviceStart() {
 		String devicePath = serviceGetConfig("devicePath", null);
 		if (devicePath == null) {
-			System.out.println("No Show2 device configured.");
+			C3Util.log("No Show2 device configured.");
 		} else {
-			System.out.println("Show2 device configured: " + devicePath);
+			C3Util.log("Show2 device configured: " + devicePath);
 
 			int defaultRotation = serviceGetConfigInt("defaultRotation", 0);
 			if ((defaultRotation < 0) || (defaultRotation > 3))

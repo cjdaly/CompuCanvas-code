@@ -18,11 +18,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.locosoft.CompuCanvas.controller.util.C3Util;
+
 @SuppressWarnings("serial")
 public class C3Servlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("in C3Servlet.doGet!");
+		C3Util.log("in C3Servlet.doGet!");
 		super.doGet(req, resp);
 	}
 }

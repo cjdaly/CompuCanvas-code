@@ -18,6 +18,7 @@ import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStickService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
@@ -82,9 +83,7 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 		String blinkStickInfoCommand = "blinkstick -i";
 		int result = ExecUtil.execCommand(blinkStickInfoCommand, blinkStickOut, blinkStickErr);
 		if (result != 0) {
-			System.out.println("Error (" + result + ") from: " + blinkStickInfoCommand);
-			System.out.println(" stdout: " + blinkStickOut);
-			System.out.println(" stderr: " + blinkStickErr);
+			C3Util.logExecResult(result, blinkStickInfoCommand, blinkStickOut.toString(), blinkStickErr.toString());
 		} else {
 			String infoTmp = blinkStickOut.toString();
 			int index = infoTmp.lastIndexOf("Found device:");
@@ -92,7 +91,7 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				String infoText = infoTmp.substring(index);
 				BlinkStick blinkStick = new BlinkStick(this, infoText);
 				_blinkStickArray.add(blinkStick);
-				System.out.println("BlinkStick detected: " + //
+				C3Util.log("BlinkStick detected: " + //
 						blinkStick.getSerial() + //
 						" (kind: " + blinkStick.getKind() + //
 						", mode: " + blinkStick.getMode() + ")");
@@ -117,14 +116,12 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 				StringBuilder blinkStickErr = new StringBuilder();
 				int result = ExecUtil.execCommand(blinkStickCommand, blinkStickOut, blinkStickErr);
 				if (result != 0) {
-					System.out.println("Error (" + result + ") from: " + blinkStickCommand);
-					System.out.println(" stdout: " + blinkStickOut);
-					System.out.println(" stderr: " + blinkStickErr);
+					C3Util.logExecResult(result, blinkStickCommand, blinkStickOut.toString(), blinkStickErr.toString());
 				}
 			}
 
 			if (_commandLineQueue.countCommands() > 32) {
-				System.out.println("BlinkStick service dumping command queue!");
+				C3Util.log("BlinkStick service dumping command queue!");
 				_commandLineQueue.clearCommands();
 			}
 

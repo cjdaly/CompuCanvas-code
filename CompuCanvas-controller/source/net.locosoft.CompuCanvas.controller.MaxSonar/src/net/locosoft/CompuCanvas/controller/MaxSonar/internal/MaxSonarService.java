@@ -28,18 +28,18 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 	public void serviceStart() {
 		String devicePath = serviceGetConfig("devicePath", null);
 		if (devicePath == null) {
-			System.out.println("No MaxSonar device configured.");
+			C3Util.log("No MaxSonar device configured.");
 		} else {
-			System.out.println("MaxSonar device configured: " + devicePath);
+			C3Util.log("MaxSonar device configured: " + devicePath);
 
 			String command = C3Util.getC3ScriptsDir() + "/max-sonar.sh " + devicePath;
 			ExecUtil.LineReader lineReader = new ExecUtil.LineReader() {
 
 				public void readLine(String line) {
 					if (line.startsWith("MaxSonar: ")) {
-						System.out.println("MaxSonar init: " + line.substring("MaxSonar: ".length()));
+						C3Util.log("MaxSonar init: " + line.substring("MaxSonar: ".length()));
 					} else if (line.startsWith("R")) {
-						// System.out.println("MaxSonar range: " +
+						// C3Util.log("MaxSonar range: " +
 						// line.substring(1));
 					}
 				}
