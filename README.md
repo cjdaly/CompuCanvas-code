@@ -1,7 +1,9 @@
 
-## CompuCanvas code
+# CompuCanvas code
 
-### command line control
+## command line control
+
+The USB devices incorporated into CompuCanvas systems have been selected (among other factors) because they can be controlled in a straightforward way from the command line on an rPi.  Below are command line examples for each device.
 
 #### BlinkStick
 
@@ -38,9 +40,18 @@ For CompuCanvas systems that incorporate a USB connected Maxbotix Ultrasonic Ran
 
     ( stty -F /dev/ttyUSB0 57600 ; cat /dev/ttyUSB0 )
 
-### new system configuration
+## CompuCanvas Controller
 
-Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi ; pw:raspberry`), then do:
+The CompuCanvas Controller (C3) is a work in progress based on headless Eclipse 4.5 and Java 8 (included in Raspbian distribution).  Normally it will be started on bootup (see `/etc/rc.local` and the `sudo-setup.sh` script discussed below) and will monitor sensors, blink lights, play sounds and otherwise do 'interesting things' in a hopefully unobtrusive and non-annoying manner.  To check out C3:
+
+    cd ~/CompuCanvas-code/CompuCanvas-controller/C3-runtime
+    ./c3.sh status
+
+Invoking `c3.sh` with no arguments will show a usage message which, in addition to `status` describes `start` and `stop` arguments. Check out the `c3.log` file for details on C3 operation.
+
+## new system configuration
+
+Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi` ; `pw:raspberry`), then do:
 
     sudo passwd pi
 
