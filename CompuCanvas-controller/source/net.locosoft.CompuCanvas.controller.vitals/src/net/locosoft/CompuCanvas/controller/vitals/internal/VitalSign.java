@@ -14,25 +14,28 @@ package net.locosoft.CompuCanvas.controller.vitals.internal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDType;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
 import net.locosoft.CompuCanvas.controller.util.FileUtil;
-import net.locosoft.CompuCanvas.controller.util.tsd.TSDBuffer;
-import net.locosoft.CompuCanvas.controller.util.tsd.TSDType;
-import net.locosoft.CompuCanvas.controller.util.tsd.TSDValue;
 
 public abstract class VitalSign {
 
 	private String _id;
 	private String _units;
 	private TSDType _type;
+
+	private TSDGroup _group;
 	protected TSDBuffer _buffer;
 
-	public VitalSign(String id, String units, TSDType type) {
+	public VitalSign(String id, String units, TSDType type, TSDGroup group) {
 		_id = id;
 		_units = units;
 		_type = type;
-		_buffer = new TSDBuffer(id, units, type);
+		_group = group;
+		_buffer = _group.createTSDBuffer(id, units, type);
 	}
 
 	public String getId() {
@@ -47,86 +50,80 @@ public abstract class VitalSign {
 		return _type;
 	}
 
-	public void record() {
-		TSDValue tsd = read();
-		if (tsd != null) {
-			_buffer.setLatest(tsd);
-		}
-	}
-
-	protected abstract TSDValue read();
+	public abstract void update();
 
 	public static class C3ProcessVmPeak extends VitalSign {
-		public C3ProcessVmPeak() {
-			super("process.c3.vmPeak", "kB", TSDType.Long);
+		public C3ProcessVmPeak(TSDGroup group) {
+			super("process.c3.vmPeak", "kB", TSDType.Long, group);
 		}
 
 		private Pattern _vmPeakPattern = Pattern.compile("VmPeak:\\s+(\\d+)\\s+kB");
 
-		public TSDValue read() {
-			String procStatus = FileUtil.readFileToString("/proc/" + C3Util.getC3Pid() + "/status");
+		public void update() {
+			int c3Pid = C3Util.getC3Pid();
+			if (c3Pid == -1)
+				return;
+
+			String procStatus = FileUtil.readFileToString("/proc/" + c3Pid + "/status");
 			Matcher matcher = _vmPeakPattern.matcher(procStatus);
 			if (matcher.find()) {
 				String vmPeakText = matcher.group(1);
-				return new TSDValue(vmPeakText, getType());
+				_buffer.update(vmPeakText);
 			}
-			return null;
 		}
 	}
 
 	public static class JVMTotalMemory extends VitalSign {
-		public JVMTotalMemory() {
-			super("jvm.totalMemory", "bytes", TSDType.Long);
+		public JVMTotalMemory(TSDGroup group) {
+			super("jvm.totalMemory", "bytes", TSDType.Long, group);
 		}
 
-		public TSDValue read() {
+		public void update() {
 			long totalMemory = Runtime.getRuntime().totalMemory();
-			return new TSDValue(totalMemory);
+			_buffer.update(totalMemory);
 		}
 	}
 
 	public static class SystemLoad extends VitalSign {
-		public SystemLoad() {
-			super("system.loadAvg1Min", "load average", TSDType.Double);
+		public SystemLoad(TSDGroup group) {
+			super("system.loadAvg1Min", "load average", TSDType.Double, group);
 		}
 
-		public TSDValue read() {
+		public void update() {
 			String procLoadAvg = FileUtil.readFileToString("/proc/loadavg");
 			String[] loadAvgs = procLoadAvg.split("\\s+");
 			if ((loadAvgs != null) && (loadAvgs.length > 0)) {
 				String loadAvg1MinText = loadAvgs[0];
-				return new TSDValue(loadAvg1MinText, getType());
+				_buffer.update(loadAvg1MinText);
 			}
-			return null;
 		}
 	}
 
 	public static class SystemMemory extends VitalSign {
-		public SystemMemory() {
-			super("system.memFree", "kB", TSDType.Long);
+		public SystemMemory(TSDGroup group) {
+			super("system.memFree", "kB", TSDType.Long, group);
 		}
 
 		private Pattern _memFreePattern = Pattern.compile("MemFree:\\s+(\\d+)\\s+kB");
 
-		protected TSDValue read() {
+		public void update() {
 			String procMemInfo = FileUtil.readFileToString("/proc/meminfo");
 			Matcher matcher = _memFreePattern.matcher(procMemInfo);
 			if (matcher.find()) {
 				String memFreeText = matcher.group(1);
-				return new TSDValue(memFreeText, getType());
+				_buffer.update(memFreeText);
 			}
-			return null;
 		}
 	}
 
 	public static class SystemStorage extends VitalSign {
-		public SystemStorage() {
-			super("system.diskUsePercent", "kB", TSDType.Long);
+		public SystemStorage(TSDGroup group) {
+			super("system.diskUsePercent", "kB", TSDType.Long, group);
 		}
 
 		private Pattern _dfPattern = Pattern.compile("/dev/\\S+\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)%");
 
-		protected TSDValue read() {
+		public void update() {
 			StringBuilder processOut = new StringBuilder();
 			StringBuilder processErr = new StringBuilder();
 			String dfCommand = "/bin/df -k " + C3Util.getC3DataDir();
@@ -135,10 +132,8 @@ public abstract class VitalSign {
 			Matcher matcher = _dfPattern.matcher(processOut);
 			if (matcher.find()) {
 				String dfUsePercentText = matcher.group(4);
-				return new TSDValue(dfUsePercentText, getType());
+				_buffer.update(dfUsePercentText);
 			}
-
-			return null;
 		}
 	}
 }

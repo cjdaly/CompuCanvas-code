@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import org.osgi.framework.BundleContext;
 
@@ -25,11 +24,22 @@ import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3ServiceInternal;
 import net.locosoft.CompuCanvas.controller.core.ICoreService;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.FileUtil;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class CoreService extends AbstractC3Service implements ICoreService {
+
+	private BundleContext _bundleContext;
+	private HashMap<String, IC3ServiceInternal> _idToService;
+	private HashMap<Class<? extends IC3Service>, IC3ServiceInternal> _ifaceToService;
+	private ArrayList<IC3ServiceInternal> _orderedServices;
+
+	private HashMap<String, TSDGroup> _tsdGroups;
+
+	private Properties _modelConfig;
 
 	// ICoreService
 
@@ -46,6 +56,16 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 				: _modelConfig.getProperty(key);
 	}
 
+	public TSDGroup createTSDGroup(String id, IC3Service service) {
+		TSDGroup tsdGroup = new TSDGroup(id, service);
+		_tsdGroups.put(id, tsdGroup);
+		return tsdGroup;
+	}
+
+	public void propagateTSDValue(TSDValue value) {
+		// TODO: Multimpexor
+	}
+
 	// IC3Service
 
 	public Class<? extends IC3Service> getServiceInterface() {
@@ -54,13 +74,15 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	// for CoreActivator
 
-	void activatorInit(BundleContext bundleContext, TreeMap<String, IC3ServiceInternal> idToService,
+	void activatorInit(BundleContext bundleContext, HashMap<String, IC3ServiceInternal> idToService,
 			HashMap<Class<? extends IC3Service>, IC3ServiceInternal> ifaceToService,
 			ArrayList<IC3ServiceInternal> orderedServices) {
 		_bundleContext = bundleContext;
 		_idToService = idToService;
 		_ifaceToService = ifaceToService;
 		_orderedServices = orderedServices;
+
+		_tsdGroups = new HashMap<String, TSDGroup>();
 	}
 
 	void activatorStart() {
@@ -141,10 +163,4 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		}
 	};
 
-	private BundleContext _bundleContext;
-	private TreeMap<String, IC3ServiceInternal> _idToService;
-	private HashMap<Class<? extends IC3Service>, IC3ServiceInternal> _ifaceToService;
-	private ArrayList<IC3ServiceInternal> _orderedServices;
-
-	private Properties _modelConfig;
 }

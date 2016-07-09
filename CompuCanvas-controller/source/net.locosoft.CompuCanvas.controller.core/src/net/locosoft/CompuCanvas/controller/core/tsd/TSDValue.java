@@ -9,7 +9,7 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.util.tsd;
+package net.locosoft.CompuCanvas.controller.core.tsd;
 
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 
@@ -22,41 +22,30 @@ public class TSDValue {
 	private long _longValue = 0;
 	private double _doubleValue = 0;
 
-	public TSDValue(String value) {
-		this(System.currentTimeMillis(), value);
-	}
+	private TSDBuffer _buffer;
 
-	public TSDValue(long timeMillis, String value) {
+	TSDValue(long timeMillis, String value, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
 		_type = TSDType.String;
 		_stringValue = value;
+		_buffer = buffer;
 	}
 
-	public TSDValue(long value) {
-		this(System.currentTimeMillis(), value);
-	}
-
-	public TSDValue(long timeMillis, long value) {
+	TSDValue(long timeMillis, long value, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
 		_type = TSDType.Long;
 		_longValue = value;
+		_buffer = buffer;
 	}
 
-	public TSDValue(double value) {
-		this(System.currentTimeMillis(), value);
-	}
-
-	public TSDValue(long timeMillis, double value) {
+	TSDValue(long timeMillis, double value, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
 		_type = TSDType.Double;
 		_doubleValue = value;
+		_buffer = buffer;
 	}
 
-	public TSDValue(String value, TSDType type) {
-		this(System.currentTimeMillis(), value, type);
-	}
-
-	public TSDValue(long timeMillis, String value, TSDType type) {
+	TSDValue(long timeMillis, String value, TSDType type, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
 		_type = type;
 		_stringValue = value;
@@ -69,6 +58,7 @@ public class TSDValue {
 			break;
 		default:
 		}
+		_buffer = buffer;
 	}
 
 	public long getTime() {
@@ -77,6 +67,10 @@ public class TSDValue {
 
 	public TSDType getType() {
 		return _type;
+	}
+
+	public TSDBuffer getBuffer() {
+		return _buffer;
 	}
 
 	public String asString() {

@@ -117,7 +117,6 @@ public class ExecUtil {
 	}
 
 	public static class IgnoreLineReader implements LineReader {
-
 		public boolean isDone() {
 			return false;
 		}

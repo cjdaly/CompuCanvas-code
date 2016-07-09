@@ -13,18 +13,26 @@ package net.locosoft.CompuCanvas.controller.vitals.internal;
 
 import java.util.ArrayList;
 
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class VitalsReader extends MonitorThread {
 
+	private VitalsService _service;
+	private TSDGroup _vitals;
+
 	private ArrayList<VitalSign> _vitalSigns = new ArrayList<VitalSign>();
 
-	public VitalsReader() {
-		_vitalSigns.add(new VitalSign.C3ProcessVmPeak());
-		_vitalSigns.add(new VitalSign.JVMTotalMemory());
-		_vitalSigns.add(new VitalSign.SystemLoad());
-		_vitalSigns.add(new VitalSign.SystemMemory());
-		_vitalSigns.add(new VitalSign.SystemStorage());
+	public VitalsReader(VitalsService service) {
+		_service = service;
+
+		_vitals = _service.serviceCreateTSDGroup("vitals");
+
+		_vitalSigns.add(new VitalSign.C3ProcessVmPeak(_vitals));
+		_vitalSigns.add(new VitalSign.JVMTotalMemory(_vitals));
+		_vitalSigns.add(new VitalSign.SystemLoad(_vitals));
+		_vitalSigns.add(new VitalSign.SystemMemory(_vitals));
+		_vitalSigns.add(new VitalSign.SystemStorage(_vitals));
 	}
 
 	protected long getPostSleepMillis() {
@@ -35,7 +43,7 @@ public class VitalsReader extends MonitorThread {
 
 	public boolean cycle() throws Exception {
 		VitalSign vitalSign = _vitalSigns.get(_vitalSignIndex);
-		vitalSign.record();
+		vitalSign.update();
 
 		_vitalSignIndex++;
 		if (_vitalSignIndex == _vitalSigns.size())

@@ -14,10 +14,16 @@ package net.locosoft.CompuCanvas.controller.MaxSonar.internal;
 import net.locosoft.CompuCanvas.controller.MaxSonar.IMaxSonarService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDType;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
 
 public class MaxSonarService extends AbstractC3Service implements IMaxSonarService {
+
+	private TSDGroup _maxSonar;
+	private TSDBuffer _maxSonarRange;
 
 	// IC3Service
 
@@ -32,6 +38,9 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 		} else {
 			C3Util.log("MaxSonar device configured: " + devicePath);
 
+			_maxSonar = serviceCreateTSDGroup("maxSonar");
+			_maxSonarRange = _maxSonar.createTSDBuffer("range", "mm", TSDType.Long);
+
 			String command = C3Util.getC3ScriptsDir() + "/max-sonar.sh " + devicePath;
 			ExecUtil.LineReader lineReader = new ExecUtil.LineReader() {
 
@@ -39,8 +48,7 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 					if (line.startsWith("MaxSonar: ")) {
 						C3Util.log("MaxSonar init: " + line.substring("MaxSonar: ".length()));
 					} else if (line.startsWith("R")) {
-						// C3Util.log("MaxSonar range: " +
-						// line.substring(1));
+						_maxSonarRange.update(line.substring(1));
 					}
 				}
 

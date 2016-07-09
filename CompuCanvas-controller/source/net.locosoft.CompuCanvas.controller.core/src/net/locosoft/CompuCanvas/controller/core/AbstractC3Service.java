@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.core;
 
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public abstract class AbstractC3Service implements IC3ServiceInternal {
@@ -63,6 +64,10 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		String key = "c3.service." + getServiceId() + "." + keySuffix;
 		String value = getCoreService().getModelConfig(key);
 		return C3Util.parseInt(value, defaultValue);
+	}
+
+	public TSDGroup serviceCreateTSDGroup(String id) {
+		return getCoreService().createTSDGroup(id, this);
 	}
 
 }

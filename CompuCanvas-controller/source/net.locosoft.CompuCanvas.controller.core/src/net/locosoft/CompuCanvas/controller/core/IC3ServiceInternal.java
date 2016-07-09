@@ -11,6 +11,8 @@
 
 package net.locosoft.CompuCanvas.controller.core;
 
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+
 public interface IC3ServiceInternal extends IC3Service {
 
 	public int serviceGetPriority();
@@ -29,4 +31,5 @@ public interface IC3ServiceInternal extends IC3Service {
 
 	public int serviceGetConfigInt(String keySuffix, int defaultValue);
 
+	public TSDGroup serviceCreateTSDGroup(String id);
 }

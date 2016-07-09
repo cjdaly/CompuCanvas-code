@@ -43,7 +43,7 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 			_session = new Show2Session(devicePath);
 			_session.start();
 
-			_listener = new Show2Listener(_session);
+			_listener = new Show2Listener(this, _session);
 			_listener.start();
 
 			_feeder = new Show2Feeder(_session, defaultRotation);

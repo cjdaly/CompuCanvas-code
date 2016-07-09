@@ -9,7 +9,7 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.util.tsd;
+package net.locosoft.CompuCanvas.controller.core.tsd;
 
 public enum TSDType {
 	String, //

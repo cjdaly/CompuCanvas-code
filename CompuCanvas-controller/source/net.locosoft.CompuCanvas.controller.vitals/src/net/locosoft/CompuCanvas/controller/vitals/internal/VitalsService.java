@@ -24,7 +24,7 @@ public class VitalsService extends AbstractC3Service implements IVitalsService {
 	}
 
 	public void serviceStart() {
-		_vitalsReader = new VitalsReader();
+		_vitalsReader = new VitalsReader(this);
 		_vitalsReader.start();
 	}
 

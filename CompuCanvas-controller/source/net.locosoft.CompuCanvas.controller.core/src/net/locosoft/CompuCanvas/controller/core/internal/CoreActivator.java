@@ -13,7 +13,6 @@ package net.locosoft.CompuCanvas.controller.core.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -40,7 +39,7 @@ public class CoreActivator implements BundleActivator {
 	}
 
 	private CoreService registerC3Services(BundleContext bundleContext) {
-		TreeMap<String, IC3ServiceInternal> idToService = new TreeMap<String, IC3ServiceInternal>();
+		HashMap<String, IC3ServiceInternal> idToService = new HashMap<String, IC3ServiceInternal>();
 		HashMap<Class<? extends IC3Service>, IC3ServiceInternal> ifaceToService = new HashMap<Class<? extends IC3Service>, IC3ServiceInternal>();
 		ArrayList<IC3ServiceInternal> orderedServices = new ArrayList<IC3ServiceInternal>();
 		CoreService coreService = null;
