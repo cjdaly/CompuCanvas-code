@@ -12,18 +12,20 @@
 package net.locosoft.CompuCanvas.controller.BlinkStick.internal;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStickService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
-import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
-import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class BlinkStickService extends AbstractC3Service implements IBlinkStickService {
+
+	private BlinkStickFeeder _blinkStickFeeder;
+	private RandomBlinker _randomBlinker;
+
+	private ArrayList<BlinkStick> _blinkStickArray = new ArrayList<BlinkStick>();
 
 	// IBlinkStickService
 
@@ -44,8 +46,11 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 	public void serviceStart() {
 		detectBlinkSticks();
 		if (getBlinkStickCount() > 0) {
+			_blinkStickFeeder = new BlinkStickFeeder(this);
 			_blinkStickFeeder.start();
-			_randomEnqueuer.start();
+
+			_randomBlinker = new RandomBlinker(this);
+			_randomBlinker.start();
 		}
 	}
 
@@ -53,29 +58,11 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 		if (getBlinkStickCount() == 0)
 			return;
 
-		_randomEnqueuer.stop(true);
+		_randomBlinker.stop(true);
 
-		_commandLineQueue.clearCommands();
-
-		for (int i = 0; i < getBlinkStickCount(); i++) {
-			IBlinkStick blinkStick = getBlinkStick(i);
-			blinkStick.setLED(-1, "off");
-		}
-
-		String nextCommand = _commandLineQueue.peekCommand();
-		while (nextCommand != null) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				//
-			}
-			nextCommand = _commandLineQueue.peekCommand();
-		}
-
-		_blinkStickFeeder.stop();
+		_blinkStickFeeder.stopSequence();
+		_blinkStickFeeder.stop(true);
 	}
-
-	private ArrayList<BlinkStick> _blinkStickArray = new ArrayList<BlinkStick>();
 
 	private void detectBlinkSticks() {
 		StringBuilder blinkStickOut = new StringBuilder();
@@ -101,84 +88,10 @@ public class BlinkStickService extends AbstractC3Service implements IBlinkStickS
 		}
 	}
 
-	private CommandLineQueue _commandLineQueue = new CommandLineQueue();
-
 	void enqueueCommand(String command) {
-		_commandLineQueue.enqueueCommand(command);
+		if (_blinkStickFeeder != null && !_blinkStickFeeder.isStopped()) {
+			_blinkStickFeeder.enqueueCommand(command);
+		}
 	}
-
-	private MonitorThread _blinkStickFeeder = new MonitorThread() {
-
-		public boolean cycle() throws Exception {
-			String blinkStickCommand = _commandLineQueue.dequeueCommand();
-			if (blinkStickCommand != null) {
-				StringBuilder blinkStickOut = new StringBuilder();
-				StringBuilder blinkStickErr = new StringBuilder();
-				int result = ExecUtil.execCommand(blinkStickCommand, blinkStickOut, blinkStickErr);
-				if (result != 0) {
-					C3Util.logExecResult(result, blinkStickCommand, blinkStickOut.toString(), blinkStickErr.toString());
-				}
-			}
-
-			if (_commandLineQueue.countCommands() > 32) {
-				C3Util.log("BlinkStick service dumping command queue!");
-				_commandLineQueue.clearCommands();
-			}
-
-			return true;
-		}
-	};
-
-	private MonitorThread _randomEnqueuer = new MonitorThread() {
-		private int _randomSkipPercent;
-		private int _randomDelayMillis;
-
-		protected void init() {
-			_randomSkipPercent = serviceGetConfigInt("random.skipPercent", 70);
-			_randomDelayMillis = serviceGetConfigInt("random.delayMillis", 500);
-		}
-
-		protected long getPreSleepMillis() {
-			return _randomDelayMillis;
-		}
-
-		public boolean cycle() throws Exception {
-			if (random(100) >= _randomSkipPercent) {
-				int randomBlinkStickIndex = random(getBlinkStickCount());
-				IBlinkStick blinkStick = getBlinkStick(randomBlinkStickIndex);
-
-				int limit = random(blinkStick.getLimitMin(), blinkStick.getLimitMax() + 1);
-				String color = _BasicColors[random(3, _BasicColors.length)];
-
-				switch (blinkStick.getMode()) {
-				case Random1:
-					int index = random(blinkStick.getLEDCount());
-					blinkStick.setLED(index, color, limit);
-					break;
-				case Random2:
-					blinkStick.setLED(-1, color, limit);
-					break;
-				case Random3:
-					int firstIndex = random(2) * (blinkStick.getLEDCount() / 2);
-					int lastIndex = firstIndex + (blinkStick.getLEDCount() / 2);
-					for (int i = firstIndex; i < lastIndex; i++) {
-						blinkStick.setLED(i, color, limit);
-					}
-					break;
-				default:
-				}
-			}
-
-			return true;
-		}
-
-		private int random(int range) {
-			return ThreadLocalRandom.current().nextInt(range);
-		}
-
-		private int random(int minInclusive, int maxExclusive) {
-			return ThreadLocalRandom.current().nextInt(minInclusive, maxExclusive);
-		}
-	};
 
 }

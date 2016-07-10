@@ -53,7 +53,7 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 
 	public void serviceStop() {
 		if (_feeder != null) {
-			_feeder.stop();
+			_feeder.stop(true);
 		}
 		if (_listener != null) {
 			_listener.stop();

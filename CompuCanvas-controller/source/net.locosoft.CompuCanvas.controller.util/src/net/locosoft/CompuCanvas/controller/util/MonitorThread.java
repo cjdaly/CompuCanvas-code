@@ -66,7 +66,8 @@ public abstract class MonitorThread implements Runnable {
 				}
 
 				if (!_stopping) {
-					_stopping = !cycle();
+					if (!cycle())
+						_stopping = true;
 				}
 
 				if (!_stopping) {

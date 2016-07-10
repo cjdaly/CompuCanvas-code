@@ -58,7 +58,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	public TSDGroup createTSDGroup(String id, IC3Service service) {
 		TSDGroup tsdGroup = new TSDGroup(id, service);
-		_tsdGroups.put(id, tsdGroup);
+		_tsdGroups.put(tsdGroup.getHashKey(), tsdGroup);
 		return tsdGroup;
 	}
 

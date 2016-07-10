@@ -19,6 +19,7 @@ import net.locosoft.CompuCanvas.controller.core.ICoreService;
 public class TSDGroup {
 
 	private String _id;
+	private String _hashKey;
 	private IC3Service _service;
 	private ICoreService _coreService;
 
@@ -27,7 +28,12 @@ public class TSDGroup {
 	public TSDGroup(String id, IC3Service service) {
 		_id = id;
 		_service = service;
+		_hashKey = _service.getServiceId() + ";" + _id;
 		_coreService = _service.getCoreService();
+	}
+
+	public String getHashKey() {
+		return _hashKey;
 	}
 
 	public String getId() {

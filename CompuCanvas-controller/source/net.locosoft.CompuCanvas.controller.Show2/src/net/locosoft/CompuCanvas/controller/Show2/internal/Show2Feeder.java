@@ -41,12 +41,17 @@ public class Show2Feeder extends MonitorThread {
 	}
 
 	public boolean cycle() throws Exception {
-
 		Show2Show show = Show2Show.nextShow();
 		Show2Commands commands = show.emitCommands(_defaultRotation);
 		_session.enqueueCommands(commands);
-
 		return true;
+	}
+
+	public void endCycle() throws Exception {
+		_session.clearCommands();
+		Show2Commands commands = new Show2Commands();
+		commands.addCommand("cls");
+		_session.enqueueCommands(commands);
 	}
 
 }
