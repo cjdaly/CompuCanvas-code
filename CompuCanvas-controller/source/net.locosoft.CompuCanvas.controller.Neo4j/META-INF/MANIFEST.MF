@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CompuCanvas Controller Neo4j service
+Bundle-SymbolicName: net.locosoft.CompuCanvas.controller.Neo4j;singleton:=true
+Bundle-Version: 0.1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.osgi,
+ org.eclipse.core.runtime,
+ net.locosoft.CompuCanvas.controller.core,
+ net.locosoft.CompuCanvas.controller.util
+Export-Package: net.locosoft.CompuCanvas.controller.Neo4j
+Bundle-ClassPath: lib/neo4j-java-driver-1.0.3.jar,
+ .

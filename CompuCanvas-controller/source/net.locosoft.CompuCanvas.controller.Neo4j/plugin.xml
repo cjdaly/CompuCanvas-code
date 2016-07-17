@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="net.locosoft.CompuCanvas.controller.core.C3Service">
+      <C3Service
+            id="Neo4j"
+            implementation="net.locosoft.CompuCanvas.controller.Neo4j.internal.Neo4jService"
+            priority="50">
+      </C3Service>
+   </extension>
+
+</plugin>

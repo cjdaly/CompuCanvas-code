@@ -28,11 +28,11 @@ public class AudioFeeder extends MonitorThread {
 		String audioCommand = _commandLineQueue.dequeueCommand();
 
 		if (audioCommand != null) {
-			StringBuilder blinkStickOut = new StringBuilder();
-			StringBuilder blinkStickErr = new StringBuilder();
-			int result = ExecUtil.execCommand(audioCommand, blinkStickOut, blinkStickErr);
+			StringBuilder audioOut = new StringBuilder();
+			StringBuilder audioErr = new StringBuilder();
+			int result = ExecUtil.execCommand(audioCommand, audioOut, audioErr);
 			if (result != 0) {
-				C3Util.logExecResult(result, audioCommand, blinkStickOut.toString(), blinkStickErr.toString());
+				C3Util.logExecResult(result, audioCommand, audioOut.toString(), audioErr.toString());
 			}
 		} else {
 			// int hello = ThreadLocalRandom.current().nextInt(100);
@@ -41,6 +41,11 @@ public class AudioFeeder extends MonitorThread {
 			// 'hello'";
 			// enqueueCommand(command);
 			// }
+		}
+
+		if (_commandLineQueue.countCommands() > 8) {
+			C3Util.log("Audio service dumping command queue!");
+			_commandLineQueue.clearCommands();
 		}
 
 		return true;

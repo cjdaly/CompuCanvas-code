@@ -28,6 +28,7 @@
       <plugin id="javax.xml"/>
       <plugin id="net.locosoft.CompuCanvas.controller.BlinkStick"/>
       <plugin id="net.locosoft.CompuCanvas.controller.MaxSonar"/>
+      <plugin id="net.locosoft.CompuCanvas.controller.Neo4j"/>
       <plugin id="net.locosoft.CompuCanvas.controller.Show2"/>
       <plugin id="net.locosoft.CompuCanvas.controller.audio"/>
       <plugin id="net.locosoft.CompuCanvas.controller.core"/>
@@ -95,7 +96,7 @@
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <property name="eclipse.ignoreApp" value="true" />
-      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.20" />
+      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.21" />
       <property name="org.osgi.service.http.port" value="10123" />
       <property name="osgi.noShutdown" value="true" />
    </configurations>

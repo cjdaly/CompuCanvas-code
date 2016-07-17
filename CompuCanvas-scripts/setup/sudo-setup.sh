@@ -17,12 +17,18 @@ else
   CC_MODEL_ID="$1"
 fi
 
+echo "Setup for CompuCanvas model ID: ${CC_MODEL_ID} ..."
+
 COMPUCANVAS_SCRIPTS_HOME=/home/pi/CompuCanvas-code/CompuCanvas-scripts
 COMPUCANVAS_C3_HOME=/home/pi/CompuCanvas-code/CompuCanvas-controller/C3-runtime
 
+echo "Configuring Neo4j Debian repo ..."
+wget -O - https://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
+echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
+
 apt-get update
 apt-get upgrade -y
-apt-get install ant espeak mpg321 -y
+apt-get install ant espeak mpg321 neo4j -y
 pip install blinkstick
 blinkstick --add-udev-rule
 
@@ -36,3 +42,5 @@ echo "$CC_MODEL_ID" > "$COMPUCANVAS_C3_HOME/config/CC.id"
 echo "Adding startup callouts to /etc/rc.local ..."
 sed -i -e "s:^exit 0$:$COMPUCANVAS_SCRIPTS_HOME/boot-sequence.sh\n\nexit 0:" /etc/rc.local
 sed -i -e "s:^exit 0$:sudo -u pi -H $COMPUCANVAS_C3_HOME/c3.sh start\n\nexit 0:" /etc/rc.local
+
+echo "Completed setup for CompuCanvas model ID: ${CC_MODEL_ID}."

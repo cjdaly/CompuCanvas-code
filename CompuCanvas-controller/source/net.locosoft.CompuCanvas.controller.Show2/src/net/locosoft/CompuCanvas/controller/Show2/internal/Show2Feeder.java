@@ -52,6 +52,9 @@ public class Show2Feeder extends MonitorThread {
 		Show2Commands commands = new Show2Commands();
 		commands.addCommand("cls");
 		_session.enqueueCommands(commands);
+
+		// wait for cls
+		Thread.sleep(1000);
 	}
 
 }
