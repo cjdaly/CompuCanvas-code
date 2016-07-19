@@ -15,4 +15,6 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public interface INeo4jService extends IC3Service {
 
+	public void runCypher(Cypher cypher);
+
 }
