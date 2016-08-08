@@ -33,6 +33,10 @@ public class TSDBuffer {
 		_group = group;
 	}
 
+	public String getHashKey() {
+		return _group.getHashKey() + "/" + _id;
+	}
+
 	public String getId() {
 		return _id;
 	}
@@ -68,6 +72,17 @@ public class TSDBuffer {
 		if (value == null)
 			return;
 		TSDValue tsd = new TSDValue(timeMillis, value, getType(), this);
+		updateHelper(tsd);
+	}
+
+	public synchronized void update(String[] values) {
+		update(System.currentTimeMillis(), values);
+	}
+
+	public synchronized void update(long timeMillis, String[] values) {
+		if (values == null)
+			return;
+		TSDValue tsd = new TSDValue(timeMillis, values, this);
 		updateHelper(tsd);
 	}
 

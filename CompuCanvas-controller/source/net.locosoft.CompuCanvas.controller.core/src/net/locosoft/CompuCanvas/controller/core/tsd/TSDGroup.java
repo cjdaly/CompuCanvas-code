@@ -28,7 +28,7 @@ public class TSDGroup {
 	public TSDGroup(String id, IC3Service service) {
 		_id = id;
 		_service = service;
-		_hashKey = _service.getServiceId() + ";" + _id;
+		_hashKey = _service.getServiceId() + "/" + _id;
 		_coreService = _service.getCoreService();
 	}
 

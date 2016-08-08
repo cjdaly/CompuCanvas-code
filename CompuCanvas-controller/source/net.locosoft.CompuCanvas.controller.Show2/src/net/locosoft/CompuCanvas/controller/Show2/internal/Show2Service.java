@@ -20,6 +20,7 @@ import net.locosoft.Show2Eboogaloo.Show2Session;
 public class Show2Service extends AbstractC3Service implements IShow2Service {
 
 	private Show2Session _session;
+	private Show2CommandTSDGroup _commandTSDs;
 	private Show2Listener _listener;
 	private Show2Feeder _feeder;
 
@@ -43,10 +44,12 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 			_session = new Show2Session(devicePath);
 			_session.start();
 
-			_listener = new Show2Listener(this, _session);
+			_commandTSDs = new Show2CommandTSDGroup(this);
+
+			_listener = new Show2Listener(this, _session, _commandTSDs);
 			_listener.start();
 
-			_feeder = new Show2Feeder(_session, defaultRotation);
+			_feeder = new Show2Feeder(_session, defaultRotation, _commandTSDs);
 			_feeder.start();
 		}
 	}

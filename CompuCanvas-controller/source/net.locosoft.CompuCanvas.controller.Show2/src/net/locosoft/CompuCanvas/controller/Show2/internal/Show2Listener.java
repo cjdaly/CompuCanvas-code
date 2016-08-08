@@ -24,6 +24,7 @@ import net.locosoft.Show2Eboogaloo.Show2Session;
 public class Show2Listener extends MonitorThread {
 	private Show2Service _service;
 	private Show2Session _session;
+	private Show2CommandTSDGroup _commandTSDs;
 
 	private TSDGroup _bmp180;
 	private TSDBuffer _bmp180Temp;
@@ -38,9 +39,10 @@ public class Show2Listener extends MonitorThread {
 	private TSDBuffer _si7020Temp;
 	private TSDBuffer _si7020Humi;
 
-	public Show2Listener(Show2Service service, Show2Session session) {
+	public Show2Listener(Show2Service service, Show2Session session, Show2CommandTSDGroup commandTSDs) {
 		_service = service;
 		_session = session;
+		_commandTSDs = commandTSDs;
 
 		_bmp180 = _service.serviceCreateTSDGroup("bmp180");
 		_bmp180Temp = _bmp180.createTSDBuffer("temp", "Celsius", TSDType.Double);
@@ -62,6 +64,7 @@ public class Show2Listener extends MonitorThread {
 
 		String line = _session.pullOutputLine();
 		if ((line != null) && (line.startsWith("!! "))) {
+			_commandTSDs.getOutputs().update(line);
 			Matcher matcher = _SensorDataPattern.matcher(line);
 			if (matcher.matches()) {
 				long timeMillis = System.currentTimeMillis();

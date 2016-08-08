@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.vitals.internal;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,7 +51,7 @@ public abstract class VitalSign {
 		return _type;
 	}
 
-	public abstract void update();
+	public abstract void update(Date date);
 
 	public static class C3ProcessVmPeak extends VitalSign {
 		public C3ProcessVmPeak(TSDGroup group) {
@@ -59,7 +60,7 @@ public abstract class VitalSign {
 
 		private Pattern _vmPeakPattern = Pattern.compile("VmPeak:\\s+(\\d+)\\s+kB");
 
-		public void update() {
+		public void update(Date date) {
 			int c3Pid = C3Util.getC3Pid();
 			if (c3Pid == -1)
 				return;
@@ -68,7 +69,7 @@ public abstract class VitalSign {
 			Matcher matcher = _vmPeakPattern.matcher(procStatus);
 			if (matcher.find()) {
 				String vmPeakText = matcher.group(1);
-				_buffer.update(vmPeakText);
+				_buffer.update(date.getTime(), vmPeakText);
 			}
 		}
 	}
@@ -78,9 +79,9 @@ public abstract class VitalSign {
 			super("jvm.totalMemory", "bytes", TSDType.Long, group);
 		}
 
-		public void update() {
+		public void update(Date date) {
 			long totalMemory = Runtime.getRuntime().totalMemory();
-			_buffer.update(totalMemory);
+			_buffer.update(date.getTime(), totalMemory);
 		}
 	}
 
@@ -89,12 +90,12 @@ public abstract class VitalSign {
 			super("system.loadAvg1Min", "load average", TSDType.Double, group);
 		}
 
-		public void update() {
+		public void update(Date date) {
 			String procLoadAvg = FileUtil.readFileToString("/proc/loadavg");
 			String[] loadAvgs = procLoadAvg.split("\\s+");
 			if ((loadAvgs != null) && (loadAvgs.length > 0)) {
 				String loadAvg1MinText = loadAvgs[0];
-				_buffer.update(loadAvg1MinText);
+				_buffer.update(date.getTime(), loadAvg1MinText);
 			}
 		}
 	}
@@ -106,12 +107,12 @@ public abstract class VitalSign {
 
 		private Pattern _memFreePattern = Pattern.compile("MemFree:\\s+(\\d+)\\s+kB");
 
-		public void update() {
+		public void update(Date date) {
 			String procMemInfo = FileUtil.readFileToString("/proc/meminfo");
 			Matcher matcher = _memFreePattern.matcher(procMemInfo);
 			if (matcher.find()) {
 				String memFreeText = matcher.group(1);
-				_buffer.update(memFreeText);
+				_buffer.update(date.getTime(), memFreeText);
 			}
 		}
 	}
@@ -123,7 +124,7 @@ public abstract class VitalSign {
 
 		private Pattern _dfPattern = Pattern.compile("/dev/\\S+\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)%");
 
-		public void update() {
+		public void update(Date date) {
 			StringBuilder processOut = new StringBuilder();
 			StringBuilder processErr = new StringBuilder();
 			String dfCommand = "/bin/df -k " + C3Util.getC3DataDir();
@@ -132,7 +133,7 @@ public abstract class VitalSign {
 			Matcher matcher = _dfPattern.matcher(processOut);
 			if (matcher.find()) {
 				String dfUsePercentText = matcher.group(4);
-				_buffer.update(dfUsePercentText);
+				_buffer.update(date.getTime(), dfUsePercentText);
 			}
 		}
 	}

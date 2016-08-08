@@ -12,6 +12,7 @@
 package net.locosoft.CompuCanvas.controller.BlinkStick.internal;
 
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDCommandGroup;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
@@ -20,10 +21,12 @@ import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 public class BlinkStickFeeder extends MonitorThread {
 
 	private BlinkStickService _service;
+	private TSDCommandGroup _tsdCommandGroup;
 	private CommandLineQueue _commandLineQueue = new CommandLineQueue();
 
 	public BlinkStickFeeder(BlinkStickService service) {
 		_service = service;
+		_tsdCommandGroup = new TSDCommandGroup(_service, "commands");
 	}
 
 	void enqueueCommand(String command) {
@@ -32,10 +35,18 @@ public class BlinkStickFeeder extends MonitorThread {
 
 	public boolean cycle() throws Exception {
 		String blinkStickCommand = _commandLineQueue.dequeueCommand();
+
 		if (blinkStickCommand != null) {
 			StringBuilder blinkStickOut = new StringBuilder();
 			StringBuilder blinkStickErr = new StringBuilder();
+
+			_tsdCommandGroup.getInputs().update(blinkStickCommand);
 			int result = ExecUtil.execCommand(blinkStickCommand, blinkStickOut, blinkStickErr);
+			long timeMillis = System.currentTimeMillis();
+			_tsdCommandGroup.getOutputs().update(timeMillis, blinkStickOut.toString());
+			_tsdCommandGroup.getErrors().update(timeMillis, blinkStickErr.toString());
+			_tsdCommandGroup.getResults().update(timeMillis, result);
+
 			if (result != 0) {
 				C3Util.logExecResult(result, blinkStickCommand, blinkStickOut.toString(), blinkStickErr.toString());
 			}

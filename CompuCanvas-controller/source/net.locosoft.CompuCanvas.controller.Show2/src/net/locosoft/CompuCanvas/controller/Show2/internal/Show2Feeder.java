@@ -19,10 +19,12 @@ public class Show2Feeder extends MonitorThread {
 
 	private Show2Session _session;
 	private int _defaultRotation;
+	private Show2CommandTSDGroup _commandTSDs;
 
-	public Show2Feeder(Show2Session session, int defaultRotation) {
+	public Show2Feeder(Show2Session session, int defaultRotation, Show2CommandTSDGroup commandTSDs) {
 		_session = session;
 		_defaultRotation = defaultRotation;
+		_commandTSDs = commandTSDs;
 	}
 
 	protected long getPreSleepMillis() {
@@ -37,13 +39,13 @@ public class Show2Feeder extends MonitorThread {
 		Show2Commands commands = new Show2Commands();
 		commands.addCommand("-WB");
 		commands.addCommand("blt255");
-		_session.enqueueCommands(commands);
+		enqueueCommands(commands);
 	}
 
 	public boolean cycle() throws Exception {
 		Show2Show show = Show2Show.nextShow();
 		Show2Commands commands = show.emitCommands(_defaultRotation);
-		_session.enqueueCommands(commands);
+		enqueueCommands(commands);
 		return true;
 	}
 
@@ -51,10 +53,18 @@ public class Show2Feeder extends MonitorThread {
 		_session.clearCommands();
 		Show2Commands commands = new Show2Commands();
 		commands.addCommand("cls");
-		_session.enqueueCommands(commands);
+		enqueueCommands(commands);
 
 		// wait for cls
-		Thread.sleep(1000);
+		Thread.sleep(2000);
+	}
+
+	private void enqueueCommands(Show2Commands commands) {
+		long timeMillis = System.currentTimeMillis();
+		_session.enqueueCommands(commands);
+		int queueSize = _session.getCommandQueueSize();
+		_commandTSDs.getInputs().update(timeMillis, commands.getCommands());
+		_commandTSDs.getQueueSizes().update(timeMillis, queueSize);
 	}
 
 }
