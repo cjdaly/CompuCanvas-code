@@ -64,8 +64,6 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	public void propagateTSDValue(TSDValue value) {
 		// TODO: Multimpexor
-
-		System.out.println("propagate: " + value);
 	}
 
 	// IC3Service
