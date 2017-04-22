@@ -29,6 +29,9 @@ echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.
 apt-get update
 apt-get upgrade -y
 apt-get install ant espeak mpg321 neo4j -y
+
+neo4j-admin set-initial-password canvas
+
 pip install blinkstick
 blinkstick --add-udev-rule
 

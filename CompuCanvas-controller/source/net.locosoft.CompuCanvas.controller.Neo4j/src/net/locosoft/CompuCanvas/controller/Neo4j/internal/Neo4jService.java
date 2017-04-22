@@ -48,7 +48,7 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 
 	public void serviceStart() {
 		try {
-			_driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "neo4j"));
+			_driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "canvas"));
 			_session = _driver.session();
 			_feeder = new Neo4jFeeder(_session);
 			_feeder.start();
