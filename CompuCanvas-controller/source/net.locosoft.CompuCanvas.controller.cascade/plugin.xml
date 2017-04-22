@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="net.locosoft.CompuCanvas.controller.core.C3Service">
+      <C3Service
+            id="cascade"
+            implementation="net.locosoft.CompuCanvas.controller.cascade.internal.CascadeService"
+            priority="20">
+      </C3Service>
+   </extension>
+
+</plugin>

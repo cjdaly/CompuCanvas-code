@@ -41,14 +41,17 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	private Properties _modelConfig;
 
+	private TSDCache _tsdCache = new TSDCache();
+
 	// ICoreService
 
 	public IC3Service getService(String id) {
 		return _idToService.get(id);
 	}
 
-	public <C3S extends IC3Service> IC3Service getService(Class<C3S> serviceInterface) {
-		return _ifaceToService.get(serviceInterface);
+	@SuppressWarnings("unchecked")
+	public <C3S> C3S getService(Class<C3S> serviceInterface) {
+		return (C3S) _ifaceToService.get(serviceInterface);
 	}
 
 	public String getModelConfig(String key) {
@@ -63,7 +66,11 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	}
 
 	public void propagateTSDValue(TSDValue value) {
-		// TODO: Multimpexor
+		_tsdCache.add(value);
+	}
+
+	public TSDValue[] getLatestTSDValues(int sizeHint) {
+		return _tsdCache.getLatest(sizeHint);
 	}
 
 	// IC3Service

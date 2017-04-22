@@ -18,6 +18,7 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 public class TSDBuffer {
 
 	private String _id;
+	private String _hashKey;
 	private String _units;
 	private TSDType _type;
 	private int _size;
@@ -31,10 +32,11 @@ public class TSDBuffer {
 		_type = type;
 		_size = size;
 		_group = group;
+		_hashKey = _group.getHashKey() + "/" + _id;
 	}
 
 	public String getHashKey() {
-		return _group.getHashKey() + "/" + _id;
+		return _hashKey;
 	}
 
 	public String getId() {

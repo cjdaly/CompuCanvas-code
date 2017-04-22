@@ -15,6 +15,7 @@ import java.util.LinkedList;
 
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
@@ -44,8 +45,18 @@ public class Neo4jFeeder extends MonitorThread {
 		Cypher cypher = dequeueCypher();
 
 		if (cypher != null) {
-			StatementResult result = _session.run(cypher.getText(), cypher.getParams());
-			cypher.handleResult(result);
+			StatementResult result = null;
+			if (cypher.useTransaction()) {
+				try (Transaction tx = _session.beginTransaction()) {
+					result = tx.run(cypher.getText(), cypher.getParams());
+					tx.success();
+				}
+			} else {
+				result = _session.run(cypher.getText(), cypher.getParams());
+			}
+			if (result != null) {
+				cypher.handleResult(result);
+			}
 		}
 
 		return true;

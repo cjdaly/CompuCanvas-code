@@ -7,6 +7,7 @@ net.locosoft.CompuCanvas.controller.MaxSonar,0.1.0,plugins/net.locosoft.CompuCan
 net.locosoft.CompuCanvas.controller.Neo4j,0.1.0,plugins/net.locosoft.CompuCanvas.controller.Neo4j_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.Show2,0.1.0,plugins/net.locosoft.CompuCanvas.controller.Show2_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.audio,0.1.0,plugins/net.locosoft.CompuCanvas.controller.audio_0.1.0.jar,4,false
+net.locosoft.CompuCanvas.controller.cascade,0.1.0,plugins/net.locosoft.CompuCanvas.controller.cascade_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.core,0.1.0,plugins/net.locosoft.CompuCanvas.controller.core_0.1.0.jar,4,true
 net.locosoft.CompuCanvas.controller.packaging,0.1.0,plugins/net.locosoft.CompuCanvas.controller.packaging_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.server,0.1.0,plugins/net.locosoft.CompuCanvas.controller.server_0.1.0.jar,4,true

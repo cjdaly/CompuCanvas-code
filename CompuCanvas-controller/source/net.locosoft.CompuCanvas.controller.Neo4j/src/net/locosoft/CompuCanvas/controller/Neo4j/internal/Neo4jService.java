@@ -30,8 +30,12 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 
 	// INeo4jService
 
+	public boolean isAcceptingCypher() {
+		return ((_feeder != null) && (!_feeder.isStopped()));
+	}
+
 	public void runCypher(Cypher cypher) {
-		if (_feeder != null) {
+		if (isAcceptingCypher()) {
 			_feeder.enqueueCypher(cypher);
 		}
 	}
@@ -47,6 +51,7 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 			_driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "neo4j"));
 			_session = _driver.session();
 			_feeder = new Neo4jFeeder(_session);
+			_feeder.start();
 		} catch (Exception ex) {
 			C3Util.log(ex.toString());
 		}

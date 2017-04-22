@@ -12,49 +12,35 @@
 package net.locosoft.CompuCanvas.controller.Neo4j;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.summary.ResultSummary;
 
 public abstract class Cypher {
 
 	private HashMap<String, Object> _params = new HashMap<String, Object>();
-	private List<Record> _results;
-	private ResultSummary _summary;
-	private boolean _retainResults = false;
-	private boolean _retainSummary = false;
+	private boolean _useTransaction = false;
 	private boolean _wasHandled = false;
 
 	public Cypher() {
 		this(false);
 	}
 
-	public Cypher(boolean retainResults) {
-		this(retainResults, false);
-	}
-
-	public Cypher(boolean retainResults, boolean retainSummary) {
-		_retainResults = retainResults;
-		_retainSummary = retainSummary;
+	public Cypher(boolean useTransaction) {
+		_useTransaction = useTransaction;
 	}
 
 	public abstract String getText();
 
-	protected abstract void handle(StatementResult result);
+	protected void handle(StatementResult result) {
+	}
+
+	public boolean useTransaction() {
+		return _useTransaction;
+	}
 
 	public Map<String, Object> getParams() {
 		return _params;
-	}
-
-	public List<Record> getResults() {
-		return _results;
-	}
-
-	public ResultSummary getSummary() {
-		return _summary;
 	}
 
 	public void addParam(String key, String value) {
@@ -74,12 +60,6 @@ public abstract class Cypher {
 	}
 
 	public void handleResult(StatementResult result) {
-		if (_retainResults) {
-			_results = result.list();
-		}
-		if (_retainSummary) {
-			_summary = result.consume();
-		}
 		handle(result);
 		_wasHandled = true;
 	}

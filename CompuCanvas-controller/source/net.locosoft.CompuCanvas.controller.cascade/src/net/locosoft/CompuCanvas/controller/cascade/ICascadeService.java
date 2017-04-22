@@ -9,14 +9,10 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.Neo4j;
+package net.locosoft.CompuCanvas.controller.cascade;
 
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
-public interface INeo4jService extends IC3Service {
-
-	public boolean isAcceptingCypher();
-
-	public void runCypher(Cypher cypher);
+public interface ICascadeService extends IC3Service {
 
 }

@@ -18,12 +18,14 @@ public interface ICoreService extends IC3Service {
 
 	public IC3Service getService(String id);
 
-	public <C3S extends IC3Service> IC3Service getService(Class<C3S> serviceInterface);
+	public <C3S> C3S getService(Class<C3S> serviceInterface);
 
 	public String getModelConfig(String key);
 
 	public TSDGroup createTSDGroup(String id, IC3Service service);
 
 	public void propagateTSDValue(TSDValue value);
+
+	public TSDValue[] getLatestTSDValues(int sizeHint);
 
 }

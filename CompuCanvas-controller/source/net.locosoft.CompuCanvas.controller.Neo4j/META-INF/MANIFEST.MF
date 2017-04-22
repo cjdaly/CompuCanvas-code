@@ -8,6 +8,12 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.core.runtime,
  net.locosoft.CompuCanvas.controller.core,
  net.locosoft.CompuCanvas.controller.util
-Export-Package: net.locosoft.CompuCanvas.controller.Neo4j
-Bundle-ClassPath: lib/neo4j-java-driver-1.0.3.jar,
- .
+Export-Package: net.locosoft.CompuCanvas.controller.Neo4j,
+ org.neo4j.driver.v1,
+ org.neo4j.driver.v1.exceptions,
+ org.neo4j.driver.v1.exceptions.value,
+ org.neo4j.driver.v1.summary,
+ org.neo4j.driver.v1.types,
+ org.neo4j.driver.v1.util
+Bundle-ClassPath: .,
+ lib/neo4j-java-driver-1.0.6.jar
