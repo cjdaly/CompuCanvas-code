@@ -26,12 +26,16 @@ echo "Configuring Neo4j Debian repo ..."
 wget -O - https://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
 echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
 
+echo "Doing apt-get update/upgrade/install ..."
 apt-get update
 apt-get upgrade -y
 apt-get install ant espeak mpg321 neo4j -y
 
+echo "Neo4j post-install config ..."
 neo4j-admin set-initial-password canvas
+update-rc.d neo4j defaults
 
+echo "Blinkstick install and config ..."
 pip install blinkstick
 blinkstick --add-udev-rule
 
