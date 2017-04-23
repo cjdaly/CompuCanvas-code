@@ -51,19 +51,13 @@ Invoking `c3.sh` with no arguments will show a usage message which, in addition 
 
 ## new system configuration
 
-Burn Raspbian Jessie image onto a microSD, boot and login (`user:pi` ; `pw:raspberry`), then do:
+First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) Jessie image onto a microSD, [configure for ssh](https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/), boot and login (`user:pi` ; `pw:raspberry`), then run the following command to set a new password:
 
     sudo passwd pi
 
-and set a new password.  Now do:
+Next, run `sudo raspi-config` and set timezone, etc.
 
-    sudo raspi-config
-
-and choose the option to expand filesystem.  May also want to go into internationalization options and set timezone.  When exiting `raspi-config` select the option to reboot, or do:
-
-    sudo reboot
-
-After the reboot, login again and do:
+Finally, clone the CompuCanvas code and run the system setup script:
 
     git clone https://github.com/cjdaly/CompuCanvas-code.git
     cd CompuCanvas-code/CompuCanvas-scripts/setup
