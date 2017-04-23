@@ -13,7 +13,7 @@ package net.locosoft.CompuCanvas.controller.cascade.internal;
 
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.v1.Value;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.Neo4j.INeo4jService;
@@ -24,12 +24,12 @@ import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
-public class Cascader extends MonitorThread {
+public class Cascade extends MonitorThread {
 
 	private ICoreService _coreService;
 	private INeo4jService _neo4jService;
 
-	public Cascader(ICoreService coreService, INeo4jService neo4jService) {
+	public Cascade(ICoreService coreService, INeo4jService neo4jService) {
 		_coreService = coreService;
 		_neo4jService = neo4jService;
 	}
@@ -89,10 +89,17 @@ public class Cascader extends MonitorThread {
 			C3Util.log("Cypher: " + getText());
 			while (result.hasNext()) {
 				Record r = result.next();
+				for (int i = 0; i < r.size(); i++) {
+					Value v = r.get(i);
+					C3Util.log("-> " + i + ":" + v.toString() + ", type: " + v.type().toString());
+				}
+
+				for (String key : r.keys()) {
+					Value v = r.get(key);
+					C3Util.log("-> " + key + ":" + v.toString() + ", type: " + v.type().toString());
+				}
 				C3Util.log("result: " + r.toString());
 			}
-			ResultSummary summary = result.consume();
-			C3Util.log("summary: " + summary.toString());
 		}
 
 	}

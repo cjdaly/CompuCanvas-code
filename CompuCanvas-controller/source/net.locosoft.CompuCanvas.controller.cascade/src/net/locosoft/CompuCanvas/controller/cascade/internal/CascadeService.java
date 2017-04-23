@@ -18,7 +18,7 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public class CascadeService extends AbstractC3Service implements ICascadeService {
 
-	private Cascader _cascader;
+	private Cascade _cascade;
 
 	// IC3Service
 
@@ -28,13 +28,13 @@ public class CascadeService extends AbstractC3Service implements ICascadeService
 
 	public void serviceStart() {
 		INeo4jService neo4jService = getCoreService().getService(INeo4jService.class);
-		_cascader = new Cascader(getCoreService(), neo4jService);
-		_cascader.start();
+		_cascade = new Cascade(getCoreService(), neo4jService);
+		_cascade.start();
 	}
 
 	public void serviceStop() {
-		if (_cascader != null) {
-			_cascader.stop();
+		if (_cascade != null) {
+			_cascade.stop();
 		}
 	}
 }
