@@ -89,16 +89,20 @@ public class Cascade extends MonitorThread {
 			C3Util.log("Cypher: " + getText());
 			while (result.hasNext()) {
 				Record r = result.next();
-				for (int i = 0; i < r.size(); i++) {
-					Value v = r.get(i);
-					C3Util.log("-> " + i + ":" + v.toString() + ", type: " + v.type().toString());
-				}
 
 				for (String key : r.keys()) {
 					Value v = r.get(key);
-					C3Util.log("-> " + key + ":" + v.toString() + ", type: " + v.type().toString());
+					C3Util.log("-> " + key + ":" + v.toString() + ", type: " + v.type().name());
+					handle(v, 1);
 				}
-				C3Util.log("result: " + r.toString());
+			}
+		}
+
+		private void handle(Value value, int level) {
+			for (String key : value.keys()) {
+				Value v = value.get(key);
+				C3Util.log(" -" + level + "-> " + key + ":" + v.toString() + ", type: " + v.type().name());
+				handle(v, level + 1);
 			}
 		}
 
