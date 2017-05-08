@@ -26,6 +26,6 @@ public interface ICoreService extends IC3Service {
 
 	public void propagateTSDValue(TSDValue value);
 
-	public TSDValue[] getLatestTSDValues(int sizeHint);
+	public TSDValue[] getTSDValuesAfter(long timeMillis);
 
 }

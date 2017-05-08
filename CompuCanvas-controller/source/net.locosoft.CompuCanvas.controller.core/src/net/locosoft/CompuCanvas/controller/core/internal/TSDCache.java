@@ -38,15 +38,15 @@ public class TSDCache {
 		}
 	}
 
-	public synchronized TSDValue[] getLatest(int sizeHint) {
+	public synchronized TSDValue[] getAfter(long timeMillis) {
 		ArrayList<TSDValue> values = new ArrayList<TSDValue>();
 
 		for (Entry<Long, Bucket> entry : _timeMillisToBucket.descendingMap().entrySet()) {
 			Bucket bucket = entry.getValue();
-			bucket.fill(values);
-
-			if (values.size() >= sizeHint)
+			if (bucket.getTime() <= timeMillis)
 				break;
+
+			bucket.fill(values);
 		}
 
 		return (TSDValue[]) values.toArray(new TSDValue[values.size()]);

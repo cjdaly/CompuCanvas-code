@@ -55,11 +55,15 @@ public abstract class Cypher {
 		_params.put(key, value);
 	}
 
+	public void addParam(String key, Map<String, Object>[] map) {
+		_params.put(key, map);
+	}
+
 	public boolean wasHandled() {
 		return _wasHandled;
 	}
 
-	public void handleResult(StatementResult result) {
+	public final void handleResult(StatementResult result) {
 		handle(result);
 		_wasHandled = true;
 	}

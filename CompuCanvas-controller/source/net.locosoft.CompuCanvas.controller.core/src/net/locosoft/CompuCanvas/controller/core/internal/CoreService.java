@@ -69,8 +69,8 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		_tsdCache.add(value);
 	}
 
-	public TSDValue[] getLatestTSDValues(int sizeHint) {
-		return _tsdCache.getLatest(sizeHint);
+	public TSDValue[] getTSDValuesAfter(long timeMillis) {
+		return _tsdCache.getAfter(timeMillis);
 	}
 
 	// IC3Service

@@ -12,3 +12,5 @@
 
 apt-get install arduino -y
 pip install ino
+
+sed -i -e "s:^# CompuCanvas$:# Show2\n\n/home/pi/Show2-Eboogaloo/show2.sh blt255 siz6 fg3 /0/Compu /1/Canvas ledB > /dev/null 2>&1\n\n# CompuCanvas:" /etc/rc.local

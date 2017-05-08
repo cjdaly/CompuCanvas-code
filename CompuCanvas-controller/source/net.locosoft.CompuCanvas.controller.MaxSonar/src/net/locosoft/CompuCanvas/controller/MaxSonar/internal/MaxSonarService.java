@@ -24,6 +24,9 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 
 	private TSDGroup _maxSonar;
 	private TSDBuffer _maxSonarRange;
+	private String _rValuePrev = "";
+	private int _skipCount = 0;
+	private int _skipMax = 12;
 
 	// IC3Service
 
@@ -48,7 +51,17 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 					if (line.startsWith("MaxSonar: ")) {
 						C3Util.log("MaxSonar init: " + line.substring("MaxSonar: ".length()));
 					} else if (line.startsWith("R")) {
-						_maxSonarRange.update(line.substring(1));
+						String rValue = line.substring(1);
+						if (rValue.equals(_rValuePrev)) {
+							_skipCount++;
+						} else {
+							_skipCount = _skipMax;
+						}
+						_rValuePrev = rValue;
+						if (_skipCount >= _skipMax) {
+							_maxSonarRange.update(rValue);
+							_skipCount = 0;
+						}
 					}
 				}
 

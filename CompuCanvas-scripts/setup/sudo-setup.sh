@@ -46,7 +46,7 @@ sudo -u pi touch "$COMPUCANVAS_C3_HOME/config/CC.id"
 echo "$CC_MODEL_ID" > "$COMPUCANVAS_C3_HOME/config/CC.id"
 
 echo "Adding startup callouts to /etc/rc.local ..."
-sed -i -e "s:^exit 0$:$COMPUCANVAS_SCRIPTS_HOME/boot-sequence.sh\n\nexit 0:" /etc/rc.local
+sed -i -e "s:^exit 0$:# CompuCanvas\n\n$COMPUCANVAS_SCRIPTS_HOME/boot-sequence.sh\n\nexit 0:" /etc/rc.local
 sed -i -e "s:^exit 0$:sudo -u pi -H $COMPUCANVAS_C3_HOME/c3.sh start\n\nexit 0:" /etc/rc.local
 
 echo "Completed setup for CompuCanvas model ID: ${CC_MODEL_ID}."
