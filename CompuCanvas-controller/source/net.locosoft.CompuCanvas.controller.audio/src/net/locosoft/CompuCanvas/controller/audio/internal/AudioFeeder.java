@@ -18,10 +18,36 @@ import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class AudioFeeder extends MonitorThread {
 
+	private AudioService _service;
 	private CommandLineQueue _commandLineQueue = new CommandLineQueue();
+	private int _testMP3Countdown;
+	private int _testMP3Count;
+
+	public AudioFeeder(AudioService service) {
+		_service = service;
+	}
 
 	void enqueueCommand(String command) {
 		_commandLineQueue.enqueueCommand(command);
+	}
+
+	public void beginCycle() throws Exception {
+		String[] mp3Ids = _service.getMP3Ids();
+		StringBuilder sb = null;
+		for (String mp3Id : mp3Ids) {
+			if (sb == null) {
+				sb = new StringBuilder(mp3Id);
+			} else {
+				sb.append(", ");
+				sb.append(mp3Id);
+			}
+		}
+		if (sb != null) {
+			C3Util.log("audio MP3 IDs: " + sb.toString());
+		}
+
+		_testMP3Countdown = _service.serviceGetConfigInt("test.mp3.countdown", -1);
+		_testMP3Count = _testMP3Countdown;
 	}
 
 	public boolean cycle() throws Exception {
@@ -35,12 +61,14 @@ public class AudioFeeder extends MonitorThread {
 				C3Util.logExecResult(result, audioCommand, audioOut.toString(), audioErr.toString());
 			}
 		} else {
-			// int hello = ThreadLocalRandom.current().nextInt(100);
-			// if (hello == 99) {
-			// String command = C3Util.getC3ScriptsDir() + "/espeaker.sh
-			// 'hello'";
-			// enqueueCommand(command);
-			// }
+
+			if (_testMP3Count > 0) {
+				_testMP3Count--;
+				if (_testMP3Count == 0) {
+					_testMP3Count = _testMP3Countdown;
+					_service.playMP3("lonewolf");
+				}
+			}
 		}
 
 		if (_commandLineQueue.countCommands() > 8) {

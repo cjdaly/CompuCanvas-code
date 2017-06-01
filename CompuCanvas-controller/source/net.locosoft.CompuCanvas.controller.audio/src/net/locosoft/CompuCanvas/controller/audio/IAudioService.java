@@ -17,4 +17,8 @@ public interface IAudioService extends IC3Service {
 
 	void speak(String message);
 
+	String[] getMP3Ids();
+
+	void playMP3(String id);
+
 }
