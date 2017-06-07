@@ -19,13 +19,11 @@ import net.locosoft.CompuCanvas.controller.core.ICoreService;
 public class WheelOfCypher {
 
 	public static WheelOfCypher getDefault(ICoreService coreService) {
-		WheelOfCypher wheel = new WheelOfCypher(2);
+		WheelOfCypher wheel = new WheelOfCypher(3);
 
-		Cog impressionInject = new ImpressionInject(coreService);
-		wheel.add(0, impressionInject);
-
-		Cog impressionCull = new ImpressionCull();
-		wheel.add(1, impressionCull);
+		wheel.add(0, new ImpressionCull());
+		wheel.add(1, new ImpressionInject(coreService));
+		wheel.add(2, new ImpressionBind());
 
 		return wheel;
 	}
@@ -60,9 +58,11 @@ public class WheelOfCypher {
 			if (counters == null) {
 				return getClass().getSimpleName() + " - ???";
 			} else {
-				return getClass().getSimpleName() + " - nodes: +" + counters.nodesCreated() + ", -"
-						+ counters.nodesDeleted() + ", rels: +" + counters.relationshipsCreated() + ", -"
-						+ counters.relationshipsDeleted();
+				return getClass().getSimpleName() + " - " //
+						+ " N: +" + counters.nodesCreated() + ", -" + counters.nodesDeleted() //
+						+ ", L: +" + counters.labelsAdded() + ", -" + counters.labelsRemoved() //
+						+ ", R: +" + counters.relationshipsCreated() + ", -" + counters.relationshipsDeleted() //
+						+ ", P: " + counters.propertiesSet();
 			}
 		}
 	}

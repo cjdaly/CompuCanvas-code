@@ -14,11 +14,15 @@ package net.locosoft.CompuCanvas.controller.cascade.internal.cypher;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.summary.ResultSummary;
+
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.core.ICoreService;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ImpressionInject extends WheelOfCypher.Cog {
 
@@ -34,6 +38,11 @@ public class ImpressionInject extends WheelOfCypher.Cog {
 
 			public String getText() {
 				return "UNWIND $impressionMap AS map CREATE (n:Impression) SET n = map";
+			}
+
+			protected void handle(StatementResult result) {
+				ResultSummary summary = result.summary();
+				C3Util.log(getSummaryText(summary.counters()));
 			}
 		};
 
