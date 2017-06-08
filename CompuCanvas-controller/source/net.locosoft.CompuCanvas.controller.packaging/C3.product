@@ -97,7 +97,7 @@
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <property name="eclipse.ignoreApp" value="true" />
-      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.32" />
+      <property name="net.locosoft.CompuCanvas.controller.internalVersion" value="0.1.0.33" />
       <property name="org.osgi.service.http.port" value="10123" />
       <property name="osgi.noShutdown" value="true" />
    </configurations>
