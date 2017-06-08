@@ -32,11 +32,11 @@ public class ImpressionBind extends WheelOfCypher.Cog {
 						+ " MATCH (n:Impression)" //
 						+ " WITH r, n" //
 						+ " ORDER BY n.timeValue DESC " + _ImpressionLimit //
-						+ " FOREACH (n | " //
+						+ " FOREACH (i IN n | " //
 						+ "   MATCH (r1:Impressor { linkIndex:r.linkIndexCounter})" //
 						+ "   MERGE (r1)-[:ImpressorLink]->(r2:Impressor { linkIndex:r.linkIndexCounter+1})" //
-						+ "   WITH r, r1, n" //
-						+ "   CREATE (n)-[:ImpressionBind]->(r1)" //
+						+ "   WITH r, r1, i" //
+						+ "   CREATE (i)-[:ImpressionBind]->(r1)" //
 						+ "   WITH r SET r.linkIndexCounter = r.linkIndexCounter + 1" //
 						+ " )";
 			}
