@@ -31,25 +31,21 @@ public class ImpressionBind extends WheelOfCypher.Cog {
 
 			public String getText() {
 				return //
-				" MERGE (r0:Impressor { chainIndex:$chainIndex, linkIndex:0 })" + //
-				" WITH r0" + //
 				" MATCH (imp:Impression)" + //
 				" WITH imp" + //
 				" ORDER BY imp.timeValue DESC " + _ImpressionLimit + //
 				" WITH collect(imp) as imps" + //
 				" UNWIND range(0,length(imps)-1) as idx" + //
 				" WITH imps[idx] as imp, idx" + //
-				" MATCH (r1:Impressor { chainIndex:$chainIndex, linkIndex:idx })" + //
-				" WITH imp, idx, r1" + //
+				" MERGE (r1:Impressor { chainIndex:$chainIndex, linkIndex:idx })" + //
 				" MERGE (r1)-[:ImpressorLink]->(r2:Impressor { chainIndex:$chainIndex, linkIndex:idx+1 })" + //
-				" WITH imp, r1" + //
-				" CREATE (imp)-[:ImpressionBind]->(r1)" + //
+				" MERGE (imp)-[:ImpressionBind]->(r1)" + //
 				"";
 			}
 
 			protected void handle(StatementResult result) {
 				ResultSummary summary = result.summary();
-				C3Util.log(getSummaryText(summary.counters()) + ", idx: " + _chainIndex);
+				C3Util.log(getSummaryText(summary.counters()) + ", idx: " + getParams().get("chainIndex"));
 			}
 		};
 
