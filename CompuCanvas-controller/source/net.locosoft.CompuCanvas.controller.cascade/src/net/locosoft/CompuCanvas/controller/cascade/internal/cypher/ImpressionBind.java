@@ -32,6 +32,7 @@ public class ImpressionBind extends WheelOfCypher.Cog {
 			public String getText() {
 				return //
 				" MERGE (r0:Impressor { chainIndex:$chainIndex, linkIndex:0 })" + //
+				" WITH r0" + //
 				" MATCH (imp:Impression)" + //
 				" WITH imp" + //
 				" ORDER BY imp.timeValue DESC " + _ImpressionLimit + //
