@@ -20,36 +20,39 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 public class ImpressionBind extends WheelOfCypher.Cog {
 
 	private static final String _ImpressionLimit = "LIMIT 16";
+	private static final int _ChainCount = 4;
+	private int _chainIndex = -1;
 
 	public Cypher newCypher() {
+		_chainIndex++;
+		_chainIndex %= _ChainCount;
+
 		Cypher cypher = new Cypher() {
 
 			public String getText() {
-				return "    MERGE (r:Impressor { chainIndex:$chainIndex })" //
-						+ " ON CREATE SET r.linkIndex = 0, r.linkIndexCounter = 0" //
-						+ " ON MATCH SET r.linkIndexCounter = 0" //
-						+ " WITH r" //
-						+ " MATCH (imp:Impression)" //
-						+ " WITH r, imp" //
-						+ " ORDER BY imp.timeValue DESC " + _ImpressionLimit //
-						+ " WITH r, collect(imp) as imps" //
-						+ " FOREACH (imp IN imps | " //
-						+ "   MERGE (r1:Impressor { linkIndex:r.linkIndexCounter })" //
-						+ "   WITH r, r1, imp" //
-						+ "   MERGE (r1)-[:ImpressorLink]->(r2:Impressor { linkIndex:r.linkIndexCounter+1 })" //
-						+ "   WITH r, r1, imp" //
-						+ "   CREATE (imp)-[:ImpressionBind]->(r1)" //
-						+ "   WITH r SET r.linkIndexCounter = r.linkIndexCounter + 1" //
-						+ " )";
+				return //
+				" MERGE (r0:Impressor { chainIndex:$chainIndex, linkIndex:0 })" + //
+				" MATCH (imp:Impression)" + //
+				" WITH imp" + //
+				" ORDER BY imp.timeValue DESC " + _ImpressionLimit + //
+				" WITH collect(imp) as imps" + //
+				" UNWIND range(0,length(imps)-1) as idx" + //
+				" WITH imps[idx] as imp, idx" + //
+				" MATCH (r1:Impressor { chainIndex:$chainIndex, linkIndex:idx })" + //
+				" WITH imp, idx, r1" + //
+				" MERGE (r1)-[:ImpressorLink]->(r2:Impressor { chainIndex:$chainIndex, linkIndex:idx+1 })" + //
+				" WITH imp, r1" + //
+				" CREATE (imp)-[:ImpressionBind]->(r1)" + //
+				"";
 			}
 
 			protected void handle(StatementResult result) {
 				ResultSummary summary = result.summary();
-				C3Util.log(getSummaryText(summary.counters()));
+				C3Util.log(getSummaryText(summary.counters()) + ", idx: " + _chainIndex);
 			}
 		};
 
-		cypher.addParam("chainIndex", 0);
+		cypher.addParam("chainIndex", _chainIndex);
 
 		return cypher;
 	}
