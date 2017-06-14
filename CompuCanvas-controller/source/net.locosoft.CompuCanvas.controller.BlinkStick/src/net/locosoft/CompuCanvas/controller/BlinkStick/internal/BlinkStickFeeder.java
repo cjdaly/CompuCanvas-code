@@ -42,10 +42,12 @@ public class BlinkStickFeeder extends MonitorThread {
 
 			_tsdCommandGroup.getInputs().update(blinkStickCommand);
 			int result = ExecUtil.execCommand(blinkStickCommand, blinkStickOut, blinkStickErr);
-			long timeMillis = System.currentTimeMillis();
-			_tsdCommandGroup.getOutputs().update(timeMillis, blinkStickOut.toString());
-			_tsdCommandGroup.getErrors().update(timeMillis, blinkStickErr.toString());
-			_tsdCommandGroup.getResults().update(timeMillis, result);
+			// long timeMillis = System.currentTimeMillis();
+			// _tsdCommandGroup.getOutputs().update(timeMillis,
+			// blinkStickOut.toString());
+			// _tsdCommandGroup.getErrors().update(timeMillis,
+			// blinkStickErr.toString());
+			// _tsdCommandGroup.getResults().update(timeMillis, result);
 
 			if (result != 0) {
 				C3Util.logExecResult(result, blinkStickCommand, blinkStickOut.toString(), blinkStickErr.toString());
