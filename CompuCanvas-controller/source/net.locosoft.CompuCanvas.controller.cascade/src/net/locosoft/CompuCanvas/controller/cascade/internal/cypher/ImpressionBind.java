@@ -19,8 +19,8 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ImpressionBind extends WheelOfCypher.Cog {
 
-	private static final String _ImpressionLimit = "LIMIT 20";
-	private static final int _ChainCount = 4;
+	private static final String _ImpressionLimit = "LIMIT 32";
+	private static final int _ChainCount = 16;
 	private int _chainIndex = -1;
 
 	public Cypher newCypher() {
