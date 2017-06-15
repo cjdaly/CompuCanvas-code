@@ -39,6 +39,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 
 	private HashMap<String, TSDGroup> _tsdGroups;
 
+	private Properties _logConfig;
 	private Properties _modelConfig;
 
 	private TSDCache _tsdCache = new TSDCache();
@@ -57,6 +58,14 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	public String getModelConfig(String key) {
 		return (_modelConfig == null) ? null //
 				: _modelConfig.getProperty(key);
+	}
+
+	public boolean isLoggingEnabled(String key) {
+		if (_logConfig == null)
+			return true;
+
+		String value = _logConfig.getProperty(key, "true");
+		return !value.toLowerCase().equals("false");
 	}
 
 	public TSDGroup createTSDGroup(String id, IC3Service service) {
@@ -97,12 +106,19 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		C3Util.log("C3 internal version: " + C3Util.getC3InternalVersion());
 		C3Util.log("CompuCanvas model: " + C3Util.getCompuCanvasModelId());
 
+		String logConfigFilePath = C3Util.getC3ConfigDir() + "/log.properties";
+		File logConfigFile = new File(logConfigFilePath);
+		if (logConfigFile.exists()) {
+			_logConfig = FileUtil.loadPropertiesFile(logConfigFilePath);
+			C3Util.log("Loaded log config: " + logConfigFilePath);
+		}
+
 		String modelConfigFilePath = C3Util.getC3ConfigDir() + "/model/" + C3Util.getCompuCanvasModelId()
 				+ ".properties";
 		File modelConfigFile = new File(modelConfigFilePath);
 		if (modelConfigFile.exists()) {
 			_modelConfig = FileUtil.loadPropertiesFile(modelConfigFilePath);
-			C3Util.log("Loaded config: " + modelConfigFilePath);
+			C3Util.log("Loaded model config: " + modelConfigFilePath);
 		}
 
 		// order services

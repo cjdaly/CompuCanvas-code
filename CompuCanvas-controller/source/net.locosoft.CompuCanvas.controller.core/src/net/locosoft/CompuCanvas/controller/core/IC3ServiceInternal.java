@@ -31,5 +31,7 @@ public interface IC3ServiceInternal extends IC3Service {
 
 	public int serviceGetConfigInt(String keySuffix, int defaultValue);
 
+	public void serviceLog(String keySuffix, String message);
+
 	public TSDGroup serviceCreateTSDGroup(String id);
 }

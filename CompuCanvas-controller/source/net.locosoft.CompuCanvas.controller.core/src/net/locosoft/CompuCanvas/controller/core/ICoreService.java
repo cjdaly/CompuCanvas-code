@@ -22,6 +22,8 @@ public interface ICoreService extends IC3Service {
 
 	public String getModelConfig(String key);
 
+	public boolean isLoggingEnabled(String key);
+
 	public TSDGroup createTSDGroup(String id, IC3Service service);
 
 	public void propagateTSDValue(TSDValue value);

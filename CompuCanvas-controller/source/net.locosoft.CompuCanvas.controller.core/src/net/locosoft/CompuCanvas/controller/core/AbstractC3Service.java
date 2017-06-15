@@ -70,4 +70,11 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		return getCoreService().createTSDGroup(id, this);
 	}
 
+	public void serviceLog(String messageGroup, String message) {
+		String key = "c3.service." + getServiceId() + "." + messageGroup;
+		if (getCoreService().isLoggingEnabled(key)) {
+			C3Util.log(message);
+		}
+	}
+
 }

@@ -27,6 +27,7 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 	private String _rValuePrev = "";
 	private int _skipCount = 0;
 	private int _skipMax = 12;
+	private int _rValueBlur = 5;
 
 	// IC3Service
 
@@ -52,17 +53,24 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 						C3Util.log("MaxSonar init: " + line.substring("MaxSonar: ".length()));
 					} else if (line.startsWith("R")) {
 						String rValue = line.substring(1);
-						if (rValue.equals(_rValuePrev)) {
+						if (rValue.equals(_rValuePrev) || closeEnough(rValue, _rValuePrev)) {
 							_skipCount++;
 						} else {
 							_skipCount = _skipMax;
 						}
 						_rValuePrev = rValue;
 						if (_skipCount >= _skipMax) {
+							serviceLog("updates", "MaxSonar update: " + rValue);
 							_maxSonarRange.update(rValue);
 							_skipCount = 0;
 						}
 					}
+				}
+
+				private boolean closeEnough(String rValue, String rValuePrev) {
+					int rV = C3Util.parseInt(rValue, 0);
+					int rVP = C3Util.parseInt(rValuePrev, 0);
+					return Math.abs(rVP - rV) < _rValueBlur;
 				}
 
 				public boolean isDone() {
