@@ -14,19 +14,16 @@ package net.locosoft.CompuCanvas.controller.cascade.internal;
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.Neo4j.INeo4jService;
 import net.locosoft.CompuCanvas.controller.cascade.internal.cypher.WheelOfCypher;
-import net.locosoft.CompuCanvas.controller.core.ICoreService;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class Cascade extends MonitorThread {
 
-	private ICoreService _coreService;
 	private INeo4jService _neo4jService;
 	private WheelOfCypher _wheelOfCypher;
 
-	public Cascade(ICoreService coreService, INeo4jService neo4jService) {
-		_coreService = coreService;
-		_neo4jService = neo4jService;
-		_wheelOfCypher = WheelOfCypher.getDefault(_coreService);
+	public Cascade(CascadeService cascadeService) {
+		_neo4jService = cascadeService.getCoreService().getService(INeo4jService.class);
+		_wheelOfCypher = WheelOfCypher.getDefault(cascadeService);
 	}
 
 	protected long getPreSleepMillis() {

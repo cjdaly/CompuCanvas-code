@@ -26,8 +26,8 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 	private TSDBuffer _maxSonarRange;
 	private String _rValuePrev = "";
 	private int _skipCount = 0;
-	private int _skipMax = 12;
-	private int _rValueBlur = 5;
+	private int _skipMax = 20;
+	private int _rValueBlur = 10;
 
 	// IC3Service
 

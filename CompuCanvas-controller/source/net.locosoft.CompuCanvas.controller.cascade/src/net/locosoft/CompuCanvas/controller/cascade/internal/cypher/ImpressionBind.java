@@ -43,8 +43,10 @@ public class ImpressionBind extends WheelOfCypher.Cog {
 			}
 
 			protected void handle(StatementResult result) {
-				ResultSummary summary = result.summary();
-				C3Util.log(getSummaryText(summary.counters()) + ", idx: " + getParams().get("chainIndex"));
+				if (isLoggingEnabled()) {
+					ResultSummary summary = result.summary();
+					C3Util.log(getSummaryText(summary.counters()) + ", idx: " + getParams().get("chainIndex"));
+				}
 			}
 		};
 

@@ -57,12 +57,12 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 
 	public final String serviceGetConfig(String keySuffix, String defaultValue) {
 		String key = "c3.service." + getServiceId() + "." + keySuffix;
-		return getCoreService().getModelConfig(key);
+		String value = getCoreService().getModelConfig(key);
+		return value == null ? defaultValue : value;
 	}
 
 	public final int serviceGetConfigInt(String keySuffix, int defaultValue) {
-		String key = "c3.service." + getServiceId() + "." + keySuffix;
-		String value = getCoreService().getModelConfig(key);
+		String value = serviceGetConfig(keySuffix, "");
 		return C3Util.parseInt(value, defaultValue);
 	}
 
@@ -70,9 +70,13 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		return getCoreService().createTSDGroup(id, this);
 	}
 
-	public void serviceLog(String messageGroup, String message) {
-		String key = "c3.service." + getServiceId() + "." + messageGroup;
-		if (getCoreService().isLoggingEnabled(key)) {
+	public boolean serviceIsLoggingEnabled(String keySuffix) {
+		String key = "c3.service." + getServiceId() + "." + keySuffix;
+		return getCoreService().isLoggingEnabled(key);
+	}
+
+	public void serviceLog(String keySuffix, String message) {
+		if (serviceIsLoggingEnabled(keySuffix)) {
 			C3Util.log(message);
 		}
 	}

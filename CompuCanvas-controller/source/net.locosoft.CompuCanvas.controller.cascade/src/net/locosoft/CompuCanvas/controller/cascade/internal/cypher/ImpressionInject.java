@@ -18,7 +18,6 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.summary.ResultSummary;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
-import net.locosoft.CompuCanvas.controller.core.ICoreService;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
@@ -26,12 +25,7 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ImpressionInject extends WheelOfCypher.Cog {
 
-	private ICoreService _coreService;
 	private long _lastImpressionMillis;
-
-	public ImpressionInject(ICoreService coreService) {
-		_coreService = coreService;
-	}
 
 	public Cypher newCypher() {
 		Cypher cypher = new Cypher() {
@@ -41,12 +35,14 @@ public class ImpressionInject extends WheelOfCypher.Cog {
 			}
 
 			protected void handle(StatementResult result) {
-				ResultSummary summary = result.summary();
-				C3Util.log(getSummaryText(summary.counters()));
+				if (isLoggingEnabled()) {
+					ResultSummary summary = result.summary();
+					C3Util.log(getSummaryText(summary.counters()));
+				}
 			}
 		};
 
-		TSDValue[] tsdValues = _coreService.getTSDValuesAfter(_lastImpressionMillis);
+		TSDValue[] tsdValues = getCoreService().getTSDValuesAfter(_lastImpressionMillis);
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object>[] impressionMap = new Map[tsdValues.length];

@@ -11,7 +11,6 @@
 
 package net.locosoft.CompuCanvas.controller.cascade.internal;
 
-import net.locosoft.CompuCanvas.controller.Neo4j.INeo4jService;
 import net.locosoft.CompuCanvas.controller.cascade.ICascadeService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
@@ -27,8 +26,7 @@ public class CascadeService extends AbstractC3Service implements ICascadeService
 	}
 
 	public void serviceStart() {
-		INeo4jService neo4jService = getCoreService().getService(INeo4jService.class);
-		_cascade = new Cascade(getCoreService(), neo4jService);
+		_cascade = new Cascade(this);
 		_cascade.start();
 	}
 
