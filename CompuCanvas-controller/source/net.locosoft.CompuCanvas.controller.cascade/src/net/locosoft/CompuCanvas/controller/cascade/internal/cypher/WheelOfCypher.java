@@ -11,6 +11,9 @@
 
 package net.locosoft.CompuCanvas.controller.cascade.internal.cypher;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.neo4j.driver.v1.summary.SummaryCounters;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
@@ -20,39 +23,69 @@ import net.locosoft.CompuCanvas.controller.core.ICoreService;
 public class WheelOfCypher {
 
 	public static WheelOfCypher getDefault(CascadeService cascadeService) {
-		WheelOfCypher wheel = new WheelOfCypher(cascadeService, 3);
+		WheelOfCypher wheel = new WheelOfCypher(cascadeService);
 
-		wheel.add(0, new ImpressionCull());
-		wheel.add(1, new ImpressionInject());
-		wheel.add(2, new ImpressionBind());
+		wheel.addGear("wake");
+		wheel.addCog("wake", new ControlWake());
+		wheel.addCog("wake", new ImpressionCull());
+		wheel.addCog("wake", new ImpressionInject());
+		wheel.addCog("wake", new ImpressionBind());
+		wheel.setGear("wake");
+
+		wheel.addGear("sleep");
+		wheel.addCog("sleep", new ControlSleep());
 
 		return wheel;
 	}
 
 	private CascadeService _cascadeService;
 	private ICoreService _coreService;
-	private Cog[] _cogs;
-	private int _position = 0;
 
-	public WheelOfCypher(CascadeService cascadeService, int size) {
+	private HashMap<String, ArrayList<Cog>> _gears = new HashMap<String, ArrayList<Cog>>();
+	private String _gearId;
+	private int _cogIndex = 0;
+
+	public WheelOfCypher(CascadeService cascadeService) {
 		_cascadeService = cascadeService;
 		_coreService = _cascadeService.getCoreService().getService(ICoreService.class);
-		_cogs = new Cog[size];
 	}
 
-	public void add(int position, Cog cog) {
-		_cogs[position] = cog;
+	void addGear(String id) {
+		_gears.put(id, new ArrayList<Cog>());
+	}
+
+	void addCog(String gearId, Cog cog) {
+		ArrayList<Cog> gear = getGear(gearId);
+		gear.add(cog);
 		cog._wheel = this;
 	}
 
+	ArrayList<Cog> getGear(String gearId) {
+		return _gears.get(gearId);
+	}
+
+	int getCogCount(String gearId) {
+		return getGear(gearId).size();
+	}
+
+	void setGear(String gearId) {
+		ArrayList<Cog> gear = getGear(gearId);
+		if (gear != null) {
+			_gearId = gearId;
+			_cogIndex = 0;
+		}
+	}
+
 	public Cypher nextCypher() {
-		Cog cog = _cogs[_position];
+		ArrayList<Cog> gear = getGear(_gearId);
+
+		Cog cog = gear.get(_cogIndex);
 		if (cog == null)
 			return null;
 
-		_position++;
-		if (_position >= _cogs.length)
-			_position = 0;
+		_cogIndex++;
+		if (_cogIndex >= gear.size())
+			_cogIndex = 0;
 
 		return cog.newCypher();
 	}
@@ -65,6 +98,10 @@ public class WheelOfCypher {
 
 		protected ICoreService getCoreService() {
 			return _wheel._coreService;
+		}
+
+		protected void setGear(String gearId) {
+			_wheel.setGear(gearId);
 		}
 
 		protected boolean isLoggingEnabled() {

@@ -11,35 +11,27 @@
 
 package net.locosoft.CompuCanvas.controller.cascade.internal.cypher;
 
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.summary.ResultSummary;
-
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 
-public class ImpressionCull extends WheelOfCypher.Cog {
+public class ControlWake extends WheelOfCypher.Cog {
 
-	private static final long _CULL_MILLIS = 10 * 1000;
+	private int _wakeCycles = 4;
+	private int _wakeCycle = _wakeCycles;
 
 	public Cypher newCypher() {
-		Cypher cypher = new Cypher() {
 
-			public String getText() {
-				return "MATCH (n:Impression) WHERE (n.timeValue < $cullTime) DETACH DELETE n";
-			}
+		if (isLoggingEnabled()) {
+			C3Util.log(getClass().getSimpleName() + " - wakeCycle: " + _wakeCycle);
+		}
 
-			protected void handle(StatementResult result) {
-				if (isLoggingEnabled()) {
-					ResultSummary summary = result.summary();
-					C3Util.log(getSummaryText(summary.counters()));
-				}
-			}
-		};
+		_wakeCycle--;
+		if (_wakeCycle == 0) {
+			_wakeCycle = _wakeCycles;
+			setGear("sleep");
+		}
 
-		long cullTime = System.currentTimeMillis() - _CULL_MILLIS;
-		cypher.addParam("cullTime", cullTime);
-
-		return cypher;
+		return null;
 	}
 
 }
