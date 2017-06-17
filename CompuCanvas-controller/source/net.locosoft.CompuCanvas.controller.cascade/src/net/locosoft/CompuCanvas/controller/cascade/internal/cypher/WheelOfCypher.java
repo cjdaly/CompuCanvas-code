@@ -19,6 +19,7 @@ import org.neo4j.driver.v1.summary.SummaryCounters;
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.cascade.internal.CascadeService;
 import net.locosoft.CompuCanvas.controller.core.ICoreService;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class WheelOfCypher {
 
@@ -34,6 +35,8 @@ public class WheelOfCypher {
 
 		wheel.addGear("sleep");
 		wheel.addCog("sleep", new ControlSleep());
+		wheel.addCog("sleep", new SleepIndex());
+		wheel.addCog("sleep", new SleepChill());
 
 		return wheel;
 	}
@@ -108,6 +111,18 @@ public class WheelOfCypher {
 			return _wheel._cascadeService.serviceIsLoggingEnabled("cypher");
 		}
 
+		protected void logCog(String message) {
+			if (message == null) {
+				message = "";
+			} else {
+				message = " - " + message;
+			}
+
+			if (isLoggingEnabled()) {
+				C3Util.log(getClass().getSimpleName() + message);
+			}
+		}
+
 		protected String getSummaryText(SummaryCounters counters) {
 			if (counters == null) {
 				return getClass().getSimpleName() + " - ???";
@@ -117,6 +132,17 @@ public class WheelOfCypher {
 						+ ", L: +" + counters.labelsAdded() + ", -" + counters.labelsRemoved() //
 						+ ", R: +" + counters.relationshipsCreated() + ", -" + counters.relationshipsDeleted() //
 						+ ", P: " + counters.propertiesSet();
+			}
+		}
+
+		protected String getSchemaSummaryText(SummaryCounters counters) {
+			if (counters == null) {
+				return getClass().getSimpleName() + " - ???";
+			} else {
+				return getClass().getSimpleName() + " - " //
+						+ " I: +" + counters.indexesAdded() + ", -" + counters.indexesRemoved() //
+						+ ", C: +" + counters.constraintsAdded() + ", -" + counters.constraintsRemoved() //
+						+ ", L: +" + counters.labelsAdded() + ", -" + counters.labelsRemoved();
 			}
 		}
 	}

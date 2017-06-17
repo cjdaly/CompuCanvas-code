@@ -12,18 +12,15 @@
 package net.locosoft.CompuCanvas.controller.cascade.internal.cypher;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
-import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ControlWake extends WheelOfCypher.Cog {
 
-	private int _wakeCycles = 4;
+	private int _wakeCycles = 20;
 	private int _wakeCycle = _wakeCycles;
 
 	public Cypher newCypher() {
 
-		if (isLoggingEnabled()) {
-			C3Util.log(getClass().getSimpleName() + " - wakeCycle: " + _wakeCycle);
-		}
+		logCog("wakeCycle: " + _wakeCycle);
 
 		_wakeCycle--;
 		if (_wakeCycle == 0) {

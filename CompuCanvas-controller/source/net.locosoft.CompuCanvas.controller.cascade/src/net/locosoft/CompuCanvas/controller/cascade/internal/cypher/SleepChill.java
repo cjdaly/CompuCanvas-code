@@ -13,21 +13,20 @@ package net.locosoft.CompuCanvas.controller.cascade.internal.cypher;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 
-public class ControlSleep extends WheelOfCypher.Cog {
+public class SleepChill extends WheelOfCypher.Cog {
 
-	private boolean _sleepCycle = true;
+	private static final int _ChillMillis = 10 * 1000;
 
 	public Cypher newCypher() {
 
-		logCog(null);
-
-		if (_sleepCycle) {
-			_sleepCycle = false;
-		} else {
-			setGear("wake");
-			_sleepCycle = true;
+		logCog("chillMillis: " + _ChillMillis + " ....");
+		try {
+			Thread.sleep(_ChillMillis);
+		} catch (InterruptedException e) {
 		}
+		logCog("chillMillis: " + _ChillMillis + " .");
 
 		return null;
 	}
+
 }
