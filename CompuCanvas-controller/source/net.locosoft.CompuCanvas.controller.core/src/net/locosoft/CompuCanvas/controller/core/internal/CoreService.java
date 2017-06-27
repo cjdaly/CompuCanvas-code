@@ -64,8 +64,8 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		if (_logConfig == null)
 			return true;
 
-		String value = _logConfig.getProperty(key, "true");
-		return !value.toLowerCase().equals("false");
+		String value = _logConfig.getProperty(key, "false");
+		return value.toLowerCase().equals("true");
 	}
 
 	public TSDGroup createTSDGroup(String id, IC3Service service) {
