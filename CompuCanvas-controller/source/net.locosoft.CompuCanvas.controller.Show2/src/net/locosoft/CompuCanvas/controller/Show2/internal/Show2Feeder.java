@@ -64,7 +64,7 @@ public class Show2Feeder extends MonitorThread {
 		_session.enqueueCommands(commands);
 		int queueSize = _session.getCommandQueueSize();
 		_commandTSDs.getInputs().update(timeMillis, commands.getCommands());
-		_commandTSDs.getQueueSizes().update(timeMillis, queueSize);
+		_commandTSDs.getQueueSize().update(timeMillis, queueSize);
 	}
 
 }

@@ -16,14 +16,17 @@ import java.util.LinkedList;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.exceptions.Neo4jException;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class Neo4jFeeder extends MonitorThread {
 
 	private Session _session;
 	private LinkedList<Cypher> _cypherQueue = new LinkedList<Cypher>();
+	private Neo4jException _lastEx = null;
 
 	public Neo4jFeeder(Session session) {
 		_session = session;
@@ -43,8 +46,18 @@ public class Neo4jFeeder extends MonitorThread {
 	public boolean cycle() throws Exception {
 
 		Cypher cypher = dequeueCypher();
+		if (cypher == null)
+			return true;
 
-		if (cypher != null) {
+		if ((_session == null) || (!_session.isOpen()))
+			return true;
+
+		try {
+			if (_lastEx != null) {
+				Thread.sleep(5000);
+				_lastEx = null;
+			}
+
 			StatementResult result = null;
 			if (cypher.useTransaction()) {
 				try (Transaction tx = _session.beginTransaction()) {
@@ -57,6 +70,9 @@ public class Neo4jFeeder extends MonitorThread {
 			if (result != null) {
 				cypher.handleResult(result);
 			}
+		} catch (Neo4jException ex) {
+			C3Util.log(ex.toString());
+			_lastEx = ex;
 		}
 
 		return true;

@@ -134,9 +134,4 @@ public class TSDBuffer {
 		}
 	}
 
-	public synchronized TSDAverage getAverage(long lookbackMillis) {
-		// TODO
-		return new TSDAverage();
-	}
-
 }

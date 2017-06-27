@@ -16,11 +16,17 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class TSDCache {
 
+	private CoreService _coreService;
 	private int _bucketCount = 1024;
 	private TreeMap<Long, Bucket> _timeMillisToBucket = new TreeMap<Long, Bucket>();
+
+	public TSDCache(CoreService coreService) {
+		_coreService = coreService;
+	}
 
 	public synchronized void add(TSDValue value) {
 		if (value == null)
@@ -35,6 +41,10 @@ public class TSDCache {
 			}
 		} else {
 			bucket.add(value);
+		}
+
+		if (_coreService.isLoggingEnabled("TSDCache.add")) {
+			C3Util.log(getClass().getSimpleName() + " adding: " + value);
 		}
 	}
 

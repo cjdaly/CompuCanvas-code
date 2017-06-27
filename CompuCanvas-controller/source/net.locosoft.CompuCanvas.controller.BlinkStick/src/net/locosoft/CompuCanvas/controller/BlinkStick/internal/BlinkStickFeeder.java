@@ -12,7 +12,9 @@
 package net.locosoft.CompuCanvas.controller.BlinkStick.internal;
 
 import net.locosoft.CompuCanvas.controller.BlinkStick.IBlinkStick;
-import net.locosoft.CompuCanvas.controller.core.tsd.TSDCommandGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDType;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.CommandLineQueue;
 import net.locosoft.CompuCanvas.controller.util.ExecUtil;
@@ -21,12 +23,14 @@ import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 public class BlinkStickFeeder extends MonitorThread {
 
 	private BlinkStickService _service;
-	private TSDCommandGroup _tsdCommandGroup;
+	private TSDGroup _tsdGroup;
+	private TSDBuffer _inputBuffer;
 	private CommandLineQueue _commandLineQueue = new CommandLineQueue();
 
 	public BlinkStickFeeder(BlinkStickService service) {
 		_service = service;
-		_tsdCommandGroup = new TSDCommandGroup(_service, "commands");
+		_tsdGroup = service.serviceCreateTSDGroup("blinkstick");
+		_inputBuffer = _tsdGroup.createTSDBuffer("input", "commands", TSDType.String);
 	}
 
 	void enqueueCommand(String command) {
@@ -40,14 +44,8 @@ public class BlinkStickFeeder extends MonitorThread {
 			StringBuilder blinkStickOut = new StringBuilder();
 			StringBuilder blinkStickErr = new StringBuilder();
 
-			_tsdCommandGroup.getInputs().update(blinkStickCommand);
+			_inputBuffer.update(blinkStickCommand);
 			int result = ExecUtil.execCommand(blinkStickCommand, blinkStickOut, blinkStickErr);
-			// long timeMillis = System.currentTimeMillis();
-			// _tsdCommandGroup.getOutputs().update(timeMillis,
-			// blinkStickOut.toString());
-			// _tsdCommandGroup.getErrors().update(timeMillis,
-			// blinkStickErr.toString());
-			// _tsdCommandGroup.getResults().update(timeMillis, result);
 
 			if (result != 0) {
 				C3Util.logExecResult(result, blinkStickCommand, blinkStickOut.toString(), blinkStickErr.toString());

@@ -19,14 +19,14 @@ public class Show2CommandTSDGroup {
 	private Show2Service _service;
 	private TSDGroup _group;
 	private TSDBuffer _inputs;
-	private TSDBuffer _queueSizes;
+	private TSDBuffer _queueSize;
 	private TSDBuffer _outputs;
 
 	public Show2CommandTSDGroup(Show2Service service) {
 		_service = service;
 		_group = _service.serviceCreateTSDGroup("commands");
 		_inputs = _group.createTSDBuffer("input", "Show2 commands", TSDType.String);
-		_queueSizes = _group.createTSDBuffer("queueSize", "size", TSDType.Long);
+		_queueSize = _group.createTSDBuffer("queueSize", "size", TSDType.Long);
 		_outputs = _group.createTSDBuffer("output", "Show2 output", TSDType.String);
 	}
 
@@ -38,8 +38,8 @@ public class Show2CommandTSDGroup {
 		return _inputs;
 	}
 
-	public TSDBuffer getQueueSizes() {
-		return _queueSizes;
+	public TSDBuffer getQueueSize() {
+		return _queueSize;
 	}
 
 	public TSDBuffer getOutputs() {

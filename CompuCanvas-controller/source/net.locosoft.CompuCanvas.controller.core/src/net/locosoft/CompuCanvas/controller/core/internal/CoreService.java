@@ -42,7 +42,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 	private Properties _logConfig;
 	private Properties _modelConfig;
 
-	private TSDCache _tsdCache = new TSDCache();
+	private TSDCache _tsdCache = new TSDCache(this);
 
 	// ICoreService
 
