@@ -43,7 +43,7 @@ public class TSDCache {
 			bucket.add(value);
 		}
 
-		if (_coreService.isLoggingEnabled("TSDCache.add")) {
+		if (_coreService.serviceIsLoggingEnabled("TSDCache.add")) {
 			C3Util.log(getClass().getSimpleName() + " adding: " + value);
 		}
 	}
