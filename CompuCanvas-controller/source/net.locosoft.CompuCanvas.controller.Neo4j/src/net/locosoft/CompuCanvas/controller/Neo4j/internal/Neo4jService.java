@@ -27,6 +27,7 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 	private Driver _driver;
 	private Session _session;
 	private Neo4jFeeder _feeder;
+	private Neo4jVitals _vitals;
 
 	// INeo4jService
 
@@ -52,12 +53,17 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 			_session = _driver.session();
 			_feeder = new Neo4jFeeder(_session);
 			_feeder.start();
+			_vitals = new Neo4jVitals(this);
+			_vitals.start();
 		} catch (Exception ex) {
 			C3Util.log(ex.toString());
 		}
 	}
 
 	public void serviceStop() {
+		if (_vitals != null) {
+			_vitals.stop();
+		}
 		if (_feeder != null) {
 			_feeder.stop(true);
 		}

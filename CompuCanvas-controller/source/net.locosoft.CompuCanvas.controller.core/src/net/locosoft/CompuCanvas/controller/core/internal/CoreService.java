@@ -166,7 +166,7 @@ public class CoreService extends AbstractC3Service implements ICoreService {
 		}
 
 		public boolean cycle() throws Exception {
-			int c3Pid = C3Util.getC3Pid();
+			int c3Pid = C3Util.getC3PID();
 			return c3Pid != -1;
 		}
 

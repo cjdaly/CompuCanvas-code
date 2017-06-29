@@ -58,19 +58,13 @@ public abstract class VitalSign {
 			super("process.c3.vmPeak", "kB", TSDType.Long, group);
 		}
 
-		private Pattern _vmPeakPattern = Pattern.compile("VmPeak:\\s+(\\d+)\\s+kB");
-
 		public void update(Date date) {
-			int c3Pid = C3Util.getC3Pid();
+			int c3Pid = C3Util.getC3PID();
 			if (c3Pid == -1)
 				return;
 
-			String procStatus = FileUtil.readFileToString("/proc/" + c3Pid + "/status");
-			Matcher matcher = _vmPeakPattern.matcher(procStatus);
-			if (matcher.find()) {
-				String vmPeakText = matcher.group(1);
-				_buffer.update(date.getTime(), vmPeakText);
-			}
+			int vmPeak = C3Util.getProcessVmPeak(c3Pid);
+			_buffer.update(date.getTime(), vmPeak);
 		}
 	}
 
