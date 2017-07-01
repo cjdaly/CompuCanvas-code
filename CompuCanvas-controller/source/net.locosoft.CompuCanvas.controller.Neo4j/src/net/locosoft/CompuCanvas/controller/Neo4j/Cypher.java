@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.exceptions.Neo4jException;
+
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public abstract class Cypher {
 
@@ -64,8 +67,12 @@ public abstract class Cypher {
 	}
 
 	public final void handleResult(StatementResult result) {
-		handle(result);
-		_wasHandled = true;
+		try {
+			handle(result);
+			_wasHandled = true;
+		} catch (Neo4jException ex) {
+			C3Util.log(ex.toString());
+		}
 	}
 
 }

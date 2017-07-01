@@ -54,13 +54,22 @@ public class ImpressionInject extends WheelOfCypher.Cog {
 			map.put("timeValue", tsdValue.getTime());
 			switch (tsdValue.getType()) {
 			case String:
-				map.put("stringValue", tsdValue.asString());
+				if (tsdValue.isArray())
+					map.put("stringValues", tsdValue.asStrings());
+				else
+					map.put("stringValue", tsdValue.asString());
 				break;
 			case Long:
-				map.put("longValue", tsdValue.asLong());
+				if (tsdValue.isArray())
+					map.put("longValues", tsdValue.asLongs());
+				else
+					map.put("longValue", tsdValue.asLong());
 				break;
 			case Double:
-				map.put("doubleValue", tsdValue.asDouble());
+				if (tsdValue.isArray())
+					map.put("doubleValues", tsdValue.asDoubles());
+				else
+					map.put("doubleValue", tsdValue.asDouble());
 				break;
 			}
 			TSDBuffer tsdBuffer = tsdValue.getBuffer();

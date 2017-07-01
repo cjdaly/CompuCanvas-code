@@ -54,6 +54,8 @@ public abstract class VitalSign {
 	public abstract void update(Date date);
 
 	public static class C3ProcessVmPeak extends VitalSign {
+		private static final int _C3VmPeakMax = 500000;
+
 		public C3ProcessVmPeak(TSDGroup group) {
 			super("process.c3.vmPeak", "kB", TSDType.Long, group);
 		}
@@ -64,6 +66,10 @@ public abstract class VitalSign {
 				return;
 
 			int vmPeak = C3Util.getProcessVmPeak(c3Pid);
+			if (vmPeak > _C3VmPeakMax) {
+				C3Util.log("!!! C3 VmPeak: " + vmPeak + "  Reboot soon!");
+			}
+
 			_buffer.update(date.getTime(), vmPeak);
 		}
 	}

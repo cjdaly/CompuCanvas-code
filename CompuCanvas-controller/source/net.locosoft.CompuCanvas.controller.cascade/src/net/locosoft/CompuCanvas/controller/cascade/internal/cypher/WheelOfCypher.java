@@ -37,6 +37,7 @@ public class WheelOfCypher {
 		wheel.addCog("sleep", new ControlSleep());
 		wheel.addCog("sleep", new SleepIndex());
 		wheel.addCog("sleep", new SleepChill());
+		wheel.addCog("sleep", new SleepReport());
 
 		return wheel;
 	}
@@ -112,13 +113,13 @@ public class WheelOfCypher {
 		}
 
 		protected void logCog(String message) {
-			if (message == null) {
-				message = "";
-			} else {
-				message = " - " + message;
-			}
-
 			if (isLoggingEnabled()) {
+				if (message == null) {
+					message = "";
+				} else {
+					message = " - " + message;
+				}
+
 				C3Util.log(getClass().getSimpleName() + message);
 			}
 		}

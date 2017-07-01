@@ -25,6 +25,7 @@ public class Neo4jVitals extends MonitorThread {
 
 	private TSDBuffer _vmPeakTSDs;
 	private int _neo4jPID = -1;
+	private static final int _Neo4jVmPeakMax = 900000;
 
 	public Neo4jVitals(Neo4jService service) {
 		TSDGroup tsdGroup = service.serviceCreateTSDGroup("vitals");
@@ -43,6 +44,9 @@ public class Neo4jVitals extends MonitorThread {
 
 		if (_neo4jPID > 0) {
 			int vmPeak = C3Util.getProcessVmPeak(_neo4jPID);
+			if (vmPeak > _Neo4jVmPeakMax) {
+				C3Util.log("!!! Neo4j VmPeak: " + vmPeak + "  Reboot soon!");
+			}
 			_vmPeakTSDs.update(vmPeak);
 		}
 
