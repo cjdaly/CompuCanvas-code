@@ -20,12 +20,39 @@ package org.neo4j.driver.internal.cluster;
 
 public class RoutingSettings
 {
-    final int maxRoutingFailures;
-    final long retryTimeoutDelay;
+    private final int maxRoutingFailures;
+    private final long retryTimeoutDelay;
+    private final RoutingContext routingContext;
 
     public RoutingSettings( int maxRoutingFailures, long retryTimeoutDelay )
     {
+        this( maxRoutingFailures, retryTimeoutDelay, RoutingContext.EMPTY );
+    }
+
+    public RoutingSettings( int maxRoutingFailures, long retryTimeoutDelay, RoutingContext routingContext )
+    {
         this.maxRoutingFailures = maxRoutingFailures;
         this.retryTimeoutDelay = retryTimeoutDelay;
+        this.routingContext = routingContext;
+    }
+
+    public RoutingSettings withRoutingContext( RoutingContext newRoutingContext )
+    {
+        return new RoutingSettings( maxRoutingFailures, retryTimeoutDelay, newRoutingContext );
+    }
+
+    public int maxRoutingFailures()
+    {
+        return maxRoutingFailures;
+    }
+
+    public long retryTimeoutDelay()
+    {
+        return retryTimeoutDelay;
+    }
+
+    public RoutingContext routingContext()
+    {
+        return routingContext;
     }
 }

@@ -23,6 +23,7 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 
 import org.neo4j.driver.internal.cluster.LoadBalancer;
+import org.neo4j.driver.internal.cluster.RoutingContext;
 import org.neo4j.driver.internal.cluster.RoutingSettings;
 import org.neo4j.driver.internal.net.BoltServerAddress;
 import org.neo4j.driver.internal.net.SocketConnector;
@@ -46,22 +47,24 @@ import org.neo4j.driver.v1.exceptions.ClientException;
 
 import static java.lang.String.format;
 import static org.neo4j.driver.internal.security.SecurityPlan.insecure;
-import static org.neo4j.driver.v1.Config.EncryptionLevel.REQUIRED;
 
 public class DriverFactory
 {
+    public static final String BOLT_URI_SCHEME = "bolt";
+    public static final String BOLT_ROUTING_URI_SCHEME = "bolt+routing";
+
     public final Driver newInstance( URI uri, AuthToken authToken, RoutingSettings routingSettings,
             RetrySettings retrySettings, Config config )
     {
         BoltServerAddress address = BoltServerAddress.from( uri );
+        RoutingSettings newRoutingSettings = routingSettings.withRoutingContext( new RoutingContext( uri ) );
         SecurityPlan securityPlan = createSecurityPlan( address, config );
         ConnectionPool connectionPool = createConnectionPool( authToken, securityPlan, config );
         RetryLogic retryLogic = createRetryLogic( retrySettings, config.logging() );
 
         try
         {
-            return createDriver( address, uri.getScheme(), connectionPool, config, routingSettings, securityPlan,
-                    retryLogic );
+            return createDriver( uri, address, connectionPool, config, newRoutingSettings, securityPlan, retryLogic );
         }
         catch ( Throwable driverError )
         {
@@ -78,14 +81,17 @@ public class DriverFactory
         }
     }
 
-    private Driver createDriver( BoltServerAddress address, String scheme, ConnectionPool connectionPool,
-            Config config, RoutingSettings routingSettings, SecurityPlan securityPlan, RetryLogic retryLogic )
+    private Driver createDriver( URI uri, BoltServerAddress address, ConnectionPool connectionPool,
+            Config config, RoutingSettings routingSettings, SecurityPlan securityPlan,
+            RetryLogic retryLogic )
     {
-        switch ( scheme.toLowerCase() )
+        String scheme = uri.getScheme().toLowerCase();
+        switch ( scheme )
         {
-        case "bolt":
+        case BOLT_URI_SCHEME:
+            assertNoRoutingContext( uri, routingSettings );
             return createDirectDriver( address, connectionPool, config, securityPlan, retryLogic );
-        case "bolt+routing":
+        case BOLT_ROUTING_URI_SCHEME:
             return createRoutingDriver( address, connectionPool, config, routingSettings, securityPlan, retryLogic );
         default:
             throw new ClientException( format( "Unsupported URI scheme: %s", scheme ) );
@@ -222,10 +228,7 @@ public class DriverFactory
     private static SecurityPlan createSecurityPlanImpl( BoltServerAddress address, Config config )
             throws GeneralSecurityException, IOException
     {
-        Config.EncryptionLevel encryptionLevel = config.encryptionLevel();
-        boolean requiresEncryption = encryptionLevel.equals( REQUIRED );
-
-        if ( requiresEncryption )
+        if ( config.encrypted() )
         {
             Logger logger = config.logging().getLog( "SecurityPlan" );
             switch ( config.trustStrategy().strategy() )
@@ -258,6 +261,16 @@ public class DriverFactory
         else
         {
             return insecure();
+        }
+    }
+
+    private static void assertNoRoutingContext( URI uri, RoutingSettings routingSettings )
+    {
+        RoutingContext routingContext = routingSettings.routingContext();
+        if ( routingContext.isDefined() )
+        {
+            throw new IllegalArgumentException(
+                    "Routing parameters are not supported with scheme 'bolt'. Given URI: '" + uri + "'" );
         }
     }
 }

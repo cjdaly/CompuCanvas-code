@@ -63,8 +63,8 @@ public class Config
      */
     private final long idleTimeBeforeConnectionTest;
 
-    /** Level of encryption we need to adhere to */
-    private final EncryptionLevel encryptionLevel;
+    /** Indicator for encrypted traffic */
+    private final boolean encrypted;
 
     /** Strategy for how to trust encryption certificate */
     private final TrustStrategy trustStrategy;
@@ -82,7 +82,7 @@ public class Config
         this.idleTimeBeforeConnectionTest = builder.idleTimeBeforeConnectionTest;
         this.maxIdleConnectionPoolSize = builder.maxIdleConnectionPoolSize;
 
-        this.encryptionLevel = builder.encryptionLevel;
+        this.encrypted = builder.encrypted;
         this.trustStrategy = builder.trustStrategy;
         this.routingFailureLimit = builder.routingFailureLimit;
         this.routingRetryDelayMillis = builder.routingRetryDelayMillis;
@@ -150,9 +150,18 @@ public class Config
     /**
      * @return the level of encryption required for all connections.
      */
+    @Deprecated
     public EncryptionLevel encryptionLevel()
     {
-        return encryptionLevel;
+        return encrypted ? EncryptionLevel.REQUIRED : EncryptionLevel.NONE;
+    }
+
+    /**
+     * @return indicator for encrypted communication.
+     */
+    public boolean encrypted()
+    {
+        return encrypted;
     }
 
     /**
@@ -199,7 +208,7 @@ public class Config
         private boolean logLeakedSessions;
         private int maxIdleConnectionPoolSize = PoolSettings.DEFAULT_MAX_IDLE_CONNECTION_POOL_SIZE;
         private long idleTimeBeforeConnectionTest = PoolSettings.DEFAULT_IDLE_TIME_BEFORE_CONNECTION_TEST;
-        private EncryptionLevel encryptionLevel = EncryptionLevel.REQUIRED;
+        private boolean encrypted = true;
         private TrustStrategy trustStrategy = trustAllCertificates();
         private int routingFailureLimit = 1;
         private long routingRetryDelayMillis = TimeUnit.SECONDS.toMillis( 5 );
@@ -303,7 +312,8 @@ public class Config
          * application seeing connection problems, and performance.
          * <p>
          * You normally should not need to tune this parameter.
-         * This feature is turned off by default. Value {@code 0} means connections will always be tested for
+         * No connection liveliness check is done by default.
+         * Value {@code 0} means connections will always be tested for
          * validity and negative values mean connections will never be tested.
          *
          * @param value the minimum idle time in milliseconds
@@ -321,9 +331,30 @@ public class Config
          * @param level the TLS level to use
          * @return this builder
          */
+        @Deprecated
         public ConfigBuilder withEncryptionLevel( EncryptionLevel level )
         {
-            this.encryptionLevel = level;
+            this.encrypted = level == EncryptionLevel.REQUIRED;
+            return this;
+        }
+
+        /**
+         * Set to use encrypted traffic.
+         * @return this builder
+         */
+        public ConfigBuilder withEncryption()
+        {
+            this.encrypted = true;
+            return this;
+        }
+
+        /**
+         * Set to use unencrypted traffic.
+         * @return this builder
+         */
+        public ConfigBuilder withoutEncryption()
+        {
+            this.encrypted = false;
             return this;
         }
 
@@ -516,6 +547,9 @@ public class Config
      */
     public static class TrustStrategy
     {
+        /**
+         * The trust strategy that the driver supports
+         */
         public enum Strategy
         {
             @Deprecated

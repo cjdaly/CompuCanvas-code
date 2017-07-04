@@ -5,5 +5,5 @@ https://github.com/neo4j/neo4j-java-driver/releases
 
 Current version:
 
-https://github.com/neo4j/neo4j-java-driver/archive/1.2.2.zip
+https://github.com/neo4j/neo4j-java-driver/archive/1.4.1.zip
 

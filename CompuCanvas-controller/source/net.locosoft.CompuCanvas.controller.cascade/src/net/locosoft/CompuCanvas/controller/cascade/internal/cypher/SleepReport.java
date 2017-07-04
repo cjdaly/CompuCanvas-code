@@ -37,7 +37,7 @@ public class SleepReport extends WheelOfCypher.Cog {
 					Record record = result.single();
 					int impressionCount = record.get("impressionCount").asInt();
 					int impressorCount = record.get("impressorCount").asInt();
-					C3Util.log(getClass().getSimpleName() + //
+					C3Util.log("SleepReport" + //
 					" - Impressions: " + impressionCount + //
 					", Impressors: " + impressorCount //
 					);

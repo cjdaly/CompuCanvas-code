@@ -125,15 +125,33 @@ public class TSDValue {
 	}
 
 	public String asString() {
-		switch (_type) {
-		case String:
-			return _stringValue;
-		case Long:
-			return Long.toString(_longValue);
-		case Double:
-			return Double.toString(_doubleValue);
-		default:
-			return null;
+		if (isArray()) {
+			int size = getSize();
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < size; i++) {
+				switch (_type) {
+				case String:
+					sb.append(_stringValues[i]);
+				case Long:
+					sb.append(_longValues[i]);
+				case Double:
+					sb.append(_doubleValues[i]);
+				}
+				if (i > 0)
+					sb.append(", ");
+			}
+			return sb.toString();
+		} else {
+			switch (_type) {
+			case String:
+				return _stringValue;
+			case Long:
+				return Long.toString(_longValue);
+			case Double:
+				return Double.toString(_doubleValue);
+			default:
+				return null;
+			}
 		}
 	}
 

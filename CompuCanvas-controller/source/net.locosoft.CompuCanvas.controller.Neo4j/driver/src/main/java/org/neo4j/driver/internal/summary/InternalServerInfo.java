@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.neo4j.driver.internal.summary;
 
 import org.neo4j.driver.internal.net.BoltServerAddress;
@@ -26,7 +27,7 @@ public class InternalServerInfo implements ServerInfo
     private final BoltServerAddress address;
     private final String version;
 
-    public InternalServerInfo(BoltServerAddress address, String version)
+    public InternalServerInfo( BoltServerAddress address, String version )
     {
         this.address = address;
         this.version = version;

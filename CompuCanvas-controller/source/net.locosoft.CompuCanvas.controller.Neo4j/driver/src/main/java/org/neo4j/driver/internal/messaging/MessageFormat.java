@@ -42,7 +42,7 @@ public interface MessageFormat
 
     }
 
-    Writer newWriter( WritableByteChannel ch );
+    Writer newWriter( WritableByteChannel ch, boolean byteArraySupportEnabled );
 
     Reader newReader( ReadableByteChannel ch );
 

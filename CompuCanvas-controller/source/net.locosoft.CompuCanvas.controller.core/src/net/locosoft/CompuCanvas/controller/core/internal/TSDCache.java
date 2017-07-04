@@ -44,7 +44,7 @@ public class TSDCache {
 		}
 
 		if (_coreService.serviceIsLoggingEnabled("TSDCache.add")) {
-			C3Util.log(getClass().getSimpleName() + " adding: " + value);
+			C3Util.log(getClass().getSimpleName() + " adding " + value);
 		}
 	}
 

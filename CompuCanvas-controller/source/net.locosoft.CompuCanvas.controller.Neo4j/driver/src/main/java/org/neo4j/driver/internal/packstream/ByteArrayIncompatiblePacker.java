@@ -16,23 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.neo4j.driver.internal.packstream;
 
-package org.neo4j.driver.internal.cluster;
+import java.io.IOException;
 
-import java.util.List;
-
-import org.neo4j.driver.internal.NetworkSession;
-import org.neo4j.driver.internal.SessionResourcesHandler;
-import org.neo4j.driver.internal.spi.Connection;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Statement;
-
-public class GetServersProcedureRunner
+public class ByteArrayIncompatiblePacker extends PackStream.Packer
 {
-    private static final String CALL_GET_SERVERS = "CALL dbms.cluster.routing.getServers";
-
-    public List<Record> run( Connection connection )
+    public ByteArrayIncompatiblePacker( PackOutput out )
     {
-        return NetworkSession.run( connection, new Statement( CALL_GET_SERVERS ), SessionResourcesHandler.NO_OP ).list();
+        super( out );
+    }
+
+    public void packBytesHeader( int size ) throws IOException
+    {
+        throw new PackStream.UnPackable( "Packing bytes is not supported " +
+                "as the current server this driver connected to does not support unpack bytes." );
     }
 }
