@@ -17,14 +17,34 @@ import net.locosoft.Show2Eboogaloo.Show2Session;
 
 public class Show2Feeder extends MonitorThread {
 
+	private Show2Service _service;
 	private Show2Session _session;
-	private int _defaultRotation;
 	private Show2CommandTSDGroup _commandTSDs;
 
-	public Show2Feeder(Show2Session session, int defaultRotation, Show2CommandTSDGroup commandTSDs) {
+	private int _defaultRotation;
+	private int _defaultBacklight;
+	private String _showCompuCanvas;
+	private String _showCCid;
+
+	public Show2Feeder(Show2Service service, Show2Session session, Show2CommandTSDGroup commandTSDs) {
+		_service = service;
 		_session = session;
-		_defaultRotation = defaultRotation;
 		_commandTSDs = commandTSDs;
+
+		int defaultRotation = _service.serviceGetConfigInt("defaultRotation", 0);
+		if ((defaultRotation < 0) || (defaultRotation > 3))
+			defaultRotation = 0;
+		_defaultRotation = defaultRotation;
+
+		int defaultBacklight = _service.serviceGetConfigInt("defaultBacklight", 200);
+		if (defaultBacklight < 0)
+			defaultBacklight = 0;
+		if (defaultBacklight > 255)
+			defaultBacklight = 255;
+		_defaultBacklight = defaultBacklight;
+
+		_showCompuCanvas = _service.serviceGetConfig("show.CompuCanvas", null);
+		_showCCid = _service.serviceGetConfig("show.CCid", null);
 	}
 
 	protected long getPreSleepMillis() {
@@ -38,12 +58,12 @@ public class Show2Feeder extends MonitorThread {
 	public void beginCycle() throws Exception {
 		Show2Commands commands = new Show2Commands();
 		commands.addCommand("-WB");
-		commands.addCommand("blt255");
+		commands.addCommand("blt" + _defaultBacklight);
 		enqueueCommands(commands);
 	}
 
 	public boolean cycle() throws Exception {
-		Show2Show show = Show2Show.nextShow();
+		Show2Show show = Show2Show.nextShow(_showCompuCanvas, _showCCid);
 		Show2Commands commands = show.emitCommands(_defaultRotation);
 		enqueueCommands(commands);
 		return true;

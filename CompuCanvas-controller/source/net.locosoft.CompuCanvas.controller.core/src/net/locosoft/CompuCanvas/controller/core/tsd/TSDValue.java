@@ -181,6 +181,8 @@ public class TSDValue {
 			int size = getSize();
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < size; i++) {
+				if (i > 0)
+					sb.append(", ");
 				switch (_type) {
 				case String:
 					sb.append(_stringValues[i]);
@@ -192,8 +194,6 @@ public class TSDValue {
 					sb.append(_doubleValues[i]);
 					break;
 				}
-				if (i > 0)
-					sb.append(", ");
 			}
 			valueText = sb.toString();
 		} else {

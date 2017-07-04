@@ -37,10 +37,6 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 		} else {
 			C3Util.log("Show2 device configured: " + devicePath);
 
-			int defaultRotation = serviceGetConfigInt("defaultRotation", 0);
-			if ((defaultRotation < 0) || (defaultRotation > 3))
-				defaultRotation = 0;
-
 			_session = new Show2Session(devicePath);
 			_session.start();
 
@@ -49,7 +45,7 @@ public class Show2Service extends AbstractC3Service implements IShow2Service {
 			_listener = new Show2Listener(this, _session, _commandTSDs);
 			_listener.start();
 
-			_feeder = new Show2Feeder(_session, defaultRotation, _commandTSDs);
+			_feeder = new Show2Feeder(this, _session, _commandTSDs);
 			_feeder.start();
 		}
 	}

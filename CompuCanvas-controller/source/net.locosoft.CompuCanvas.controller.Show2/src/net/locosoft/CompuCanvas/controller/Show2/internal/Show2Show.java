@@ -18,11 +18,17 @@ import net.locosoft.Show2Eboogaloo.Show2Commands;
 
 public abstract class Show2Show {
 
-	public static Show2Show nextShow() {
-		int i = ThreadLocalRandom.current().nextInt(3);
+	public static Show2Show nextShow(String showCompuCanvas, String showCCid) {
+		int i = ThreadLocalRandom.current().nextInt(6);
 		switch (i) {
 		case 0:
 			return new Date();
+		case 1:
+			if (showCompuCanvas != null)
+				return new Config(showCompuCanvas);
+		case 2:
+			if (showCCid != null)
+				return new Config(showCCid);
 		default:
 			return new Time();
 		}
@@ -35,6 +41,10 @@ public abstract class Show2Show {
 	}
 
 	abstract void emitCommands(Show2Commands commands, int rotation);
+
+	boolean isVertical(int rotation) {
+		return (rotation == 0) | (rotation == 2);
+	}
 
 	public static class Time extends Show2Show {
 		private static final SimpleDateFormat _HourFormat = new SimpleDateFormat("hh");
@@ -114,7 +124,20 @@ public abstract class Show2Show {
 		}
 	}
 
-	boolean isVertical(int rotation) {
-		return (rotation == 0) | (rotation == 2);
+	public static class Config extends Show2Show {
+		private String[] _commands;
+
+		public Config(String configText) {
+			_commands = configText.split(";");
+		}
+
+		void emitCommands(Show2Commands commands, int rotation) {
+			for (String command : _commands) {
+				if ((command != null) && (!"".equals(command.trim()))) {
+					commands.addCommand(command.trim());
+				}
+			}
+		}
 	}
+
 }
