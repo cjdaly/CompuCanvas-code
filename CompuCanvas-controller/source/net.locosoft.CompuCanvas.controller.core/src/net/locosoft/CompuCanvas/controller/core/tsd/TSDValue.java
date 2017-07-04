@@ -183,11 +183,14 @@ public class TSDValue {
 			for (int i = 0; i < size; i++) {
 				switch (_type) {
 				case String:
-					sb.append(_stringValues[i]);
+					if (_stringValues.length > i)
+						sb.append(_stringValues[i]);
 				case Long:
-					sb.append(_longValues[i]);
+					if (_longValues.length > i)
+						sb.append(_longValues[i]);
 				case Double:
-					sb.append(_doubleValues[i]);
+					if (_doubleValues.length > i)
+						sb.append(_doubleValues[i]);
 				}
 				if (i > 0)
 					sb.append(", ");
@@ -196,6 +199,6 @@ public class TSDValue {
 		} else {
 			valueText = asString();
 		}
-		return "TSD: " + getBuffer().getHashKey() + " = " + valueText;
+		return "TSD: " + getBuffer().getHashKey() + "(" + getType() + ") = " + valueText;
 	}
 }
