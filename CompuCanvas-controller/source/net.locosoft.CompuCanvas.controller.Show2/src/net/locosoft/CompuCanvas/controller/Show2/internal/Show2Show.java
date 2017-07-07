@@ -134,7 +134,7 @@ public abstract class Show2Show {
 		void emitCommands(Show2Commands commands, int rotation) {
 			for (String command : _commands) {
 				if ((command != null) && (!"".equals(command.trim()))) {
-					commands.addCommand(command.trim());
+					commands.addCommand(command);
 				}
 			}
 		}
