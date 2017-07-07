@@ -64,9 +64,10 @@ public class Show2Listener extends MonitorThread {
 
 		String line = _session.pullOutputLine();
 		if ((line != null) && (line.startsWith("!! "))) {
-			_commandTSDs.getOutputs().update(line);
 			Matcher matcher = _SensorDataPattern.matcher(line);
 			if (matcher.matches()) {
+				_commandTSDs.getOutputs().update(line);
+				
 				long timeMillis = System.currentTimeMillis();
 
 				HashMap<String, String> vitalsData = new HashMap<String, String>();
