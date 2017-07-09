@@ -14,6 +14,7 @@ package net.locosoft.CompuCanvas.controller.cascade.internal;
 import net.locosoft.CompuCanvas.controller.cascade.ICascadeService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class CascadeService extends AbstractC3Service implements ICascadeService {
 
@@ -26,8 +27,13 @@ public class CascadeService extends AbstractC3Service implements ICascadeService
 	}
 
 	public void serviceStart() {
-		_cascade = new Cascade(this);
-		_cascade.start();
+		String isEnabled = serviceGetConfig("isEnabled", "false");
+		if ("true".equals(isEnabled)) {
+			_cascade = new Cascade(this);
+			_cascade.start();
+		} else {
+			C3Util.log("Cascade service is disabled.");
+		}
 	}
 
 	public void serviceStop() {

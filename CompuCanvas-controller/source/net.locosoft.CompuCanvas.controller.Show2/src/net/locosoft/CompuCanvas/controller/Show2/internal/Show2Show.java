@@ -18,8 +18,8 @@ import net.locosoft.Show2Eboogaloo.Show2Commands;
 
 public abstract class Show2Show {
 
-	public static Show2Show nextShow(String showCompuCanvas, String showCCid) {
-		int i = ThreadLocalRandom.current().nextInt(6);
+	public static Show2Show nextShow(String showCompuCanvas, String showCompuCanvasAlt, String showCCid) {
+		int i = ThreadLocalRandom.current().nextInt(7);
 		switch (i) {
 		case 0:
 			return new Date();
@@ -27,6 +27,9 @@ public abstract class Show2Show {
 			if (showCompuCanvas != null)
 				return new Config(showCompuCanvas);
 		case 2:
+			if (showCompuCanvasAlt != null)
+				return new Config(showCompuCanvasAlt);
+		case 3:
 			if (showCCid != null)
 				return new Config(showCCid);
 		default:

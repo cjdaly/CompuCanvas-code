@@ -24,6 +24,7 @@ public class Show2Feeder extends MonitorThread {
 	private int _defaultRotation;
 	private int _defaultBacklight;
 	private String _showCompuCanvas;
+	private String _showCompuCanvasAlt;
 	private String _showCCid;
 
 	public Show2Feeder(Show2Service service, Show2Session session, Show2CommandTSDGroup commandTSDs) {
@@ -44,6 +45,7 @@ public class Show2Feeder extends MonitorThread {
 		_defaultBacklight = defaultBacklight;
 
 		_showCompuCanvas = _service.serviceGetConfig("show.CompuCanvas", null);
+		_showCompuCanvasAlt = _service.serviceGetConfig("show.CompuCanvas.alt", null);
 		_showCCid = _service.serviceGetConfig("show.CCid", null);
 	}
 
@@ -63,7 +65,7 @@ public class Show2Feeder extends MonitorThread {
 	}
 
 	public boolean cycle() throws Exception {
-		Show2Show show = Show2Show.nextShow(_showCompuCanvas, _showCCid);
+		Show2Show show = Show2Show.nextShow(_showCompuCanvas, _showCompuCanvasAlt, _showCCid);
 		Show2Commands commands = show.emitCommands(_defaultRotation);
 		enqueueCommands(commands);
 		return true;
