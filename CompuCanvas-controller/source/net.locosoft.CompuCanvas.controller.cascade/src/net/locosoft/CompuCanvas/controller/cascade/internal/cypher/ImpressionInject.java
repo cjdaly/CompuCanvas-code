@@ -73,6 +73,8 @@ public class ImpressionInject extends WheelOfCypher.Cog {
 				break;
 			}
 			TSDBuffer tsdBuffer = tsdValue.getBuffer();
+			map.put("pathValue", tsdBuffer.getHashKey());
+
 			map.put("units", tsdBuffer.getUnits());
 			map.put("buffer", tsdBuffer.getId());
 			TSDGroup tsdGroup = tsdBuffer.getGroup();

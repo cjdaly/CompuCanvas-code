@@ -21,6 +21,7 @@ public class SleepIndex extends WheelOfCypher.Cog {
 
 	private static final String[] _Indices = { //
 			"CREATE INDEX ON :Impression(timeValue)", //
+			"CREATE INDEX ON :Impressor(strandIndex)", //
 			"CREATE INDEX ON :Impressor(chainIndex)", //
 			"CREATE INDEX ON :Impressor(linkIndex)" //
 	};
