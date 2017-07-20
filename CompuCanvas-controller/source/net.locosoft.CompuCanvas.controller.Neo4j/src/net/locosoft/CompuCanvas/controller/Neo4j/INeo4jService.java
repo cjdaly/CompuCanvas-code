@@ -17,6 +17,8 @@ public interface INeo4jService extends IC3Service {
 
 	public boolean isAcceptingCypher();
 
+	public int getCypherQueueLength();
+
 	public void runCypher(Cypher cypher);
 
 }

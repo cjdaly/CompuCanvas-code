@@ -35,6 +35,12 @@ public class Neo4jService extends AbstractC3Service implements INeo4jService {
 		return ((_feeder != null) && (!_feeder.isStopped()));
 	}
 
+	public int getCypherQueueLength() {
+		if (!isAcceptingCypher())
+			return -1;
+		return _feeder.getCypherQueueLength();
+	}
+
 	public void runCypher(Cypher cypher) {
 		if (isAcceptingCypher()) {
 			_feeder.enqueueCypher(cypher);

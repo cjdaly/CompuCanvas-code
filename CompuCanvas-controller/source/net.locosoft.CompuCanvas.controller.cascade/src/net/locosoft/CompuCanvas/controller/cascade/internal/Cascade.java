@@ -14,27 +14,37 @@ package net.locosoft.CompuCanvas.controller.cascade.internal;
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.Neo4j.INeo4jService;
 import net.locosoft.CompuCanvas.controller.cascade.internal.cypher.WheelOfCypher;
+import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 public class Cascade extends MonitorThread {
 
+	private CascadeService _cascadeService;
 	private INeo4jService _neo4jService;
 	private WheelOfCypher _wheelOfCypher;
 
 	public Cascade(CascadeService cascadeService) {
+		_cascadeService = cascadeService;
 		_neo4jService = cascadeService.getCoreService().getService(INeo4jService.class);
 		_wheelOfCypher = WheelOfCypher.getDefault(cascadeService);
 	}
 
 	protected long getPreSleepMillis() {
-		return 1000;
+		return 500;
 	}
 
 	public boolean cycle() throws Exception {
 
-		Cypher cypher = _wheelOfCypher.nextCypher();
-		if (cypher != null) {
-			_neo4jService.runCypher(cypher);
+		int cypherQueueLength = _neo4jService.getCypherQueueLength();
+		if (cypherQueueLength == 0) {
+			Cypher cypher = _wheelOfCypher.nextCypher();
+			if (cypher != null) {
+				_neo4jService.runCypher(cypher);
+			}
+		} else {
+			if (_cascadeService.serviceIsLoggingEnabled("cypher")) {
+				C3Util.log("Cascade - waiting for Neo4j queue: " + cypherQueueLength + " ....");
+			}
 		}
 
 		return true;

@@ -32,6 +32,10 @@ public class Neo4jFeeder extends MonitorThread {
 		_session = session;
 	}
 
+	synchronized int getCypherQueueLength() {
+		return _cypherQueue.size();
+	}
+
 	synchronized void enqueueCypher(Cypher cypher) {
 		_cypherQueue.add(cypher);
 	}
