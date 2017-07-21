@@ -29,7 +29,7 @@ echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.
 echo "Doing apt-get update/upgrade/install ..."
 apt-get update
 apt-get upgrade -y
-apt-get install ant espeak mpg321 neo4j -y
+apt-get install ant espeak mpg321 neo4j=3.1.4 -y
 
 echo "Neo4j post-install config ..."
 sudo -u neo4j neo4j-admin set-initial-password canvas
