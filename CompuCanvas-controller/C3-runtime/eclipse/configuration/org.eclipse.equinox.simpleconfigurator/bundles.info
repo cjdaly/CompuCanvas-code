@@ -3,12 +3,15 @@
 javax.servlet,3.1.0.v201410161800,plugins/javax.servlet_3.1.0.v201410161800.jar,4,false
 javax.xml,1.3.4.v201005080400,plugins/javax.xml_1.3.4.v201005080400.jar,4,false
 net.locosoft.CompuCanvas.controller.BlinkStick,0.1.0,plugins/net.locosoft.CompuCanvas.controller.BlinkStick_0.1.0.jar,4,false
+net.locosoft.CompuCanvas.controller.Blinkt,0.1.0,plugins/net.locosoft.CompuCanvas.controller.Blinkt_0.1.0.jar,4,false
+net.locosoft.CompuCanvas.controller.CircuitPython,0.1.0,plugins/net.locosoft.CompuCanvas.controller.CircuitPython_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.MaxSonar,0.1.0,plugins/net.locosoft.CompuCanvas.controller.MaxSonar_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.Neo4j,0.1.0,plugins/net.locosoft.CompuCanvas.controller.Neo4j_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.Show2,0.1.0,plugins/net.locosoft.CompuCanvas.controller.Show2_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.audio,0.1.0,plugins/net.locosoft.CompuCanvas.controller.audio_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.cascade,0.1.0,plugins/net.locosoft.CompuCanvas.controller.cascade_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.core,0.1.0,plugins/net.locosoft.CompuCanvas.controller.core_0.1.0.jar,4,true
+net.locosoft.CompuCanvas.controller.emoter,0.1.0,plugins/net.locosoft.CompuCanvas.controller.emoter_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.packaging,0.1.0,plugins/net.locosoft.CompuCanvas.controller.packaging_0.1.0.jar,4,false
 net.locosoft.CompuCanvas.controller.server,0.1.0,plugins/net.locosoft.CompuCanvas.controller.server_0.1.0.jar,4,true
 net.locosoft.CompuCanvas.controller.util,0.1.0,plugins/net.locosoft.CompuCanvas.controller.util_0.1.0.jar,4,false
