@@ -107,6 +107,11 @@ public class REPLSession {
 				writer.flush();
 				Thread.sleep(5000);
 
+				writer.write("import os\r");
+				writer.write("os.uname()\r");
+				writer.flush();
+				Thread.sleep(5000);
+
 				writer.write("1+2\r");
 				writer.flush();
 
