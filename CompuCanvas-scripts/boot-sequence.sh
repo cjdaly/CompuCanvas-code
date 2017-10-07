@@ -14,7 +14,12 @@ function espeaker() {
   espeak "$@" 2>/dev/null
 }
 
-ESPEAK_IP_ADDR=`hostname -I | sed -e 's/\(.\)/\1 /g' | sed -e 's/\./dot/g'`
+IP_ADDR=`hostname -I`
+while [ -z $IP_ADDR ]; do
+  sleep 1
+  IP_ADDR=`hostname -I`
+done
+ESPEAK_IP_ADDR=`echo $IP_ADDR | sed -e 's/\(.\)/\1 /g' | sed -e 's/\./dot/g'`
 
 sleep 3
 blinkstick --index 0 off
