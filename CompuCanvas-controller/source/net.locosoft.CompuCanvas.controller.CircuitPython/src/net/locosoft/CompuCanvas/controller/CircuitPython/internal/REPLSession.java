@@ -101,7 +101,12 @@ public class REPLSession {
 							setOsUname(trimLine);
 						}
 					} else {
-
+						String line = reader.readLine();
+						if (line != null) {
+							if (_service.serviceIsLoggingEnabled("repl.reads")) {
+								C3Util.log("CircuitPython (" + _devicePath + ") REPL: " + line);
+							}
+						}
 					}
 
 					Thread.sleep(100);
@@ -122,19 +127,30 @@ public class REPLSession {
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(_devicePath, true))) {
 				Thread.sleep(8000);
 
-				writer.write(3); // Ctrl-c
-				writer.flush();
-				Thread.sleep(1000);
-
-				writer.write(13); // Enter
-				writer.flush();
-				Thread.sleep(500);
+				// writer.write(3); // Ctrl-c
+				// writer.flush();
+				// Thread.sleep(1000);
+				//
+				// writer.write('\r');
+				// writer.flush();
+				// Thread.sleep(1000);
+				//
+				// writer.write(3); // Ctrl-c
+				// writer.flush();
+				// Thread.sleep(1000);
 
 				writer.write('\r');
 				writer.flush();
-				Thread.sleep(500);
+				Thread.sleep(1000);
 
 				writer.write("import os\r");
+				writer.flush();
+				Thread.sleep(1000);
+
+				writer.write("os.uname()\r");
+				writer.flush();
+				Thread.sleep(1000);
+
 				writer.write("os.uname().machine\r");
 				writer.flush();
 				Thread.sleep(1000);
@@ -142,7 +158,7 @@ public class REPLSession {
 				do {
 					// write...
 
-					Thread.sleep(200);
+					Thread.sleep(1000);
 				} while (!_done);
 
 			} catch (FileNotFoundException ex) {
