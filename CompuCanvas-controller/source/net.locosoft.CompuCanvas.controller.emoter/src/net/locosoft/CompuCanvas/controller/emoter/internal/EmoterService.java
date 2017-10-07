@@ -15,25 +15,24 @@ import java.util.HashMap;
 
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
-import net.locosoft.CompuCanvas.controller.emoter.IEmoter;
+import net.locosoft.CompuCanvas.controller.emoter.AbstractEmoter;
 import net.locosoft.CompuCanvas.controller.emoter.IEmoterService;
 import net.locosoft.CompuCanvas.controller.emoter.ISpectrum;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class EmoterService extends AbstractC3Service implements IEmoterService {
 
-	private HashMap<String, Emoter> _emoters = new HashMap<String, Emoter>();
+	private HashMap<String, AbstractEmoter> _emoters = new HashMap<String, AbstractEmoter>();
 	private HashMap<String, DiscreteSpectrum> _spectra = new HashMap<String, DiscreteSpectrum>();
 
-	public IEmoter registerEmoter(String id) {
+	public void registerEmoter(AbstractEmoter emoter) {
+
+		String id = emoter.getId();
 
 		if (_emoters.containsKey(id)) {
 			C3Util.log("EmoterService ignoring duplicate registerEmoter ID: " + id);
-			return null;
 		} else {
-			Emoter emoter = new Emoter(id);
 			_emoters.put(id, emoter);
-			return emoter;
 		}
 	}
 
@@ -63,6 +62,7 @@ public class EmoterService extends AbstractC3Service implements IEmoterService {
 		registerSpectrum(new DiscreteSpectrum("colors8", //
 				new String[] { "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white" }));
 
+		registerSpectrum(new Analog65535ContinuousSpectrum());
 	}
 
 	public void serviceStop() {

@@ -15,16 +15,16 @@ import java.util.Map;
 
 import net.locosoft.CompuCanvas.controller.emoter.AbstractEmote;
 
-public abstract class DotStarEmote extends AbstractEmote {
+public abstract class PWMEmote extends AbstractEmote {
 
-	public DotStarEmote(String[] supportedSpectrumIds) {
+	public PWMEmote(String[] supportedSpectrumIds) {
 		super(supportedSpectrumIds);
 	}
 
-	public static class Steady extends DotStarEmote {
+	public static class Steady extends PWMEmote {
 
 		public Steady() {
-			super(new String[] { "colors8" });
+			super(new String[] { "analog65535" });
 		}
 
 		public boolean init() {
@@ -33,13 +33,12 @@ public abstract class DotStarEmote extends AbstractEmote {
 
 		public void invoke(Map<String, Object> spectrumOptions) {
 		}
-
 	}
 
-	public static class Pulse extends DotStarEmote {
+	public static class Pulse extends PWMEmote {
 
 		public Pulse() {
-			super(new String[] { "colors8" });
+			super(new String[] { "analog65535" });
 		}
 
 		public boolean init() {
@@ -48,7 +47,6 @@ public abstract class DotStarEmote extends AbstractEmote {
 
 		public void invoke(Map<String, Object> spectrumOptions) {
 		}
-
 	}
 
 }

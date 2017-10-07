@@ -9,19 +9,26 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.emoter.internal;
+package net.locosoft.CompuCanvas.controller.emoter;
 
-import net.locosoft.CompuCanvas.controller.emoter.IEmoter;
-
-public class Emoter implements IEmoter {
+public abstract class AbstractEmoter {
 
 	private String _id;
 
-	public Emoter(String id) {
+	public AbstractEmoter(String id) {
 		_id = id;
 	}
 
 	public String getId() {
 		return _id;
 	}
+
+	public boolean initPre() {
+		return true;
+	}
+
+	public boolean initPost() {
+		return true;
+	}
+
 }

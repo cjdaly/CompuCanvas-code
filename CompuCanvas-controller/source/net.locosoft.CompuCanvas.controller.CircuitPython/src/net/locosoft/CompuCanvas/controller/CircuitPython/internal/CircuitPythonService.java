@@ -11,13 +11,16 @@
 
 package net.locosoft.CompuCanvas.controller.CircuitPython.internal;
 
+import java.io.File;
+import java.util.HashMap;
+
 import net.locosoft.CompuCanvas.controller.CircuitPython.ICircuitPythonService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public class CircuitPythonService extends AbstractC3Service implements ICircuitPythonService {
 
-	private REPLSession _session;
+	private HashMap<String, REPLSession> _sessions = new HashMap<String, REPLSession>();
 
 	// IC3Service
 
@@ -25,14 +28,34 @@ public class CircuitPythonService extends AbstractC3Service implements ICircuitP
 		return ICircuitPythonService.class;
 	}
 
+	private void startREPLSessions() throws InterruptedException {
+
+		for (int acmNum = 0; acmNum < 10; acmNum++) {
+			String acmDevPath = "/dev/ttyACM" + acmNum;
+			File acmDevFile = new File(acmDevPath);
+			if (acmDevFile.exists()) {
+				REPLSession session = new REPLSession(this, acmDevPath);
+				_sessions.put(acmDevPath, session);
+				session.start();
+				Thread.sleep(3000);
+				acmNum++;
+			}
+		}
+
+	}
+
 	public void serviceStart() {
-		_session = new REPLSession(this);
-		_session.start();
+		try {
+			startREPLSessions();
+		} catch (InterruptedException ex) {
+			// ex.printStackTrace();
+		}
 	}
 
 	public void serviceStop() {
-		if (_session != null) {
-			_session.stop();
+		for (REPLSession session : _sessions.values()) {
+			session.stop();
 		}
+
 	}
 }

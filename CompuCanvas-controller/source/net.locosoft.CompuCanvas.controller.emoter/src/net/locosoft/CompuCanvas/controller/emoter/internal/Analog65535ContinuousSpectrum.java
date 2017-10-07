@@ -9,21 +9,15 @@
  *   cjdaly - initial API and implementation
  ****************************************************************************/
 
-package net.locosoft.CompuCanvas.controller.CircuitPython.internal.emoter;
+package net.locosoft.CompuCanvas.controller.emoter.internal;
 
-import java.util.Map;
+public class Analog65535ContinuousSpectrum extends ContinuousSpectrum {
 
-public class DotStarSteadyEmote extends DotStarEmote {
+	public static final String[] _LABELS = new String[] //
+	{ "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10" };
 
-	public DotStarSteadyEmote() {
-		super(new String[] { "colors8" });
-	}
-
-	public boolean init() {
-		return true;
-	}
-
-	public void invoke(Map<String, Object> spectrumOptions) {
+	public Analog65535ContinuousSpectrum() {
+		super("analog65535", _LABELS, 65535);
 	}
 
 }

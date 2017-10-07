@@ -11,7 +11,9 @@
 
 package net.locosoft.CompuCanvas.controller.emoter;
 
-public abstract class AbstractEmote implements IEmote {
+import java.util.Map;
+
+public abstract class AbstractEmote {
 
 	private String[] _spectrumIds;
 
@@ -22,5 +24,11 @@ public abstract class AbstractEmote implements IEmote {
 	public String[] getSupportedSpectrumIds() {
 		return _spectrumIds;
 	}
+
+	public boolean init() {
+		return true;
+	}
+
+	public abstract void invoke(Map<String, Object> spectrumOptions);
 
 }

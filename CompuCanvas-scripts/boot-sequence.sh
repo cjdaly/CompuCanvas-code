@@ -14,6 +14,8 @@ function espeaker() {
   espeak "$@" 2>/dev/null
 }
 
+ESPEAK_IP_ADDR=`hostname -I | sed -e 's/\(.\)/\1 /g' | sed -e 's/\./dot/g'`
+
 sleep 3
 blinkstick --index 0 off
 blinkstick --index 1 off
@@ -27,12 +29,12 @@ sleep 2
 
 blinkstick --index 1 --pulse blue
 espeaker "I P address"
-hostname -I | espeaker -s 120
+espeaker -s 100 "$ESPEAK_IP_ADDR"
 sleep 2
 
 blinkstick --index 1 --pulse blue
 espeaker "repeating I P address"
-hostname -I | espeaker -s 120
+espeaker -s 100 "$ESPEAK_IP_ADDR"
 sleep 1
 
 blinkstick --index 0 blue

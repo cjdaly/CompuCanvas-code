@@ -15,7 +15,7 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public interface IEmoterService extends IC3Service {
 
-	public IEmoter registerEmoter(String id);
+	public void registerEmoter(AbstractEmoter emoter);
 
 	public String[] getSpectrumIds();
 

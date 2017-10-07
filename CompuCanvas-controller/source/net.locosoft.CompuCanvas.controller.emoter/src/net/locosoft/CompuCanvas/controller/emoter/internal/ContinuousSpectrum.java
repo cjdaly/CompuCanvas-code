@@ -11,7 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.emoter.internal;
 
-public class ContinuousSpectrum extends DiscreteSpectrum {
+public abstract class ContinuousSpectrum extends DiscreteSpectrum {
 
 	private int _max;
 
@@ -24,8 +24,4 @@ public class ContinuousSpectrum extends DiscreteSpectrum {
 		return _max;
 	}
 
-	public String getLabel(int index) {
-		// map index to label
-		return super.getLabel(index);
-	}
 }

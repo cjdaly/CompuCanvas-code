@@ -28,6 +28,8 @@ public class REPLSession {
 	private REPLReader _reader;
 	private REPLWriter _writer;
 	private boolean _done = false;
+	private String _deviceType = null;
+	private String _osUname = null;
 	// private LinkedList<String> _outputLines = new LinkedList<String>();
 
 	public REPLSession(CircuitPythonService service) {
@@ -62,17 +64,46 @@ public class REPLSession {
 		_done = true;
 	}
 
+	private void setDeviceType(String trimLine) {
+		if (trimLine.startsWith("'Adafruit Trinket")) {
+			_deviceType = "Trinket";
+		} else if (trimLine.startsWith("'Adafruit Gemma")) {
+			_deviceType = "Gemma";
+		} else if (trimLine.startsWith("'Adafruit CircuitPlayground")) {
+			_deviceType = "CircuitPlayground";
+		}
+		if (_deviceType != null) {
+			C3Util.log("CircuitPython (" + _devicePath + ") deviceType: " + _deviceType);
+		}
+	}
+
+	private void setOsUname(String trimLine) {
+		if (trimLine.startsWith("(sysname=")) {
+			_osUname = trimLine;
+			C3Util.log("CircuitPython (" + _devicePath + ") os.uname(): " + _osUname);
+		}
+	}
+
 	private class REPLReader extends Thread {
 		public void run() {
 			try (BufferedReader reader = new BufferedReader(new FileReader(_devicePath))) {
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 				do {
-					String line = reader.readLine();
-					if (line != null) {
-						if (_service.serviceIsLoggingEnabled("repl.reads")) {
-							C3Util.log("CircuitPython (" + _devicePath + ") REPL: " + line);
+
+					if ((_deviceType == null) || (_osUname == null)) {
+						String line = reader.readLine();
+						if (line != null) {
+							if (_service.serviceIsLoggingEnabled("repl.reads")) {
+								C3Util.log("CircuitPython (" + _devicePath + ") REPL: " + line);
+							}
+							String trimLine = line.trim();
+							setDeviceType(trimLine);
+							setOsUname(trimLine);
 						}
+					} else {
+
 					}
+
 					Thread.sleep(100);
 				} while (!_done);
 
@@ -89,35 +120,30 @@ public class REPLSession {
 	private class REPLWriter extends Thread {
 		public void run() {
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(_devicePath, true))) {
-				Thread.sleep(10000);
+				Thread.sleep(8000);
 
 				writer.write(3); // Ctrl-c
 				writer.flush();
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 
 				writer.write(13); // Enter
 				writer.flush();
-				Thread.sleep(5000);
+				Thread.sleep(500);
 
 				writer.write('\r');
 				writer.flush();
-				Thread.sleep(5000);
-
-				writer.write("1\r");
-				writer.flush();
-				Thread.sleep(5000);
+				Thread.sleep(500);
 
 				writer.write("import os\r");
-				writer.write("os.uname()\r");
+				writer.write("os.uname().machine\r");
 				writer.flush();
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 
-				writer.write("1+2\r");
-				writer.flush();
+				do {
+					// write...
 
-				// do {
-				// Thread.sleep(100);
-				// } while (!_done);
+					Thread.sleep(200);
+				} while (!_done);
 
 			} catch (FileNotFoundException ex) {
 				ex.printStackTrace();
