@@ -7,7 +7,7 @@ The USB devices incorporated into CompuCanvas systems have been selected (among 
 
 #### CircuitPython devices
 
-[CircuitPython](https://github.com/adafruit/circuitpython) devices from AdaFruit (running the [2.0.0 firmware](https://github.com/adafruit/circuitpython/releases/tag/2.0.0)), like the [TrinkedM0](https://www.adafruit.com/product/3500), [Gemma M0](https://www.adafruit.com/product/3501) and [CircuitPlayground Express](https://www.adafruit.com/product/3333) offer 2 distinct modes of command line control.  First, the device mounts as a usb drive at `/media/pi/CIRCUITPY` (additional devices at `CIRCUITPY1`, `CIRCUITPY2`, etc.).  This directory contains a `main.py` Python file which is run every time the device resets, or the file is edited and saved.
+[CircuitPython](https://github.com/adafruit/circuitpython) devices from AdaFruit (running the [2.0.0 firmware](https://github.com/adafruit/circuitpython/releases/tag/2.0.0)), like the [Trinket M0](https://www.adafruit.com/product/3500), [Gemma M0](https://www.adafruit.com/product/3501) and [CircuitPlayground Express](https://www.adafruit.com/product/3333) offer 2 distinct modes of command line control.  First, the device mounts as a usb drive at `/media/pi/CIRCUITPY` (additional devices at `CIRCUITPY1`, `CIRCUITPY2`, etc.).  This directory contains a `main.py` Python file which is run every time the device resets, or the file is edited and saved.
 
 The CircuitPython device also appears at `/dev/ttyACM0` (or `ACM1`, `ACM2`, etc).  Run the command `screen /dev/ttyACM0` and then press `Ctrl-c` and `Enter` once or twice and you should see a `>>>` Python REPL prompt.  Typing the commands below should display information about the device:
 
