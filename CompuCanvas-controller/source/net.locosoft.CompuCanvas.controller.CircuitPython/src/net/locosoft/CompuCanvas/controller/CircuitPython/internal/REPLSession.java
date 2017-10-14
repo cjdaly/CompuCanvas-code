@@ -86,7 +86,7 @@ public class REPLSession {
 	private class REPLReader extends Thread {
 		public void run() {
 			try (BufferedReader reader = new BufferedReader(new FileReader(_devicePath))) {
-				// Thread.sleep(5000);
+				Thread.sleep(5000);
 				do {
 					String line = reader.readLine();
 					if (line != null) {
@@ -105,8 +105,7 @@ public class REPLSession {
 				ex.printStackTrace();
 			} catch (IOException ex) {
 				ex.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException ex) {
 			}
 		}
 	}
@@ -154,8 +153,7 @@ public class REPLSession {
 				ex.printStackTrace();
 			} catch (IOException ex) {
 				ex.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException ex) {
 			}
 		}
 	}

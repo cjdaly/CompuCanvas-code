@@ -20,7 +20,9 @@ import net.locosoft.CompuCanvas.controller.core.IC3Service;
 
 public class CircuitPythonService extends AbstractC3Service implements ICircuitPythonService {
 
+	private REPLStarter _replStarter;
 	private HashMap<String, REPLSession> _sessions = new HashMap<String, REPLSession>();
+	private boolean _done = false;
 
 	// IC3Service
 
@@ -34,32 +36,34 @@ public class CircuitPythonService extends AbstractC3Service implements ICircuitP
 		session.start();
 	}
 
-	private void startREPLSessions() throws InterruptedException {
-
-		for (int acmNum = 0; acmNum < 10; acmNum++) {
-			String acmDevPath = "/dev/ttyACM" + acmNum;
-			File acmDevFile = new File(acmDevPath);
-			if (acmDevFile.exists()) {
-				startREPLSession(acmDevPath);
-				Thread.sleep(2000);
-				acmNum++;
-			}
-		}
-
-	}
-
 	public void serviceStart() {
-		try {
-			startREPLSessions();
-		} catch (InterruptedException ex) {
-			// ex.printStackTrace();
-		}
+		_replStarter = new REPLStarter();
+		_replStarter.start();
 	}
 
 	public void serviceStop() {
+		_done = true;
 		for (REPLSession session : _sessions.values()) {
 			session.stop();
 		}
+	}
 
+	private class REPLStarter extends Thread {
+		public void run() {
+			while (!_done) {
+				try {
+					for (int acmNum = 0; acmNum < 10; acmNum++) {
+						String acmDevPath = "/dev/ttyACM" + acmNum;
+						File acmDevFile = new File(acmDevPath);
+						if (acmDevFile.exists()) {
+							startREPLSession(acmDevPath);
+							Thread.sleep(1000 * 30);
+							acmNum++;
+						}
+					}
+				} catch (InterruptedException ex) {
+				}
+			}
+		}
 	}
 }
