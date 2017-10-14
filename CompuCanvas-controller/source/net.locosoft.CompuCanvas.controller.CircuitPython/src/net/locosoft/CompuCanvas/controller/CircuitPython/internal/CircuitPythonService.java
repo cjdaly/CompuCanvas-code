@@ -28,16 +28,20 @@ public class CircuitPythonService extends AbstractC3Service implements ICircuitP
 		return ICircuitPythonService.class;
 	}
 
+	private void startREPLSession(String acmDevPath) {
+		REPLSession session = new REPLSession(this, acmDevPath);
+		_sessions.put(acmDevPath, session);
+		session.start();
+	}
+
 	private void startREPLSessions() throws InterruptedException {
 
 		for (int acmNum = 0; acmNum < 10; acmNum++) {
 			String acmDevPath = "/dev/ttyACM" + acmNum;
 			File acmDevFile = new File(acmDevPath);
 			if (acmDevFile.exists()) {
-				REPLSession session = new REPLSession(this, acmDevPath);
-				_sessions.put(acmDevPath, session);
-				session.start();
-				Thread.sleep(3000);
+				startREPLSession(acmDevPath);
+				Thread.sleep(2000);
 				acmNum++;
 			}
 		}

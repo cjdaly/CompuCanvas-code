@@ -33,8 +33,7 @@ public class REPLSession {
 	// private LinkedList<String> _outputLines = new LinkedList<String>();
 
 	public REPLSession(CircuitPythonService service) {
-		_service = service;
-		_devicePath = "/dev/ttyACM0";
+		this(service, "/dev/ttyACM0");
 	}
 
 	public REPLSession(CircuitPythonService service, String devicePath) {
@@ -52,8 +51,8 @@ public class REPLSession {
 			_reader = new REPLReader();
 			_reader.start();
 
-			_writer = new REPLWriter();
-			_writer.start();
+			// _writer = new REPLWriter();
+			// _writer.start();
 		} else {
 			C3Util.log("CircuitPython device not found at" + _devicePath);
 			_done = true;
@@ -87,22 +86,12 @@ public class REPLSession {
 	private class REPLReader extends Thread {
 		public void run() {
 			try (BufferedReader reader = new BufferedReader(new FileReader(_devicePath))) {
-				Thread.sleep(5000);
+				// Thread.sleep(5000);
 				do {
-
-					if ((_deviceType == null) || (_osUname == null)) {
-						String line = reader.readLine();
-						if (line != null) {
-							if (_service.serviceIsLoggingEnabled("repl.reads")) {
-								C3Util.log("CircuitPython (" + _devicePath + ") REPL: " + line);
-							}
-							String trimLine = line.trim();
-							setDeviceType(trimLine);
-							setOsUname(trimLine);
-						}
-					} else {
-						String line = reader.readLine();
-						if (line != null) {
+					String line = reader.readLine();
+					if (line != null) {
+						String trimLine = line.trim();
+						if (!"".equals(trimLine)) {
 							if (_service.serviceIsLoggingEnabled("repl.reads")) {
 								C3Util.log("CircuitPython (" + _devicePath + ") REPL: " + line);
 							}
