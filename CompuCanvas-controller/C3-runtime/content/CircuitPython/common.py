@@ -14,7 +14,7 @@ import board, digitalio, time
 led = digitalio.DigitalInOut(board.D13)
 led.direction = digitalio.Direction.OUTPUT
 
-def blink(n=3)
+def blink(n=3):
   for i in range(0,n):
     led.value = True
     time.sleep(0.5)

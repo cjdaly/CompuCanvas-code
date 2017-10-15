@@ -12,7 +12,7 @@
 #device_type:TrinketM0
 #device_id:TrinketM0
 
-import common, time
+import common, time, board
 import adafruit_dotstar as dotstar
 
 dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.4)

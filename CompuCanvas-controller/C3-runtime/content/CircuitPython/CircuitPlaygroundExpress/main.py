@@ -12,35 +12,17 @@
 #device_type:CircuitPlaygroundExpress
 #device_id:CircuitPlaygroundExpress
 
-import board, digitalio, time
-import neopixel
+import common, time, board
+import analogio, pulseio, neopixel
 
-led = digitalio.DigitalInOut(board.D13)
-led.direction = digitalio.Direction.OUTPUT
+dac_led = analogio.AnalogOut(board.A0)
+pwm_led = pulseio.PWMOut(board.A1)
 
-for i in range(0,3):
-  led.value = True
-  time.sleep(0.5)
-  led.value = False
-  time.sleep(0.5)
-
-control={}
-
-def refresh_control():
-  with open('control.txt') as fp:
-    for line in fp:
-      kvs=line.split(';')
-      for kv in kvs:
-        k,v=kv.split('=')
-        control[k]=v
-
-def read_control(key, default):
-  if key in control:
-    return control[key]
-  else:
-    return default
+common.blink()
 
 while True:
-  refresh_control()
+  common.refresh_control()
+  dac_led.value = common.read_control("DAC.led", 0)
+  pwm_led.duty_cycle = common.read_control("PWM.led", 0)
   time.sleep(1.0)
 
