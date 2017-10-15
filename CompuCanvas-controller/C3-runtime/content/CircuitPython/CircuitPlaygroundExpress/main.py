@@ -22,7 +22,7 @@ common.blink()
 
 while True:
   common.refresh_control()
-  dac_led.value = common.read_control("DAC.led", 0)
-  pwm_led.duty_cycle = common.read_control("PWM.led", 0)
+  dac_led.value = int(common.read_control("DAC.led", 0))
+  pwm_led.duty_cycle = int(common.read_control("PWM.led", 0))
   time.sleep(1.0)
 

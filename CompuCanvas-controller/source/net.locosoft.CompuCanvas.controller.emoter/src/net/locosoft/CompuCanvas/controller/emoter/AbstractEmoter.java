@@ -11,9 +11,12 @@
 
 package net.locosoft.CompuCanvas.controller.emoter;
 
+import java.util.HashMap;
+
 public abstract class AbstractEmoter {
 
 	private String _id;
+	private HashMap<String, AbstractEmote> _emotes = new HashMap<String, AbstractEmote>();
 
 	public AbstractEmoter(String id) {
 		_id = id;
@@ -21,6 +24,10 @@ public abstract class AbstractEmoter {
 
 	public String getId() {
 		return _id;
+	}
+
+	public void addEmote(AbstractEmote emote) {
+		_emotes.put(emote.getId(), emote);
 	}
 
 	public boolean initPre() {

@@ -45,7 +45,7 @@ public class Neo4jVitals extends MonitorThread {
 		if (_neo4jPID > 0) {
 			int vmPeak = C3Util.getProcessVmPeak(_neo4jPID);
 			if (vmPeak > _Neo4jVmPeakMax) {
-				C3Util.log("!!! Neo4j VmPeak: " + vmPeak + "  Reboot soon!");
+				C3Util.log("!!! Neo4j VmPeak: " + vmPeak + " ;  Reboot soon!");
 			}
 			_vmPeakTSDs.update(vmPeak);
 		}

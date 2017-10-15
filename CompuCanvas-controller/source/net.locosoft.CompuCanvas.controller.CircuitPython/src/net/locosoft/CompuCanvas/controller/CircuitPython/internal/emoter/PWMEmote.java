@@ -17,14 +17,14 @@ import net.locosoft.CompuCanvas.controller.emoter.AbstractEmote;
 
 public abstract class PWMEmote extends AbstractEmote {
 
-	public PWMEmote(String[] supportedSpectrumIds) {
-		super(supportedSpectrumIds);
+	public PWMEmote(String id, String[] supportedSpectrumIds) {
+		super(id, supportedSpectrumIds);
 	}
 
 	public static class Steady extends PWMEmote {
 
 		public Steady() {
-			super(new String[] { "analog65535" });
+			super("PWM.steady", new String[] { "analog65535" });
 		}
 
 		public boolean init() {
@@ -38,7 +38,7 @@ public abstract class PWMEmote extends AbstractEmote {
 	public static class Pulse extends PWMEmote {
 
 		public Pulse() {
-			super(new String[] { "analog65535" });
+			super("PWM.pulse", new String[] { "analog65535" });
 		}
 
 		public boolean init() {

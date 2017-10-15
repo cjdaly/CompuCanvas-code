@@ -28,8 +28,9 @@ def refresh_control():
     for line in fp:
       kvs=line.split(';')
       for kv in kvs:
-        k,v=kv.split('=')
-        control[k]=v
+        if kv.find('=') != -1:
+          k,v=kv.split('=')
+          control[k]=v
 
 def read_control(key, default):
   if key in control:

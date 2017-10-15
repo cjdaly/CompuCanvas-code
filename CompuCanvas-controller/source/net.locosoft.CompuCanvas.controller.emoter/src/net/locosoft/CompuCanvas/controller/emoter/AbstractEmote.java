@@ -15,10 +15,16 @@ import java.util.Map;
 
 public abstract class AbstractEmote {
 
+	private String _id;
 	private String[] _spectrumIds;
 
-	public AbstractEmote(String[] supportedSpectrumIds) {
+	public AbstractEmote(String id, String[] supportedSpectrumIds) {
+		_id = id;
 		_spectrumIds = supportedSpectrumIds;
+	}
+
+	public String getId() {
+		return _id;
 	}
 
 	public String[] getSupportedSpectrumIds() {

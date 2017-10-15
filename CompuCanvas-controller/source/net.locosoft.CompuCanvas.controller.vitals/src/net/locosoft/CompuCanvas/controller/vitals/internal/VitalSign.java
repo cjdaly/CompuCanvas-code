@@ -137,4 +137,51 @@ public abstract class VitalSign {
 			}
 		}
 	}
+
+	private static final double _SystemTempMax = 77.0;
+
+	public static class CPUTemp extends VitalSign {
+		public CPUTemp(TSDGroup group) {
+			super("system.temp.CPU", "Celsius", TSDType.Double, group);
+		}
+
+		public void update(Date date) {
+			StringBuilder processOut = new StringBuilder();
+			StringBuilder processErr = new StringBuilder();
+			String cpuTempCommand = "cat /sys/class/thermal/thermal_zone0/temp";
+			ExecUtil.execCommand(cpuTempCommand, processOut, processErr);
+
+			int cpuTemp1000 = C3Util.parseInt(processOut.toString().trim(), -1);
+			double cpuTemp = (double) cpuTemp1000 / 1000.0;
+			if (cpuTemp > _SystemTempMax) {
+				C3Util.log("!!! CPU temp: " + cpuTemp + "C ; Shutdown soon!");
+			}
+			_buffer.update(date.getTime(), cpuTemp);
+		}
+	}
+
+	public static class GPUTemp extends VitalSign {
+		public GPUTemp(TSDGroup group) {
+			super("system.temp.GPU", "Celsius", TSDType.Double, group);
+		}
+
+		private Pattern _gpuTempPattern = Pattern.compile("temp=(\\d|\\.)+'C");
+
+		public void update(Date date) {
+			StringBuilder processOut = new StringBuilder();
+			StringBuilder processErr = new StringBuilder();
+			String gpuTempCommand = "/opt/vc/bin/vcgencmd measure_temp";
+			ExecUtil.execCommand(gpuTempCommand, processOut, processErr);
+
+			Matcher matcher = _gpuTempPattern.matcher(processOut);
+			if (matcher.find()) {
+				String gpuTempText = matcher.group(1);
+				double gpuTemp = C3Util.parseDouble(gpuTempText, -1);
+				if (gpuTemp > _SystemTempMax) {
+					C3Util.log("!!! GPU temp: " + gpuTemp + "C ; Shutdown soon!");
+				}
+				_buffer.update(date.getTime(), gpuTemp);
+			}
+		}
+	}
 }

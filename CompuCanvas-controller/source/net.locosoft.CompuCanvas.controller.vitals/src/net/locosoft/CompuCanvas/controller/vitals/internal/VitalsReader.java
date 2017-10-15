@@ -36,6 +36,8 @@ public class VitalsReader extends MonitorThread {
 		_vitalSigns.add(new VitalSign.SystemLoad(_vitals));
 		_vitalSigns.add(new VitalSign.SystemMemory(_vitals));
 		_vitalSigns.add(new VitalSign.SystemStorage(_vitals));
+		_vitalSigns.add(new VitalSign.CPUTemp(_vitals));
+		_vitalSigns.add(new VitalSign.GPUTemp(_vitals));
 
 		_timeVitals = new TimeVitalSigns(_service);
 		_dateVitals = new DateVitalSigns(_service);

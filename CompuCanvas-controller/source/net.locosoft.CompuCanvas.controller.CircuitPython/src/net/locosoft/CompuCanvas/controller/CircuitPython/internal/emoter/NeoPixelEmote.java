@@ -17,14 +17,14 @@ import net.locosoft.CompuCanvas.controller.emoter.AbstractEmote;
 
 public abstract class NeoPixelEmote extends AbstractEmote {
 
-	public NeoPixelEmote(String[] supportedSpectrumIds) {
-		super(supportedSpectrumIds);
+	public NeoPixelEmote(String id, String[] supportedSpectrumIds) {
+		super(id, supportedSpectrumIds);
 	}
 
 	public static class Steady extends NeoPixelEmote {
 
 		public Steady() {
-			super(new String[] { "colors8" });
+			super("NeoPixel.steady", new String[] { "colors8" });
 		}
 
 		public boolean init() {
@@ -39,7 +39,7 @@ public abstract class NeoPixelEmote extends AbstractEmote {
 	public static class Pulse extends NeoPixelEmote {
 
 		public Pulse() {
-			super(new String[] { "colors8" });
+			super("NeoPixel.pulse", new String[] { "colors8" });
 		}
 
 		public boolean init() {

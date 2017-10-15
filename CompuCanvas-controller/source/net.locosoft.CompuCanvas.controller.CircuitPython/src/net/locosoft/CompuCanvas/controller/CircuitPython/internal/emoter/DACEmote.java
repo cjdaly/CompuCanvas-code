@@ -17,14 +17,14 @@ import net.locosoft.CompuCanvas.controller.emoter.AbstractEmote;
 
 public abstract class DACEmote extends AbstractEmote {
 
-	public DACEmote(String[] supportedSpectrumIds) {
-		super(supportedSpectrumIds);
+	public DACEmote(String id, String[] supportedSpectrumIds) {
+		super(id, supportedSpectrumIds);
 	}
 
 	public static class Steady extends DACEmote {
 
 		public Steady() {
-			super(new String[] { "analog65535" });
+			super("DAC.steady", new String[] { "analog65535" });
 		}
 
 		public boolean init() {
@@ -38,7 +38,7 @@ public abstract class DACEmote extends AbstractEmote {
 	public static class Pulse extends DACEmote {
 
 		public Pulse() {
-			super(new String[] { "analog65535" });
+			super("DAC.pulse", new String[] { "analog65535" });
 		}
 
 		public boolean init() {
