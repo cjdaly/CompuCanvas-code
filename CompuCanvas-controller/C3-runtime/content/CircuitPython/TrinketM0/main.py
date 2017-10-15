@@ -30,15 +30,14 @@ for i in range(0,3):
 control={}
 
 def refresh_control():
-  control={}
   with open('control.txt') as fp:
-  for line in fp:
-    kvs=line.split(';')
-    for kv in kvs:
-      k,v=kv.split('=')
-      control[k]=v
+    for line in fp:
+      kvs=line.split(';')
+      for kv in kvs:
+        k,v=kv.split('=')
+        control[k]=v
 
-def read_control(key, default)
+def read_control(key, default):
   if key in control:
     return control[key]
   else:
