@@ -165,7 +165,7 @@ public abstract class VitalSign {
 			super("system.temp.GPU", "Celsius", TSDType.Double, group);
 		}
 
-		private Pattern _gpuTempPattern = Pattern.compile("temp=(\\d|\\.)+'C");
+		private Pattern _gpuTempPattern = Pattern.compile("temp=([0-9.]+)'C");
 
 		public void update(Date date) {
 			StringBuilder processOut = new StringBuilder();

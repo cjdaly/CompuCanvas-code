@@ -66,14 +66,23 @@ public class CircuitPythonService extends AbstractC3Service implements ICircuitP
 	}
 
 	private String getDeviceInfo(String mediaPath, String tag) {
+
 		String mainPyFilePath = mediaPath + "/main.py";
+
+		C3Util.log("CircuitPython checking: " + mainPyFilePath);
+
 		File mainPyFile = new File(mainPyFilePath);
 		if (!mainPyFile.exists())
 			return null;
 
 		StringBuilder processOut = new StringBuilder();
-		ExecUtil.execCommand("grep '" + tag + "' " + mainPyFilePath, processOut, null);
+		StringBuilder processErr = new StringBuilder();
+		int result = ExecUtil.execCommand("grep " + tag + " " + mainPyFilePath, processOut, processErr);
 		String processOutText = processOut.toString();
+
+		C3Util.log("CircuitPython grep result: " + result + ", output: " + processOutText);
+		C3Util.log("CircuitPython grep error: " + processErr.toString());
+
 		if (processOutText.startsWith(tag)) {
 			String deviceTypeRaw = processOutText.substring(tag.length());
 			String deviceType = deviceTypeRaw.trim();
