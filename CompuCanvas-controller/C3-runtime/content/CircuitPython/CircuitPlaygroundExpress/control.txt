@@ -1,4 +1,6 @@
 
 DAC.led=47000
-PWM.led=65000
+PWM.led=0
+
 NeoPixel.mode=silly
+NeoPixel.R=40;NeoPixel.G=0;NeoPixel.B=100

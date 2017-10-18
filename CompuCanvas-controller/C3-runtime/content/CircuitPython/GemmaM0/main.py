@@ -12,19 +12,18 @@
 #device_type:GemmaM0
 #device_id:GemmaM0
 
-import common, time, board
-import adafruit_dotstar as dotstar
+import time, board
+import c3common, c3dotstar
 
-dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.4)
-dot[0] = [0,100,100]
-
-common.blink()
+c3common.blink()
 
 while True:
-  common.refresh_control()
-  r = common.read_control("DotStar.R", 100)
-  g = common.read_control("DotStar.G", 0)
-  b = common.read_control("DotStar.B", 0)
-  dot[0] = [int(r), int(g), int(b)]
-  time.sleep(1.0)
+  if c3common.refresh_control():
+    r = c3common.read_control("DotStar.R", 100)
+    g = c3common.read_control("DotStar.G", 0)
+    b = c3common.read_control("DotStar.B", 0)
+    c3dotstar.set_color(int(r), int(g), int(b))
+    time.sleep(0.5)
+  else:
+    c3common.blink(n=1,s=1)
 

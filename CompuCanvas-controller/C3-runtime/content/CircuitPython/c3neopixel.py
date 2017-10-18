@@ -9,11 +9,10 @@
 #   cjdaly - initial API and implementation
 ####
 
-c3.service.BlinkStick.device.BS004691-3.0.kind=Strip
-c3.service.BlinkStick.device.BS004691-3.0.limitMin=30
-c3.service.BlinkStick.device.BS004691-3.0.limitMax=60
+import neopixel
 
-c3.service.BlinkStick.device.BS005523-3.0.kind=Strip
-c3.service.BlinkStick.device.BS005523-3.0.limitMin=30
-c3.service.BlinkStick.device.BS005523-3.0.limitMax=60
+neo_pix =  neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=True)
+
+def fill_solid(r, g, b):
+  neo_pix.fill((r,g,b))
 

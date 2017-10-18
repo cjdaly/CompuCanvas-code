@@ -1,0 +1,111 @@
+<!--
+ - Copyright (c) 2017 Chris J Daly (github user cjdaly)
+ - All rights reserved. This program and the accompanying materials
+ - are made available under the terms of the Eclipse Public License v1.0
+ - which accompanies this distribution, and is available at
+ - http://www.eclipse.org/legal/epl-v10.html
+ -
+ - Contributors:
+ -   cjdaly - initial API and implementation
+-->
+
+<project name="CircuitPython-deployer" default="main">
+	<target name="main" depends="init"/>
+	
+	<target name="init">
+	</target>
+	
+	<target name="deploy">
+		<deploy-cp cp-dirname="CIRCUITPY"/>
+		<deploy-cp cp-dirname="CIRCUITPY1"/>
+		<deploy-cp cp-dirname="CIRCUITPY2"/>
+		<deploy-cp cp-dirname="CIRCUITPY3"/>
+		<deploy-cp cp-dirname="CIRCUITPY4"/>
+		<deploy-cp cp-dirname="CIRCUITPY5"/>
+		<deploy-cp cp-dirname="CIRCUITPY6"/>
+		<deploy-cp cp-dirname="CIRCUITPY7"/>
+		<deploy-cp cp-dirname="CIRCUITPY8"/>
+		<deploy-cp cp-dirname="CIRCUITPY9"/>
+	</target>
+	
+	<macrodef name="deploy-cp">
+		<attribute name="cp-dirname" default="CIRCUITPY"/>
+		<attribute name="media-path" default="/media/pi/@{cp-dirname}"/>
+		<sequential>
+			<condition property="deploy-target-@{cp-dirname}" value="to" else="NO" >
+				<available file="@{media-path}/main.py" />
+			</condition>
+			<antcall target="deploy-${deploy-target-@{cp-dirname}}-device">
+				<param name="media-path" value="@{media-path}" />
+			</antcall>
+		</sequential>
+	</macrodef>
+	
+	<target name="deploy-to-device">
+		<loadfile property="device-type-raw" srcfile="${media-path}">
+			<filterchain>
+				<linecontainsregexp>
+					<regexp pattern="#device_type:"/>
+				</linecontainsregexp>
+				<replaceregex pattern="#device_type:(\S*)" replace="\1"/>
+			</filterchain>
+		</loadfile>
+		
+		<condition property="device-type" value="${device-type-raw}" else="Unknown">
+			<or>
+				<equals arg1="${device-type-raw}" arg2="TrinketM0" />
+				<equals arg1="${device-type-raw}" arg2="GemmaM0" />
+				<equals arg1="${device-type-raw}" arg2="CircuitPlaygroundExpress" />
+			</or>
+		</condition>
+		
+		<antcall target="deploy-to-${device-type}"/>
+	</target>
+	
+	<macrodef name="undeploy-common">
+		<attribute name="media-path"/>
+		<sequential>
+			<delete file="@{media-path}/control.txt"/>
+			<delete dir="@{media-path}" includes="*.py" excludes="main.py"/>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="deploy-common">
+		<attribute name="media-path"/>
+		<attribute name="device-type"/>
+		<sequential>
+			<echo>Deploying to CircuitPython device at ${media-path}</echo>
+			<echo>Device type: ${device-type}</echo>
+			<copy todir="@{media-path}" file="./@{device-type}/c3common.py"/>
+			<copy todir="@{media-path}" file="./@{device-type}/control.txt"/>
+			<copy todir="@{media-path}" file="./@{device-type}/main.py"/>
+		</sequential>
+	</macrodef>
+	
+	<target name="deploy-to-TrinketM0">
+		<undeploy-common media-path="${media-path}"/>
+		<copy todir="${media-path}" file="./c3dotstar.py"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+	</target>
+	
+	<target name="deploy-to-GemmaM0">
+		<undeploy-common media-path="${media-path}"/>
+		<copy todir="${media-path}" file="./c3dotstar.py"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+	</target>
+		
+	<target name="deploy-to-CircuitPlaygroundExpress">
+		<undeploy-common media-path="${media-path}"/>
+		<copy todir="${media-path}" file="./c3neopixel.py"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+	</target>
+	
+	<target name="deploy-to-Unknown">
+		<echo>Unknown CircuitPython device at ${media-path}.</echo>
+	</target>
+	
+	<target name="deploy-NO-device">
+		<echo>No CircuitPython device at ${media-path}.</echo>
+	</target>
+	
+</project>

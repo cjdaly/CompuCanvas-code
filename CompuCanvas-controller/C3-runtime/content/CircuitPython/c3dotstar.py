@@ -9,11 +9,12 @@
 #   cjdaly - initial API and implementation
 ####
 
-c3.service.BlinkStick.device.BS004691-3.0.kind=Strip
-c3.service.BlinkStick.device.BS004691-3.0.limitMin=30
-c3.service.BlinkStick.device.BS004691-3.0.limitMax=60
+import adafruit_dotstar as dotstar
+dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.4)
 
-c3.service.BlinkStick.device.BS005523-3.0.kind=Strip
-c3.service.BlinkStick.device.BS005523-3.0.limitMin=30
-c3.service.BlinkStick.device.BS005523-3.0.limitMax=60
+dot_color = [0,100,100]
+dot[0] = dot_color
+
+def set_color(r,g,b):
+  dot[0] = [r,g,b]
 
