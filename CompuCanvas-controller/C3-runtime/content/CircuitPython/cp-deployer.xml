@@ -63,7 +63,9 @@
 		<attribute name="media-path"/>
 		<sequential>
 			<delete file="@{media-path}/control.txt"/>
-			<delete dir="@{media-path}" includes="*.py" excludes="main.py"/>
+			<delete>
+				<fileset dir="@{media-path}" includes="*.py" excludes="main.py"/>
+			</delete>
 		</sequential>
 	</macrodef>
 	
