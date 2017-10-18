@@ -24,8 +24,8 @@ def blink(n=3,s=0.5):
 control={}
 control_mod_time=0
 
-
 def refresh_control():
+  global control, control_mod_time
   try:
     check_mod_time = os.stat('control.txt')[8] # st_mtime?
     if (check_mod_time > control_mod_time):

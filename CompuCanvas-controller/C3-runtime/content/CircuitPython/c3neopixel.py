@@ -9,7 +9,7 @@
 #   cjdaly - initial API and implementation
 ####
 
-import neopixel
+import board, neopixel
 
 neo_pix =  neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=True)
 

@@ -28,7 +28,7 @@ while True:
     r = c3common.read_control("NeoPixel.R", 100)
     g = c3common.read_control("NeoPixel.G", 0)
     b = c3common.read_control("NeoPixel.B", 0)
-    neo_pix.fill_solid(int(r), int(g), int(b))
+    c3neopixel.fill_solid(int(r), int(g), int(b))
     #
     time.sleep(0.5)
   else:
