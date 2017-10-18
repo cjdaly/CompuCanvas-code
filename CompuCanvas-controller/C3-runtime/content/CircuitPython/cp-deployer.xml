@@ -9,11 +9,7 @@
  -   cjdaly - initial API and implementation
 -->
 
-<project name="CircuitPython-deployer" default="main">
-	<target name="main" depends="init"/>
-	
-	<target name="init">
-	</target>
+<project name="CircuitPython-deployer" default="deploy">
 	
 	<target name="deploy">
 		<deploy-cp cp-dirname="CIRCUITPY"/>
@@ -42,12 +38,13 @@
 	</macrodef>
 	
 	<target name="deploy-to-device">
-		<loadfile property="device-type-raw" srcfile="${media-path}">
+		<loadfile property="device-type-raw" srcfile="${media-path}/main.py">
 			<filterchain>
 				<linecontainsregexp>
 					<regexp pattern="#device_type:"/>
 				</linecontainsregexp>
 				<replaceregex pattern="#device_type:(\S*)" replace="\1"/>
+				<striplinebreaks/>
 			</filterchain>
 		</loadfile>
 		
@@ -74,9 +71,9 @@
 		<attribute name="media-path"/>
 		<attribute name="device-type"/>
 		<sequential>
-			<echo>Deploying to CircuitPython device at ${media-path}</echo>
-			<echo>Device type: ${device-type}</echo>
-			<copy todir="@{media-path}" file="./@{device-type}/c3common.py"/>
+			<echo>Deploying to CircuitPython device at @{media-path}</echo>
+			<echo>Device type: @{device-type}</echo>
+			<copy todir="@{media-path}" file="./c3common.py"/>
 			<copy todir="@{media-path}" file="./@{device-type}/control.txt"/>
 			<copy todir="@{media-path}" file="./@{device-type}/main.py"/>
 		</sequential>
