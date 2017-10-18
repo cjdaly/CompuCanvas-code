@@ -38,7 +38,7 @@ def refresh_control():
               control[k]=v
       control_mod_time = check_mod_time
     return True
-  except OSError:
+  except:
     return False
 
 def read_control(key, default):

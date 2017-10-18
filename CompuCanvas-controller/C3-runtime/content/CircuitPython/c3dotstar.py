@@ -9,6 +9,7 @@
 #   cjdaly - initial API and implementation
 ####
 
+import board
 import adafruit_dotstar as dotstar
 dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.4)
 
