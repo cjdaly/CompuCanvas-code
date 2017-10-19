@@ -10,7 +10,7 @@
 ####
 
 #device_type:TrinketM0
-#device_id:TrinketM0
+#device_id:Trinket-1
 
 import time, board
 import c3common, c3dotstar
@@ -19,10 +19,10 @@ c3common.blink()
 
 while True:
   if c3common.refresh_control():
-    r = c3common.read_control("DotStar.R", 100)
-    g = c3common.read_control("DotStar.G", 0)
-    b = c3common.read_control("DotStar.B", 0)
-    c3dotstar.set_color(int(r), int(g), int(b))
+    r = c3common.read_control_int("DotStar.R", 100)
+    g = c3common.read_control_int("DotStar.G", 0)
+    b = c3common.read_control_int("DotStar.B", 0)
+    c3dotstar.set_color(r, g, b)
     time.sleep(0.5)
   else:
     c3common.blink(n=1,s=1)

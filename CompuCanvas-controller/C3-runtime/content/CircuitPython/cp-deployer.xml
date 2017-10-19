@@ -56,6 +56,17 @@
 			</or>
 		</condition>
 		
+		<loadfile property="device-id" srcfile="${media-path}/main.py">
+			<filterchain>
+				<linecontainsregexp>
+					<regexp pattern="#device_id:"/>
+				</linecontainsregexp>
+				<replaceregex pattern="#device_id:(\S+)" replace="\1"/>
+				<striplinebreaks/>
+			</filterchain>
+		</loadfile>
+		<property name="device-id" value="CP1"/>
+		
 		<antcall target="deploy-to-${device-type}"/>
 	</target>
 	
@@ -72,31 +83,36 @@
 	<macrodef name="deploy-common">
 		<attribute name="media-path"/>
 		<attribute name="device-type"/>
+		<attribute name="device-id"/>
 		<sequential>
 			<echo>Deploying to CircuitPython device at @{media-path}</echo>
 			<echo>Device type: @{device-type}</echo>
 			<copy todir="@{media-path}" file="./c3common.py"/>
 			<copy todir="@{media-path}" file="./@{device-type}/control.txt"/>
-			<copy todir="@{media-path}" file="./@{device-type}/main.py"/>
+			<copy todir="@{media-path}" file="./@{device-type}/main.py">
+				<filterchain>
+					<replaceregex pattern="#device_id:(\S+)" replace="#device_id:@{device-id}"/>
+				</filterchain>
+			</copy>
 		</sequential>
 	</macrodef>
 	
 	<target name="deploy-to-TrinketM0">
 		<undeploy-common media-path="${media-path}"/>
 		<copy todir="${media-path}" file="./c3dotstar.py"/>
-		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}" device-id="${device-id}"/>
 	</target>
 	
 	<target name="deploy-to-GemmaM0">
 		<undeploy-common media-path="${media-path}"/>
 		<copy todir="${media-path}" file="./c3dotstar.py"/>
-		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}" device-id="${device-id}"/>
 	</target>
 		
 	<target name="deploy-to-CircuitPlaygroundExpress">
 		<undeploy-common media-path="${media-path}"/>
 		<copy todir="${media-path}" file="./c3neopixel.py"/>
-		<deploy-common media-path="${media-path}" device-type="${device-type}"/>
+		<deploy-common media-path="${media-path}" device-type="${device-type}" device-id="${device-id}"/>
 	</target>
 	
 	<target name="deploy-to-Unknown">

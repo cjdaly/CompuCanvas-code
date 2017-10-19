@@ -13,6 +13,11 @@ import board, neopixel
 
 neo_pix =  neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=True)
 
-def fill_solid(r, g, b):
-  neo_pix.fill((r,g,b))
+def fill_solid(colorRGB, altColorRGB = None):
+  neo_pix.fill(colorRGB)
+  if (altColorRGB is not None):
+    neo_pix[1] = altColorRGB
+    neo_pix[3] = altColorRGB
+    neo_pix[6] = altColorRGB
+    neo_pix[8] = altColorRGB
 

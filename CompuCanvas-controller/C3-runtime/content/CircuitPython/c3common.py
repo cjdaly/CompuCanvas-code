@@ -47,3 +47,6 @@ def read_control(key, default):
   else:
     return default
 
+def read_control_int(key, default):
+  return int(read_control(key, default))
+
