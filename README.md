@@ -3,7 +3,7 @@
 
 ## command line control
 
-The USB devices incorporated into CompuCanvas systems have been selected (among other factors) because they can be controlled in a straightforward way from the command line on an rPi.  Below are command line examples for each device.
+The peripheral devices incorporated into CompuCanvas systems have been selected (among other factors) because they can be controlled in a straightforward way from the command line on an rPi.  Below are command line examples for each device.
 
 #### CircuitPython devices
 
