@@ -16,9 +16,34 @@ The CircuitPython device also appears at `/dev/ttyACM0` (or `ACM1`, `ACM2`, etc)
 
 To exit the `screen` command and return back to the Linux command line prompt, type `Ctrl-a`, `k`, `y`.
 
+#### Pimoroni Blinkt
+
+The Pimoroni [Blinkt](https://www.adafruit.com/product/3195) device has 8 RGB LEDs which can be controlled via Python (either REPL or scripts).  Note that the Blinkt is not configured as part of the `sudo-setup.sh` script discussed below.  Setup and usage of the Blinkt is described [here](https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-blinkt), but the initial one-time setup is a single line command:
+
+    curl https://get.pimoroni.com/blinkt | bash
+
+Reboot is recommended after the setup script is run.  To test the Blinkt, try Python like this:
+
+    import time
+    from blinkt import set_pixel, set_brightness, show, clear
+    set_brightness(0.3)
+    clear()
+    set_pixel(0,   0,   0, 100)
+    set_pixel(1,   0, 100, 0)
+    set_pixel(2, 100,   0, 0)
+    set_pixel(3,   0, 100, 100)
+    set_pixel(4, 100, 100, 0)
+    set_pixel(5, 100,   0, 100)
+    set_pixel(6, 100, 100, 100)
+    set_pixel(7,  10,  10, 10)
+    show()
+    while True:
+      time.sleep(1.0)
+
+
 #### BlinkStick
 
-Use the `blinkstick` command to control the BlinkStick lights.  Run `blinkstick --help` to see usage information.  Here are some example commands:
+Use the `blinkstick` command to control the [BlinkStick](https://www.blinkstick.com/) lights.  Run `blinkstick --help` to see usage information.  Here are some example commands:
 
     blinkstick --pulse red
     blinkstick --index 0 --pulse red
