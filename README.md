@@ -14,7 +14,7 @@ The CircuitPython device also appears at `/dev/ttyACM0` (or `ACM1`, `ACM2`, etc)
     import os
     os.uname()
 
-To exit the `screen` command and return back to the Linux command line prompt, type `Ctrl-a`, `k`, `y`.
+Pressing `Ctrl-d` in the REPL will cause the device to reset and run the `main.py` file again.  To exit the `screen` command and return back to the Linux command line prompt, type `Ctrl-a`, `k`, `y`.
 
 #### Pimoroni Blinkt
 
