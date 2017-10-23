@@ -43,11 +43,11 @@ Reboot is recommended after the setup script is run.  To test the Blinkt, try Py
 
 #### BlinkStick
 
-Use the `blinkstick` command to control the [BlinkStick](https://www.blinkstick.com/) lights.  Run `blinkstick --help` to see usage information.  Here are some example commands:
+Use the `blinkstick` command to control [BlinkStick](https://www.blinkstick.com/) lights.  Run `blinkstick --help` to see usage information.  Here are some example commands:
 
     blinkstick --pulse red
     blinkstick --index 0 --pulse red
-    blinkstick --index 1 green
+    blinkstick --index 1 --limit 40 green
 
 #### text to speech
 
