@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import net.locosoft.CompuCanvas.controller.audio.IAudioService;
 import net.locosoft.CompuCanvas.controller.core.AbstractC3Service;
 import net.locosoft.CompuCanvas.controller.core.IC3Service;
-import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class AudioService extends AbstractC3Service implements IAudioService {
 
@@ -27,17 +26,18 @@ public class AudioService extends AbstractC3Service implements IAudioService {
 
 	public void speak(String message) {
 		if (_feeder != null) {
-			String command = C3Util.getC3ScriptsDir() + "/espeaker.sh '" + message + "'";
+			String command = serviceGetContentDir() + "/espeaker.sh '" + message + "'";
 			_feeder.enqueueCommand(command);
 		}
 	}
 
+	private final String _NA_DIR = serviceGetContentDir() + "/NoAgenda";
 	private ArrayList<String> _mp3IDs;
 
 	public String[] getMP3Ids() {
 		if (_mp3IDs == null) {
 			_mp3IDs = new ArrayList<String>();
-			File mp3Dir = new File(C3Util.getC3MP3Dir());
+			File mp3Dir = new File(_NA_DIR);
 			if (mp3Dir.isDirectory()) {
 				File[] files = mp3Dir.listFiles();
 				for (File file : files) {
@@ -53,7 +53,7 @@ public class AudioService extends AbstractC3Service implements IAudioService {
 
 	public void playMP3(String id) {
 		if (_feeder != null) {
-			String mp3FilePath = C3Util.getC3MP3Dir() + "/" + id + ".mp3";
+			String mp3FilePath = _NA_DIR + "/" + id + ".mp3";
 			File mp3File = new File(mp3FilePath);
 			if (mp3File.exists()) {
 				String command = "mpg321 " + mp3File;

@@ -57,18 +57,10 @@ public class C3Util {
 			return null;
 	}
 
-	public static String getC3ScriptsDir() {
+	public static String getC3ContentDir() {
 		String c3HomeDir = getC3HomeDir();
 		if (c3HomeDir != null)
-			return c3HomeDir + "/scripts";
-		else
-			return null;
-	}
-
-	public static String getC3MP3Dir() {
-		String c3HomeDir = getC3HomeDir();
-		if (c3HomeDir != null)
-			return c3HomeDir + "/content/NoAgenda";
+			return c3HomeDir + "/content";
 		else
 			return null;
 	}

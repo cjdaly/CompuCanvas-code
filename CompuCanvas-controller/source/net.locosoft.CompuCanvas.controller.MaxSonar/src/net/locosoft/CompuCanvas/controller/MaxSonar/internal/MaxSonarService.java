@@ -45,7 +45,7 @@ public class MaxSonarService extends AbstractC3Service implements IMaxSonarServi
 			_maxSonar = serviceCreateTSDGroup("maxSonar");
 			_maxSonarRange = _maxSonar.createTSDBuffer("range", "mm", TSDType.Long);
 
-			String command = C3Util.getC3ScriptsDir() + "/max-sonar.sh " + devicePath;
+			String command = serviceGetContentDir() + "/max-sonar.sh " + devicePath;
 			ExecUtil.LineReader lineReader = new ExecUtil.LineReader() {
 
 				public void readLine(String line) {

@@ -66,6 +66,10 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		return C3Util.parseInt(value, defaultValue);
 	}
 
+	public String serviceGetContentDir() {
+		return C3Util.getC3ContentDir() + "/service/" + getServiceId();
+	}
+
 	public TSDGroup serviceCreateTSDGroup(String id) {
 		return getCoreService().createTSDGroup(id, this);
 	}
