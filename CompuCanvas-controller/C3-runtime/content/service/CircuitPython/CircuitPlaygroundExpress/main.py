@@ -20,6 +20,8 @@ pwm_led = pulseio.PWMOut(board.A1)
 
 c3common.blink()
 
+flip = True
+
 while True:
   if c3common.refresh_control():
     dac_led.value = c3common.read_control_int("DAC.led", 0)
@@ -32,7 +34,11 @@ while True:
     r2 = c3common.read_control_int("NeoPixel.alt.R", 0)
     g2 = c3common.read_control_int("NeoPixel.alt.G", 80)
     b2 = c3common.read_control_int("NeoPixel.alt.B", 0)
-    c3neopixel.fill_solid((r, g, b), (r2, g2, b2))
+    flip = not flip
+    if flip:
+      c3neopixel.fill_solid((r, g, b), (r2, g2, b2))
+    else:
+      c3neopixel.fill_solid((r2, g2, b2), (r, g, b))
     #
     time.sleep(1.0)
   else:

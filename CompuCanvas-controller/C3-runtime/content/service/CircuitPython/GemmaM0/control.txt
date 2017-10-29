@@ -1,2 +1,2 @@
-DotStar.R=40;DotStar.G=100;DotStar.B=0
+DotStar.R=20;DotStar.G=0;DotStar.B=160
 DotStar.mode=steady
