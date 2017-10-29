@@ -22,8 +22,10 @@ while True:
     r = c3common.read_control_int("DotStar.R", 100)
     g = c3common.read_control_int("DotStar.G", 0)
     b = c3common.read_control_int("DotStar.B", 0)
+    d = c3common.read_control_float("DotStar.pulseDelay", 0.02)
     c3dotstar.set_color(r, g, b)
-    time.sleep(0.5)
+    c3dotstar.pulse(d)
+    time.sleep(0.33)
   else:
     c3common.blink(n=1,s=1)
 

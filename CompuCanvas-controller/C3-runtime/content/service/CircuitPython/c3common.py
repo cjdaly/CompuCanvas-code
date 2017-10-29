@@ -50,3 +50,6 @@ def read_control(key, default):
 def read_control_int(key, default):
   return int(read_control(key, default))
 
+def read_control_float(key, default):
+  return float(read_control(key, default))
+

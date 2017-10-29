@@ -26,16 +26,23 @@ def set_brightness(b):
   else:
     dots.brightness = b
 
-def pulse(steps, period):
+def pulse(delay=0.02):
   global dots
-  max_br = dots.brightness
-  db = max_br / steps
-  dt = period / (steps * 2.0) 
-  for i in range(0, steps):
-    dots.brightness = max_br - i * db
-    time.sleep(dt)
-  for i in range(0, steps):
-    dots.brightness = i * db
-    time.sleep(dt)
-  dots.brightness = max_br
+  r,g,b = dots[0]
+  rgb = [r,g,b]
+  while (r+g+b > 0):
+    r=0 if r<=0 else r-1
+    g=0 if g<=0 else g-1
+    b=0 if b<=0 else b-1
+    dots[0] = [r,g,b]
+    time.sleep(delay)
+  done=False
+  while not done:
+    r=r+1 if r<rgb[0] else rgb[0]
+    g=g+1 if g<rgb[1] else rgb[1]
+    b=b+1 if b<rgb[2] else rgb[2]
+    dots[0] = [r,g,b]
+    time.sleep(delay)
+    done = rgb==[r,g,b]
+
 

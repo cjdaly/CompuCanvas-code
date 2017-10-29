@@ -11,7 +11,7 @@
 
 import board, neopixel
 
-neo_pix =  neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=True)
+neo_pix =  neopixel.NeoPixel(board.NEOPIXEL, 10, auto_write=False)
 
 def fill_solid(colorRGB, altColorRGB = None):
   neo_pix.fill(colorRGB)
@@ -20,4 +20,5 @@ def fill_solid(colorRGB, altColorRGB = None):
     neo_pix[3] = altColorRGB
     neo_pix[6] = altColorRGB
     neo_pix[8] = altColorRGB
+  neo_pix.show()
 
