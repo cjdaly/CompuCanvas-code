@@ -1,8 +1,13 @@
 
 DAC.led.hi=48500
 DAC.led.lo=47500
+DAC.led.step=5
+DAC.led.delay=0.01
+
 PWM.led.hi=0
 PWM.led.lo=0
+PWM.led.step=5
+PWM.led.delay=0.01
 
 NeoPixel.mode=silly
 NeoPixel.R=80;NeoPixel.G=0;NeoPixel.B=0
