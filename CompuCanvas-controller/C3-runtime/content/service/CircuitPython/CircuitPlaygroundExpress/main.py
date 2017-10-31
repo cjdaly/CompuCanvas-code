@@ -24,8 +24,25 @@ flip = True
 
 while True:
   if c3common.refresh_control():
-    dac_led.value = c3common.read_control_int("DAC.led", 0)
-    pwm_led.duty_cycle = c3common.read_control_int("PWM.led", 0)
+    dac_lo = c3common.read_control_int("DAC.led.lo", 47000)
+    dac_hi = c3common.read_control_int("DAC.led.hi", 48000)
+    pwm_lo = c3common.read_control_int("PWM.led.lo", 0)
+    pwm_hi = c3common.read_control_int("PWM.led.hi", 0)
+    #
+    if flip:
+      for i in range(dac_lo, dac_hi, 2):
+        dac_led.value = i
+        time.sleep(0.01)
+      for i in range(pwm_lo, pwm_hi, 2):
+        pwm_led.duty_cycle = i
+        time.sleep(0.01)
+    else:
+      for i in range(dac_hi, dac_lo, -2):
+        dac_led.value = i
+        time.sleep(0.01)
+      for i in range(pwm_hi, pwm_lo, -2):
+        pwm_led.duty_cycle = i
+        time.sleep(0.01)
     #
     r = c3common.read_control_int("NeoPixel.R", 80)
     g = c3common.read_control_int("NeoPixel.G", 0)
@@ -40,7 +57,7 @@ while True:
     else:
       c3neopixel.fill_solid((r2, g2, b2), (r, g, b))
     #
-    time.sleep(1.0)
+    time.sleep(0.1)
   else:
     c3common.blink(n=1,s=1)
 
