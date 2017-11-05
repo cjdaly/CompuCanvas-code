@@ -7,14 +7,14 @@ The peripheral devices incorporated into CompuCanvas systems have been selected 
 
 #### CircuitPython devices
 
-[CircuitPython](https://github.com/adafruit/circuitpython) devices from AdaFruit (running the [2.0.0 firmware](https://github.com/adafruit/circuitpython/releases/tag/2.0.0)), like the [Trinket M0](https://www.adafruit.com/product/3500), [Gemma M0](https://www.adafruit.com/product/3501) and [Circuit Playground Express](https://www.adafruit.com/product/3333) offer 2 distinct modes of command line control.  First, the device mounts as a usb drive at `/media/pi/CIRCUITPY` (additional devices at `CIRCUITPY1`, `CIRCUITPY2`, etc.).  This directory contains a `main.py` Python file which is run every time the device resets, or the file is edited and saved.
+[CircuitPython](https://github.com/adafruit/circuitpython) devices from AdaFruit (running the [2.0.0 firmware](https://github.com/adafruit/circuitpython/releases/tag/2.0.0)), like the [Trinket M0](https://www.adafruit.com/product/3500), [Gemma M0](https://www.adafruit.com/product/3501) and [Circuit Playground Express](https://www.adafruit.com/product/3333) offer 2 distinct modes of command line control.  First, the device mounts as a usb drive at `/media/pi/CIRCUITPY` (additional devices at `CIRCUITPY1`, `CIRCUITPY2`, etc.).  This directory contains a `main.py` Python file which is run every time the device resets.  Editing and saving `main.py` will force a reset and then run the new version.
 
 The CircuitPython device also appears at `/dev/ttyACM0` (or `ACM1`, `ACM2`, etc).  Run the command `screen /dev/ttyACM0` and then press `Ctrl-c` and `Enter` once or twice and you should see a `>>>` Python REPL prompt.  Typing the commands below should display information about the device:
 
     import os
     os.uname()
 
-Pressing `Ctrl-d` in the REPL will cause the device to reset and run the `main.py` file again.  To exit the `screen` command and return back to the Linux command line prompt, type `Ctrl-a`, `k`, `y`.
+Pressing `Ctrl-d` in the REPL will cause the device to reset and run the `main.py` file again.  If there is a bug in `main.py`, error details (including line numbers) will be displayed in the REPL after a `Ctrl-d` reset.  To exit the `screen` command and return back to the Linux command line prompt, type `Ctrl-a`, `k`, `y`.
 
 #### Pimoroni Blinkt
 
@@ -91,7 +91,10 @@ First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) Jessie i
 
     sudo passwd pi
 
-Next, run `sudo raspi-config` and set timezone, etc.
+Next, run `sudo raspi-config` and:
+* in Localization Options, set Timezone
+* in Advanced Options, set Memory Split to 16 for GPU
+* tweak other settings as desired
 
 Finally, clone the CompuCanvas code and run the system setup script:
 
