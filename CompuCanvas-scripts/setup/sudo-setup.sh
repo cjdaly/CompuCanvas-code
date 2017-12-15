@@ -32,6 +32,7 @@ apt-get upgrade -y
 apt-get install ant espeak mpg321 neo4j=3.1.4 -y
 
 echo "Neo4j post-install config ..."
+apt-mark hold neo4j
 sudo -u neo4j neo4j-admin set-initial-password canvas
 
 echo "Blinkstick install and config ..."
