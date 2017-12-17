@@ -32,7 +32,7 @@ public class PoemReader extends MonitorThread {
 	}
 
 	public boolean cycle() throws Exception {
-		String uri = "http://allpoetry.com";
+		String uri = "http://allpoetry.com/poems";
 
 		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
 			CloseableHttpResponse response = httpClient.execute(new HttpGet(uri));
