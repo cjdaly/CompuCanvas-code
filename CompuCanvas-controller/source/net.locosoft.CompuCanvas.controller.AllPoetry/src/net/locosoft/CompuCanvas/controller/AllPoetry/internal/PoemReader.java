@@ -34,8 +34,9 @@ public class PoemReader extends MonitorThread {
 		return 1000 * 60 * 5;
 	}
 
-	private static final Pattern _PoemPattern = Pattern
-			.compile("<div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>", Pattern.DOTALL);
+	private static final Pattern _PoemPattern = Pattern.compile(
+			"<a href=[\"']/(.*?)[\"'].*?data-id=[\"'](.*?)[\"']>(.*?)</a>.*>(.*?)</a></h1><div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
+			Pattern.DOTALL);
 
 	public boolean cycle() throws Exception {
 		String uri = "http://allpoetry.com/poems";
@@ -45,9 +46,17 @@ public class PoemReader extends MonitorThread {
 			String bodyText = EntityUtils.toString(response.getEntity());
 			Matcher matcher = _PoemPattern.matcher(bodyText);
 			while (matcher.find()) {
-				String poemBody = matcher.group(1);
-				C3Util.log("POEM DUMP:");
-				C3Util.log(poemBody);
+				String authorLink = matcher.group(1);
+				String authorId = matcher.group(2);
+				String authorName = matcher.group(3);
+
+				String poemTitle = matcher.group(4);
+				String poemBody = matcher.group(5);
+
+				C3Util.log("\nPOEM DUMP");
+				C3Util.log("aLink: " + authorLink + ", aId: " + authorId + ", aName: " + authorName);
+				C3Util.log("poem: " + poemTitle);
+				C3Util.log(poemBody + "\n");
 			}
 		}
 
