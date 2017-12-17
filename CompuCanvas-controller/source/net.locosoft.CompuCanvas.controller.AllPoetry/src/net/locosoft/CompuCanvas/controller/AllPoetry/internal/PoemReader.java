@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.AllPoetry.internal;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,8 @@ public class PoemReader extends MonitorThread {
 	}
 
 	protected long getPostSleepMillis() {
-		return 1000 * 60 * 5;
+		int minutes = ThreadLocalRandom.current().nextInt(120, 240);
+		return 1000 * 60 * minutes;
 	}
 
 	private static final Pattern _PoemPattern = Pattern.compile(
@@ -54,7 +56,8 @@ public class PoemReader extends MonitorThread {
 				String poemMetadata = matcher.group(3);
 				String poemBody = matcher.group(4);
 				String poemBodyFix = poemBody.replace("<br>", "");
-				String[] poemBodyLines = poemBodyFix.split("\\r?\\n");
+				String poemBodyFix2 = poemBodyFix.replace("&nbsp;", "");
+				String[] poemBodyLines = poemBodyFix2.split("\\r?\\n");
 
 				Matcher matcher2 = _MetadataPattern.matcher(poemMetadata);
 				if (matcher2.find()) {
