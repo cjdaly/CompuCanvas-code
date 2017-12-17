@@ -53,6 +53,8 @@ public class PoemReader extends MonitorThread {
 				String authorLink = matcher.group(2);
 				String poemMetadata = matcher.group(3);
 				String poemBody = matcher.group(4);
+				String poemBodyFix = poemBody.replace("<br>", "");
+				String[] poemBodyLines = poemBodyFix.split("\\r?\\n");
 
 				Matcher matcher2 = _MetadataPattern.matcher(poemMetadata);
 				if (matcher2.find()) {
@@ -61,12 +63,16 @@ public class PoemReader extends MonitorThread {
 					C3Util.log("\nPOEM DUMP");
 					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
 					C3Util.log("pTitle: " + poemTitle + ", pLink: " + poemUrl);
-					C3Util.log(poemBody + "\n");
+					for (String line : poemBodyLines) {
+						C3Util.log("> " + line);
+					}
+					C3Util.log("\n---\n\n");
 				} else {
 					C3Util.log("\nPOEM DUMP (partial)");
 					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
 					C3Util.log("[[[metadata: " + poemMetadata + "]]]");
 					C3Util.log(poemBody + "\n");
+					C3Util.log("\n---\n\n");
 				}
 			}
 		}
