@@ -38,6 +38,9 @@ public class PoemReader extends MonitorThread {
 			"<a class=[\"']u[\"'] data-name=[\"'](.*?)[\"'] href=[\"']/(.*?)[\"']><img(.*?)<div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
 			Pattern.DOTALL);
 
+	private static final Pattern _MetadataPattern = Pattern.compile(
+			"<h1 class=[\"']title vcard item[\"'][^>]*><a class=[^>]+href=\"([^\"]*)\">([^<]+)</a>", Pattern.DOTALL);
+
 	public boolean cycle() throws Exception {
 		String uri = "http://allpoetry.com/poems";
 
@@ -51,10 +54,20 @@ public class PoemReader extends MonitorThread {
 				String poemMetadata = matcher.group(3);
 				String poemBody = matcher.group(4);
 
-				C3Util.log("\nPOEM DUMP");
-				C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
-				C3Util.log("[[[metadata: " + poemMetadata + "]]]");
-				C3Util.log(poemBody + "\n");
+				Matcher matcher2 = _MetadataPattern.matcher(poemMetadata);
+				if (matcher2.find()) {
+					String poemUrl = matcher2.group(1);
+					String poemTitle = matcher2.group(2);
+					C3Util.log("\nPOEM DUMP");
+					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
+					C3Util.log("pTitle: " + poemTitle + ", pLink: " + poemUrl);
+					C3Util.log(poemBody + "\n");
+				} else {
+					C3Util.log("\nPOEM DUMP (partial)");
+					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
+					C3Util.log("[[[metadata: " + poemMetadata + "]]]");
+					C3Util.log(poemBody + "\n");
+				}
 			}
 		}
 
