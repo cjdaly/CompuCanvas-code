@@ -35,7 +35,7 @@ public class PoemReader extends MonitorThread {
 	}
 
 	private static final Pattern _PoemPattern = Pattern.compile(
-			"<a class=[\"']u[\"'] data-name=[\"'](.*?)[\"'] href=[\"']/(.*?)[\"']>.*>(.*?)</a></h1><div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
+			"<a class=[\"']u[\"'] data-name=[\"'](.*?)[\"'] href=[\"']/(.*?)[\"']><img.*?>([^<>]+)</a></h1><div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
 			Pattern.DOTALL);
 
 	public boolean cycle() throws Exception {
