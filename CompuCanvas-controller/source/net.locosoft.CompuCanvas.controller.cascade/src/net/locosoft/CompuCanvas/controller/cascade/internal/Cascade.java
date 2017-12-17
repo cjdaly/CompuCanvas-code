@@ -41,6 +41,9 @@ public class Cascade extends MonitorThread {
 			if (cypher != null) {
 				_neo4jService.runCypher(cypher);
 			}
+		} else if (cypherQueueLength == -1) {
+			C3Util.log("Cascade - Neo4jService unavailable!");
+			Thread.sleep(10000);
 		} else {
 			if (_cascadeService.serviceIsLoggingEnabled("cypher")) {
 				C3Util.log("Cascade - waiting for Neo4j queue: " + cypherQueueLength + " ....");

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CompuCanvas Controller AllPoetry service
+Bundle-SymbolicName: net.locosoft.CompuCanvas.controller.AllPoetry;singleton:=true
+Bundle-Version: 0.1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.osgi,
+ org.eclipse.core.runtime,
+ org.apache.httpcomponents.httpcore,
+ org.apache.httpcomponents.httpclient,
+ net.locosoft.CompuCanvas.controller.core,
+ net.locosoft.CompuCanvas.controller.util
+Export-Package: net.locosoft.CompuCanvas.controller.AllPoetry
