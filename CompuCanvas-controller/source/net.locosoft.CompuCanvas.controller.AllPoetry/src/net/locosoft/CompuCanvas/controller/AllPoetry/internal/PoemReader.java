@@ -11,6 +11,9 @@
 
 package net.locosoft.CompuCanvas.controller.AllPoetry.internal;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -31,14 +34,21 @@ public class PoemReader extends MonitorThread {
 		return 1000 * 60 * 5;
 	}
 
+	private static final Pattern _PoemPattern = Pattern
+			.compile("<div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>", Pattern.DOTALL);
+
 	public boolean cycle() throws Exception {
 		String uri = "http://allpoetry.com/poems";
 
 		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
 			CloseableHttpResponse response = httpClient.execute(new HttpGet(uri));
 			String bodyText = EntityUtils.toString(response.getEntity());
-			C3Util.log("POETRY DUMP:");
-			C3Util.log(bodyText);
+			Matcher matcher = _PoemPattern.matcher(bodyText);
+			while (matcher.find()) {
+				String poemBody = matcher.group(1);
+				C3Util.log("POEM DUMP:");
+				C3Util.log(poemBody);
+			}
 		}
 
 		return true;
