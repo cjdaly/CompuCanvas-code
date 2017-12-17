@@ -35,7 +35,7 @@ public class PoemReader extends MonitorThread {
 	}
 
 	private static final Pattern _PoemPattern = Pattern.compile(
-			"<a class=[\"']u[\"'] data-name=[\"'](.*?)[\"'] href=[\"']/(.*?)[\"']><img.*?>([^<>]+)</a></h1><div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
+			"<a class=[\"']u[\"'] data-name=[\"'](.*?)[\"'] href=[\"']/(.*?)[\"']><img(.*?)</a></h1><div class=[\"']preview poem_body[\"']>(.*?)<div class=[\"']copyright[\"']>",
 			Pattern.DOTALL);
 
 	public boolean cycle() throws Exception {
@@ -48,13 +48,12 @@ public class PoemReader extends MonitorThread {
 			while (matcher.find()) {
 				String authorName = matcher.group(1);
 				String authorLink = matcher.group(2);
-
-				String poemTitle = matcher.group(3);
+				String poemMetadata = matcher.group(3);
 				String poemBody = matcher.group(4);
 
 				C3Util.log("\nPOEM DUMP");
 				C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
-				C3Util.log("poem: " + poemTitle);
+				C3Util.log("[[[metadata: " + poemMetadata + "]]]");
 				C3Util.log(poemBody + "\n");
 			}
 		}
