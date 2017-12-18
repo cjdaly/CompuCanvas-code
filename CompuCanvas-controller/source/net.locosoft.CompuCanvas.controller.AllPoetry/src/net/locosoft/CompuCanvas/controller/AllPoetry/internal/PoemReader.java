@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.AllPoetry.internal;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,12 @@ import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
 @SuppressWarnings("restriction")
 public class PoemReader extends MonitorThread {
+
+	private AllPoetryService _service;
+
+	public PoemReader(AllPoetryService service) {
+		_service = service;
+	}
 
 	protected long getPreSleepMillis() {
 		return 1000 * 30;
@@ -44,43 +51,101 @@ public class PoemReader extends MonitorThread {
 			"<h1 class=[\"']title vcard item[\"'][^>]*><a class=[^>]+href=\"([^\"]*)\">([^<]+)</a>", Pattern.DOTALL);
 
 	public boolean cycle() throws Exception {
+		ArrayList<Poem> _poems = new ArrayList<Poem>();
+
 		String uri = "http://allpoetry.com/poems";
 
+		String bodyText = null;
 		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
 			CloseableHttpResponse response = httpClient.execute(new HttpGet(uri));
-			String bodyText = EntityUtils.toString(response.getEntity());
+			bodyText = EntityUtils.toString(response.getEntity());
+		}
+
+		if (bodyText == null) {
+			if (_service.serviceIsLoggingEnabled("stats")) {
+				C3Util.log("AllPoetry - unable to get poems!");
+			}
+		} else {
 			Matcher matcher = _PoemPattern.matcher(bodyText);
 			while (matcher.find()) {
 				String authorName = matcher.group(1);
-				String authorLink = matcher.group(2);
+				String authorUrl = matcher.group(2);
 				String poemMetadata = matcher.group(3);
-				String poemBody = matcher.group(4);
-				String poemBodyFix = poemBody.replace("<br>", "");
-				String poemBodyFix2 = poemBodyFix.replace("&nbsp;", "");
-				String[] poemBodyLines = poemBodyFix2.split("\\r?\\n");
-
-				Matcher matcher2 = _MetadataPattern.matcher(poemMetadata);
-				if (matcher2.find()) {
-					String poemUrl = matcher2.group(1);
-					String poemTitle = matcher2.group(2);
-					C3Util.log("\nPOEM DUMP");
-					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
-					C3Util.log("pTitle: " + poemTitle + ", pLink: " + poemUrl);
-					for (String line : poemBodyLines) {
-						C3Util.log("> " + line);
-					}
-					C3Util.log("\n---\n\n");
-				} else {
-					C3Util.log("\nPOEM DUMP (partial)");
-					C3Util.log("aLink: " + authorLink + ", aName: " + authorName);
-					C3Util.log("[[[metadata: " + poemMetadata + "]]]");
-					C3Util.log(poemBody + "\n");
-					C3Util.log("\n---\n\n");
+				String poemBodyRaw = matcher.group(4);
+				Poem poem = constructPoem(authorName, authorUrl, poemMetadata, poemBodyRaw);
+				if (poem != null) {
+					_poems.add(poem);
 				}
+			}
+
+			if (_service.serviceIsLoggingEnabled("stats")) {
+				C3Util.log("AllPoetry - retrieved " + _poems.size() + " poems.");
+			}
+
+			for (Poem poem : _poems) {
+				sanityCheckPoem(poem);
 			}
 		}
 
 		return true;
+	}
+
+	private Poem constructPoem(String authorName, String authorUrl, String poemMetadata, String poemBodyRaw) {
+		String poemBodyFix = poemBodyRaw.replace("<br>", "");
+		String poemBodyFix2 = poemBodyFix.replace("&nbsp;", "");
+		String[] poemBodyLines = poemBodyFix2.split("\\r?\\n");
+
+		Matcher matcher = _MetadataPattern.matcher(poemMetadata);
+		if (matcher.find()) {
+			String poemUrl = matcher.group(1);
+			String poemTitle = matcher.group(2);
+			if (_service.serviceIsLoggingEnabled("dump")) {
+				C3Util.log("AllPoetry - constructing poem: " + poemTitle + " (" + poemUrl + ") by " + authorName + " ("
+						+ authorUrl + ")");
+				for (String line : poemBodyLines) {
+					C3Util.log("> " + line);
+				}
+				C3Util.log("\n---\n\n");
+			}
+			return new Poem(poemTitle, poemUrl, authorName, authorUrl, poemBodyLines);
+		}
+
+		return null;
+	}
+
+	private boolean sanityCheckPoem(Poem poem) {
+		boolean sanityCheck = true;
+
+		int lineCount = poem.getLineCount();
+		if ((lineCount < 4) || (lineCount > 24)) {
+			sanityCheck = false;
+		}
+
+		int maxLineLength = poem.getMaxLineLength();
+		if (maxLineLength > 79) {
+			sanityCheck = false;
+		}
+
+		char[] nonAsciiChars = poem.scanNonAsciiChars();
+		if (nonAsciiChars.length > 0) {
+			sanityCheck = false;
+		}
+
+		if (_service.serviceIsLoggingEnabled("stats")) {
+			C3Util.log("AllPoetry - poem: " + poem.getTitle() + " by " + poem.getAuthorName());
+			C3Util.log("- sanityCheck: " + sanityCheck + ", lineCount: " + lineCount + ", maxLineLength: "
+					+ maxLineLength);
+			if (nonAsciiChars.length > 0) {
+				StringBuilder sb = new StringBuilder();
+				for (char c : nonAsciiChars) {
+					int cVal = c;
+					sb.append("#" + cVal + ", ");
+				}
+				C3Util.log("- nonAsciiChars: " + sb);
+			}
+		}
+
+		return sanityCheck;
 	}
 
 }

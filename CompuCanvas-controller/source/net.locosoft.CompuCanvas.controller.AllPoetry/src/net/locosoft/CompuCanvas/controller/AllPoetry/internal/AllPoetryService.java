@@ -31,7 +31,7 @@ public class AllPoetryService extends AbstractC3Service implements IAllPoetrySer
 	public void serviceStart() {
 		String isEnabled = serviceGetConfig("isEnabled", "false");
 		if ("true".equals(isEnabled)) {
-			_poemReader = new PoemReader();
+			_poemReader = new PoemReader(this);
 			_poemReader.start();
 		} else {
 			C3Util.log("AllPoetry service is disabled.");

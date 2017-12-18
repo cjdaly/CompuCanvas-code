@@ -1,0 +1,86 @@
+/*****************************************************************************
+ * Copyright (c) 2017 Chris J Daly (github user cjdaly)
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   cjdaly - initial API and implementation
+ ****************************************************************************/
+
+package net.locosoft.CompuCanvas.controller.AllPoetry.internal;
+
+public class Poem {
+
+	private String _poemTitle;
+	private String _poemUrl;
+	private String _authorName;
+	private String _authorUrl;
+	private String[] _poemBodyLines;
+
+	public Poem(String poemTitle, String poemUrl, String authorName, String authorUrl, String[] poemBodyLines) {
+		_poemTitle = poemTitle;
+		_poemUrl = poemUrl;
+		_authorName = authorName;
+		_authorUrl = authorUrl;
+		_poemBodyLines = poemBodyLines;
+	}
+
+	public String getTitle() {
+		return _poemTitle;
+	}
+
+	public String getUrl() {
+		return _poemUrl;
+	}
+
+	public String getAuthorName() {
+		return _authorName;
+	}
+
+	public String getAuthorUrl() {
+		return _authorUrl;
+	}
+
+	public int getTotalLineCount() {
+		return _poemBodyLines.length;
+	}
+
+	public int getLineCount() {
+		int lineCount = 0;
+		for (String line : _poemBodyLines) {
+			if ((line != null) && (!"".equals(line.trim()))) {
+				lineCount++;
+			}
+		}
+		return lineCount;
+	}
+
+	public int getMaxLineLength() {
+		int maxLineLength = 0;
+		for (String line : _poemBodyLines) {
+			if (line != null) {
+				if (line.length() > maxLineLength)
+					maxLineLength = line.length();
+			}
+		}
+		return maxLineLength;
+	}
+
+	public char[] scanNonAsciiChars() {
+		StringBuilder sb = new StringBuilder();
+		for (String line : _poemBodyLines) {
+			if (line != null) {
+				for (int i = 0; i < line.length(); i++) {
+					char c = line.charAt(i);
+					if ((c < 32) || (c > 126)) {
+						sb.append(c);
+					}
+				}
+			}
+		}
+		return sb.toString().toCharArray();
+	}
+
+}
