@@ -91,9 +91,9 @@ public class PoemReader extends MonitorThread {
 	}
 
 	private Poem constructPoem(String authorName, String authorUrl, String poemMetadata, String poemBodyRaw) {
-		String poemBodyFix = poemBodyRaw.replace("<br>", "");
-		String poemBodyFix2 = poemBodyFix.replace("&nbsp;", "");
-		String[] poemBodyLines = poemBodyFix2.split("\\r?\\n");
+		String poemBodyFix = poemBodyRaw.replaceAll("<[^<>]+>", "");
+		poemBodyFix = poemBodyFix.replace("&nbsp;", "");
+		String[] poemBodyLines = poemBodyFix.split("\\r?\\n");
 
 		Matcher matcher = _MetadataPattern.matcher(poemMetadata);
 		if (matcher.find()) {
