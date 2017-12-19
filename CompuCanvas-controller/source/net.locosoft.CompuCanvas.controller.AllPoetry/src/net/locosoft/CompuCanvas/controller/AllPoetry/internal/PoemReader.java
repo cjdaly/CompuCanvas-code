@@ -30,9 +30,7 @@ public class PoemReader extends MonitorThread {
 
 	private AllPoetryService _service;
 
-	private String _poemUri = "http://allpoetry.com/poems";
 	private ArrayList<Poem> _poems = new ArrayList<Poem>();
-
 	private Poem _poem = null;
 	private int _poemLineNum = -1;
 
@@ -66,6 +64,9 @@ public class PoemReader extends MonitorThread {
 				_poem = null;
 				_poemLineNum = -1;
 				int sleepMinutes = ThreadLocalRandom.current().nextInt(30, 60);
+				if (_service.serviceIsLoggingEnabled("read")) {
+					C3Util.log("AllPoetry - sleep: " + sleepMinutes + " minutes.");
+				}
 				Thread.sleep(1000 * 60 * sleepMinutes);
 			}
 		} else if (_poems.size() > 0) {
@@ -77,7 +78,8 @@ public class PoemReader extends MonitorThread {
 		} else {
 			String bodyText = null;
 			try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-				CloseableHttpResponse response = httpClient.execute(new HttpGet(_poemUri));
+				String poemUri = _service.serviceGetConfig("poem.url", "http://allpoetry.com/poems");
+				CloseableHttpResponse response = httpClient.execute(new HttpGet(poemUri));
 				bodyText = EntityUtils.toString(response.getEntity());
 			}
 
