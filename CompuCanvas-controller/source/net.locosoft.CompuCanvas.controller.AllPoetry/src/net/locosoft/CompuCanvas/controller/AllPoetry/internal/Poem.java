@@ -11,6 +11,9 @@
 
 package net.locosoft.CompuCanvas.controller.AllPoetry.internal;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Poem {
 
 	private String _poemTitle;
@@ -43,6 +46,14 @@ public class Poem {
 		return _authorUrl;
 	}
 
+	public String getLine(int lineNum) {
+		return _poemBodyLines[lineNum];
+	}
+
+	public String[] getTokenizedLine(int lineNum) {
+		return null;
+	}
+
 	public int getTotalLineCount() {
 		return _poemBodyLines.length;
 	}
@@ -68,7 +79,7 @@ public class Poem {
 		return maxLineLength;
 	}
 
-	public char[] scanNonAsciiChars() {
+	public char[] getAllNonAsciiChars() {
 		StringBuilder sb = new StringBuilder();
 		for (String line : _poemBodyLines) {
 			if (line != null) {
@@ -79,6 +90,27 @@ public class Poem {
 					}
 				}
 			}
+		}
+		return sb.toString().toCharArray();
+	}
+
+	public char[] getUniqueNonAsciiChars() {
+		Set<Character> badChars = new HashSet<Character>();
+
+		for (String line : _poemBodyLines) {
+			if (line != null) {
+				for (int i = 0; i < line.length(); i++) {
+					char c = line.charAt(i);
+					if ((c < 32) || (c > 126)) {
+						badChars.add(c);
+					}
+				}
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (Character c : badChars) {
+			sb.append(c);
 		}
 		return sb.toString().toCharArray();
 	}
