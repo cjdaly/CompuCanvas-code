@@ -65,7 +65,7 @@ public class PoemReader extends MonitorThread {
 			if (_poemLineNum >= _poem.getTotalLineCount()) {
 				_poem = null;
 				_poemLineNum = -1;
-				int sleepMinutes = ThreadLocalRandom.current().nextInt(5, 10);
+				int sleepMinutes = ThreadLocalRandom.current().nextInt(30, 60);
 				Thread.sleep(1000 * 60 * sleepMinutes);
 			}
 		} else if (_poems.size() > 0) {
@@ -112,6 +112,13 @@ public class PoemReader extends MonitorThread {
 	private Poem constructPoem(String authorName, String authorUrl, String poemMetadata, String poemBodyRaw) {
 		String poemBodyFix = poemBodyRaw.replaceAll("<[^<>]+>", "");
 		poemBodyFix = poemBodyFix.replace("&nbsp;", "");
+		poemBodyFix = poemBodyFix.replace((char) 160, ' ');
+		poemBodyFix = poemBodyFix.replace((char) 8212, '-');
+		poemBodyFix = poemBodyFix.replace((char) 8216, '`');
+		poemBodyFix = poemBodyFix.replace((char) 8217, '\'');
+		poemBodyFix = poemBodyFix.replace((char) 8220, '"');
+		poemBodyFix = poemBodyFix.replace((char) 8221, '"');
+		poemBodyFix = poemBodyFix.replace("" + (char) 8230, "...");
 		String[] poemBodyLines = poemBodyFix.split("\\r?\\n");
 
 		Matcher matcher = _MetadataPattern.matcher(poemMetadata);
@@ -124,7 +131,7 @@ public class PoemReader extends MonitorThread {
 				for (String line : poemBodyLines) {
 					C3Util.log("> " + line);
 				}
-				C3Util.log("\n---\n\n");
+				C3Util.log("\n~~~\n\n");
 			}
 			return new Poem(poemTitle, poemUrl, authorName, authorUrl, poemBodyLines);
 		}
@@ -166,6 +173,7 @@ public class PoemReader extends MonitorThread {
 				}
 				C3Util.log("- nonAsciiChars (total: " + nonAsciiChars.length + "): " + sb);
 			}
+			C3Util.log("\n---\n\n");
 		}
 
 		return sanityCheck;

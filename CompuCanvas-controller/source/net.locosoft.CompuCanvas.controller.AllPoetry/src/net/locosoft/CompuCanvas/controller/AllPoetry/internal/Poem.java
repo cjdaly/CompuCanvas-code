@@ -85,7 +85,7 @@ public class Poem {
 			if (line != null) {
 				for (int i = 0; i < line.length(); i++) {
 					char c = line.charAt(i);
-					if ((c < 32) || (c > 126)) {
+					if (!isAllowedAsciiChar(c)) {
 						sb.append(c);
 					}
 				}
@@ -101,7 +101,7 @@ public class Poem {
 			if (line != null) {
 				for (int i = 0; i < line.length(); i++) {
 					char c = line.charAt(i);
-					if ((c < 32) || (c > 126)) {
+					if (!isAllowedAsciiChar(c)) {
 						badChars.add(c);
 					}
 				}
@@ -113,6 +113,16 @@ public class Poem {
 			sb.append(c);
 		}
 		return sb.toString().toCharArray();
+	}
+
+	public boolean isAllowedAsciiChar(char c) {
+		if (c == 9)
+			return true;
+
+		if ((c >= 32) && (c <= 126))
+			return true;
+
+		return false;
 	}
 
 }
