@@ -22,6 +22,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
+import net.locosoft.CompuCanvas.controller.core.tsd.TSDType;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 
@@ -29,6 +32,11 @@ import net.locosoft.CompuCanvas.controller.util.MonitorThread;
 public class PoemReader extends MonitorThread {
 
 	private AllPoetryService _service;
+	private TSDGroup _poemReaderGroup;
+	private TSDBuffer _poemLineBuffer;
+	private TSDBuffer _poemLineCountBuffer;
+	private TSDBuffer _poemAuthorBuffer;
+	private TSDBuffer _poemTitleBuffer;
 
 	private ArrayList<Poem> _poems = new ArrayList<Poem>();
 	private Poem _poem = null;
@@ -36,6 +44,11 @@ public class PoemReader extends MonitorThread {
 
 	public PoemReader(AllPoetryService service) {
 		_service = service;
+		_poemReaderGroup = _service.serviceCreateTSDGroup("poemReader");
+		_poemLineBuffer = _poemReaderGroup.createTSDBuffer("poemLine", "text", TSDType.String);
+		_poemLineCountBuffer = _poemReaderGroup.createTSDBuffer("poemLineCount", "count", TSDType.Long);
+		_poemAuthorBuffer = _poemReaderGroup.createTSDBuffer("poemAuthor", "text", TSDType.String);
+		_poemTitleBuffer = _poemReaderGroup.createTSDBuffer("poemTitle", "text", TSDType.String);
 	}
 
 	protected long getPreSleepMillis() {
@@ -59,6 +72,9 @@ public class PoemReader extends MonitorThread {
 			if (_service.serviceIsLoggingEnabled("read")) {
 				C3Util.log("AllPoetry - poemLine: " + line);
 			}
+			_poemLineCountBuffer.update(_poemLineNum);
+			_poemLineBuffer.update(line);
+
 			_poemLineNum++;
 			if (_poemLineNum >= _poem.getTotalLineCount()) {
 				_poem = null;
@@ -75,6 +91,9 @@ public class PoemReader extends MonitorThread {
 			if (_service.serviceIsLoggingEnabled("read")) {
 				C3Util.log("AllPoetry - poem: " + _poem.getTitle() + ", author: " + _poem.getAuthorName());
 			}
+			_poemAuthorBuffer.update(_poem.getAuthorName());
+			_poemTitleBuffer.update(_poem.getTitle());
+			_poemLineCountBuffer.update(_poem.getTotalLineCount());
 		} else {
 			String bodyText = null;
 			try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
@@ -87,6 +106,7 @@ public class PoemReader extends MonitorThread {
 				if (_service.serviceIsLoggingEnabled("stats")) {
 					C3Util.log("AllPoetry - unable to get poems!");
 					int sleepMinutes = ThreadLocalRandom.current().nextInt(15, 30);
+					C3Util.log("AllPoetry - sleep: " + sleepMinutes + " minutes.");
 					Thread.sleep(1000 * 60 * sleepMinutes);
 				}
 			} else {
@@ -113,20 +133,14 @@ public class PoemReader extends MonitorThread {
 
 	private Poem constructPoem(String authorName, String authorUrl, String poemMetadata, String poemBodyRaw) {
 		String poemBodyFix = poemBodyRaw.replaceAll("<[^<>]+>", "");
-		poemBodyFix = poemBodyFix.replace("&nbsp;", "");
-		poemBodyFix = poemBodyFix.replace((char) 160, ' ');
-		poemBodyFix = poemBodyFix.replace((char) 8212, '-');
-		poemBodyFix = poemBodyFix.replace((char) 8216, '`');
-		poemBodyFix = poemBodyFix.replace((char) 8217, '\'');
-		poemBodyFix = poemBodyFix.replace((char) 8220, '"');
-		poemBodyFix = poemBodyFix.replace((char) 8221, '"');
-		poemBodyFix = poemBodyFix.replace("" + (char) 8230, "...");
+		poemBodyFix = scrubString(poemBodyFix);
 		String[] poemBodyLines = poemBodyFix.split("\\r?\\n");
 
 		Matcher matcher = _MetadataPattern.matcher(poemMetadata);
 		if (matcher.find()) {
 			String poemUrl = matcher.group(1);
 			String poemTitle = matcher.group(2);
+			poemTitle = scrubString(poemTitle);
 			if (_service.serviceIsLoggingEnabled("dump")) {
 				C3Util.log("AllPoetry - constructing poem: " + poemTitle + " (" + poemUrl + ") by " + authorName + " ("
 						+ authorUrl + ")");
@@ -139,6 +153,22 @@ public class PoemReader extends MonitorThread {
 		}
 
 		return null;
+	}
+
+	private String scrubString(String inputText) {
+		String scrubText = inputText;
+		scrubText = scrubText.replace("&nbsp;", "");
+		scrubText = scrubText.replace("&mdash;", "-");
+		scrubText = scrubText.replace((char) 160, ' ');
+		scrubText = scrubText.replace((char) 8211, '-');
+		scrubText = scrubText.replace((char) 8212, '-');
+		scrubText = scrubText.replace((char) 8213, '-');
+		scrubText = scrubText.replace((char) 8216, '`');
+		scrubText = scrubText.replace((char) 8217, '\'');
+		scrubText = scrubText.replace((char) 8220, '"');
+		scrubText = scrubText.replace((char) 8221, '"');
+		scrubText = scrubText.replace("" + (char) 8230, "...");
+		return scrubText;
 	}
 
 	private boolean sanityCheckPoem(Poem poem) {

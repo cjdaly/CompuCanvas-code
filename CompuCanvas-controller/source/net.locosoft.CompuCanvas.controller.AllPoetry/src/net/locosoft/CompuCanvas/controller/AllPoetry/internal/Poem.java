@@ -69,7 +69,7 @@ public class Poem {
 	}
 
 	public int getMaxLineLength() {
-		int maxLineLength = 0;
+		int maxLineLength = _poemTitle.length();
 		for (String line : _poemBodyLines) {
 			if (line != null) {
 				if (line.length() > maxLineLength)
@@ -81,6 +81,12 @@ public class Poem {
 
 	public char[] getAllNonAsciiChars() {
 		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < _poemTitle.length(); i++) {
+			char c = _poemTitle.charAt(i);
+			if (!isAllowedAsciiChar(c)) {
+				sb.append(c);
+			}
+		}
 		for (String line : _poemBodyLines) {
 			if (line != null) {
 				for (int i = 0; i < line.length(); i++) {
@@ -96,7 +102,12 @@ public class Poem {
 
 	public char[] getUniqueNonAsciiChars() {
 		Set<Character> badChars = new HashSet<Character>();
-
+		for (int i = 0; i < _poemTitle.length(); i++) {
+			char c = _poemTitle.charAt(i);
+			if (!isAllowedAsciiChar(c)) {
+				badChars.add(c);
+			}
+		}
 		for (String line : _poemBodyLines) {
 			if (line != null) {
 				for (int i = 0; i < line.length(); i++) {
