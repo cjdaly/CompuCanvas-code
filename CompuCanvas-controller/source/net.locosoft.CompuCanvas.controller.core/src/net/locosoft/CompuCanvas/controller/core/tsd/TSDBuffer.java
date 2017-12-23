@@ -23,6 +23,7 @@ public class TSDBuffer {
 	private TSDType _type;
 	private int _size;
 	private TSDGroup _group;
+	private boolean _propagateValues;
 
 	private LinkedList<TSDValue> _values = new LinkedList<TSDValue>();
 
@@ -33,6 +34,7 @@ public class TSDBuffer {
 		_size = size;
 		_group = group;
 		_hashKey = _group.getHashKey() + "/" + _id;
+		_propagateValues = true;
 	}
 
 	public String getHashKey() {
@@ -57,6 +59,10 @@ public class TSDBuffer {
 
 	public TSDGroup getGroup() {
 		return _group;
+	}
+
+	public void setPropagateValues(boolean propagateValues) {
+		_propagateValues = propagateValues;
 	}
 
 	public synchronized TSDValue getLatest() {
@@ -128,7 +134,9 @@ public class TSDBuffer {
 		}
 
 		_values.addFirst(tsd);
-		_group.propagate(tsd);
+		if (_propagateValues) {
+			_group.propagate(tsd);
+		}
 		while (_values.size() > _size) {
 			_values.removeLast();
 		}

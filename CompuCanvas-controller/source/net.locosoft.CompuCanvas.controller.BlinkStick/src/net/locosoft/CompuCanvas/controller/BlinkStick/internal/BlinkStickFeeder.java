@@ -31,6 +31,7 @@ public class BlinkStickFeeder extends MonitorThread {
 		_service = service;
 		_tsdGroup = service.serviceCreateTSDGroup("blinkstick");
 		_inputBuffer = _tsdGroup.createTSDBuffer("input", "commands", TSDType.String);
+		_inputBuffer.setPropagateValues(false);
 	}
 
 	void enqueueCommand(String command) {

@@ -52,15 +52,18 @@ public class VitalsReader extends MonitorThread {
 	public boolean cycle() throws Exception {
 		Date date = new Date();
 
-		_timeVitals.update(date);
-
-		VitalSign vitalSign = _vitalSigns.get(_vitalSignIndex);
-		vitalSign.update(date);
+		if (_vitalSignIndex == -2) {
+			_timeVitals.update(date);
+		} else if (_vitalSignIndex == -1) {
+			_dateVitals.update(date);
+		} else {
+			VitalSign vitalSign = _vitalSigns.get(_vitalSignIndex);
+			vitalSign.update(date);
+		}
 
 		_vitalSignIndex++;
 		if (_vitalSignIndex == _vitalSigns.size()) {
-			_vitalSignIndex = 0;
-			_dateVitals.update(date);
+			_vitalSignIndex = -2;
 		}
 
 		return true;
