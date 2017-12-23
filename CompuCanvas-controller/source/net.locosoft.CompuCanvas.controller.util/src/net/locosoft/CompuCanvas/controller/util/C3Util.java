@@ -11,6 +11,7 @@
 
 package net.locosoft.CompuCanvas.controller.util;
 
+import java.io.File;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,6 +70,13 @@ public class C3Util {
 		String c3HomeDir = getC3HomeDir();
 		String c3PIDFile = FileUtil.readFileToString(c3HomeDir + "/c3.PID", false);
 		return parseInt(c3PIDFile.trim(), -1);
+	}
+
+	public static void stopC3() {
+		File c3PIDFile = new File(getC3HomeDir() + "/c3.PID");
+		if (c3PIDFile.exists()) {
+			c3PIDFile.delete();
+		}
 	}
 
 	private static final Pattern _VmPeakPattern = Pattern.compile("VmPeak:\\s+(\\d+)\\s+kB");

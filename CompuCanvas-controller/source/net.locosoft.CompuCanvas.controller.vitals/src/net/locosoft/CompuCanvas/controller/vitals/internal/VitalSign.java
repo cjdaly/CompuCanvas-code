@@ -66,11 +66,12 @@ public abstract class VitalSign {
 				return;
 
 			int vmPeak = C3Util.getProcessVmPeak(c3Pid);
-			if (vmPeak > _C3VmPeakMax) {
-				C3Util.log("!!! C3 VmPeak: " + vmPeak + "  Reboot soon!");
-			}
-
 			_buffer.update(date.getTime(), vmPeak);
+
+			if (vmPeak > _C3VmPeakMax) {
+				C3Util.log("!!! C3 VmPeak: " + vmPeak + " ; stopping C3 now!");
+				C3Util.stopC3();
+			}
 		}
 	}
 
@@ -138,7 +139,7 @@ public abstract class VitalSign {
 		}
 	}
 
-	private static final double _SystemTempMax = 77.0;
+	private static final double _SystemTempMax = 78.0;
 
 	public static class CPUTemp extends VitalSign {
 		public CPUTemp(TSDGroup group) {
@@ -153,10 +154,11 @@ public abstract class VitalSign {
 
 			int cpuTemp1000 = C3Util.parseInt(processOut.toString().trim(), -1);
 			double cpuTemp = (double) cpuTemp1000 / 1000.0;
-			if (cpuTemp > _SystemTempMax) {
-				C3Util.log("!!! CPU temp: " + cpuTemp + "C ; Shutdown soon!");
-			}
 			_buffer.update(date.getTime(), cpuTemp);
+			if (cpuTemp > _SystemTempMax) {
+				C3Util.log("!!! CPU temp: " + cpuTemp + "C ; stopping C3 now!");
+				C3Util.stopC3();
+			}
 		}
 	}
 
@@ -177,10 +179,11 @@ public abstract class VitalSign {
 			if (matcher.find()) {
 				String gpuTempText = matcher.group(1);
 				double gpuTemp = C3Util.parseDouble(gpuTempText, -1);
-				if (gpuTemp > _SystemTempMax) {
-					C3Util.log("!!! GPU temp: " + gpuTemp + "C ; Shutdown soon!");
-				}
 				_buffer.update(date.getTime(), gpuTemp);
+				if (gpuTemp > _SystemTempMax) {
+					C3Util.log("!!! GPU temp: " + gpuTemp + "C ; stopping C3 now!");
+					C3Util.stopC3();
+				}
 			}
 		}
 	}
