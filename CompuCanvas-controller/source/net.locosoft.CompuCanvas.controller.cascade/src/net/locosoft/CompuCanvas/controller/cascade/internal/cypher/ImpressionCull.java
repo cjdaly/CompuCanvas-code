@@ -25,7 +25,7 @@ public class ImpressionCull extends WheelOfCypher.Cog {
 		Cypher cypher = new Cypher() {
 
 			public String getText() {
-				return "MATCH (n:Impression) WHERE (n.timeMillis < $cullTime) DETACH DELETE n";
+				return "MATCH (n:Impression) WHERE ((n.timeMillis < $cullTime) OR (n.timeValue < $cullTime)) DETACH DELETE n";
 			}
 
 			protected void handle(StatementResult result) {

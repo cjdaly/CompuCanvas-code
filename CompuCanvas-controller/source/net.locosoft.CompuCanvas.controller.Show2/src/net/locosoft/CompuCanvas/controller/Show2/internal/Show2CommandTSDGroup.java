@@ -25,7 +25,7 @@ public class Show2CommandTSDGroup {
 	public Show2CommandTSDGroup(Show2Service service) {
 		_service = service;
 		_group = _service.serviceCreateTSDGroup("commands");
-		_inputs = _group.createTSDBuffer("input", "Show2 commands", TSDType.String);
+		_inputs = _group.createTSDBuffer("input", "Show2 commands", TSDType.StringArray);
 		_queueSize = _group.createTSDBuffer("queueSize", "size", TSDType.Long);
 		_outputs = _group.createTSDBuffer("output", "Show2 output", TSDType.String);
 	}
