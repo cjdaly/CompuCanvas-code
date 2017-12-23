@@ -25,7 +25,7 @@ public class Neo4jVitals extends MonitorThread {
 
 	private TSDBuffer _vmPeakTSDs;
 	private int _neo4jPID = -1;
-	private static final int _Neo4jVmPeakMax = 800000;
+	private static final int _Neo4jVmPeakMax = 900000;
 
 	public Neo4jVitals(Neo4jService service) {
 		TSDGroup tsdGroup = service.serviceCreateTSDGroup("vitals");
