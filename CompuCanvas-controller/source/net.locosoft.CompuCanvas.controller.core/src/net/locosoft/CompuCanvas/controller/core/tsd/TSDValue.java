@@ -28,17 +28,9 @@ public class TSDValue {
 
 	private TSDBuffer _buffer;
 
-	// TSDValue(long timeMillis, String value, TSDBuffer buffer) {
-	// _timeMillis = timeMillis;
-	// _type = TSDType.String;
-	// _isArray = false;
-	// _stringValue = value;
-	// _buffer = buffer;
-	// }
-
 	TSDValue(long timeMillis, String[] values, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
-		_type = TSDType.String;
+		_type = TSDType.StringArray;
 		_isArray = true;
 		_stringValues = values;
 		_buffer = buffer;
@@ -52,14 +44,6 @@ public class TSDValue {
 		_buffer = buffer;
 	}
 
-	// TSDValue(long timeMillis, long[] values, TSDBuffer buffer) {
-	// _timeMillis = timeMillis;
-	// _type = TSDType.Long;
-	// _isArray = true;
-	// _longValues = values;
-	// _buffer = buffer;
-	// }
-
 	TSDValue(long timeMillis, double value, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
 		_type = TSDType.Double;
@@ -67,14 +51,6 @@ public class TSDValue {
 		_doubleValue = value;
 		_buffer = buffer;
 	}
-
-	// TSDValue(long timeMillis, double[] values, TSDBuffer buffer) {
-	// _timeMillis = timeMillis;
-	// _type = TSDType.Double;
-	// _isArray = true;
-	// _doubleValues = values;
-	// _buffer = buffer;
-	// }
 
 	TSDValue(long timeMillis, String value, TSDType type, TSDBuffer buffer) {
 		_timeMillis = timeMillis;
@@ -184,14 +160,16 @@ public class TSDValue {
 				if (i > 0)
 					sb.append(", ");
 				switch (_type) {
-				case String:
+				case StringArray:
 					sb.append(_stringValues[i]);
 					break;
-				case Long:
+				case LongArray:
 					sb.append(_longValues[i]);
 					break;
-				case Double:
+				case DoubleArray:
 					sb.append(_doubleValues[i]);
+					break;
+				default:
 					break;
 				}
 			}

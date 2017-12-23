@@ -12,7 +12,20 @@
 package net.locosoft.CompuCanvas.controller.core.tsd;
 
 public enum TSDType {
-	String, //
-	Long, //
-	Double
+	Long(1), //
+	LongArray(2), //
+	Double(3), //
+	DoubleArray(4), //
+	String(5), //
+	StringArray(6);
+
+	private int _ordinal;
+
+	TSDType(int ordinal) {
+		_ordinal = ordinal;
+	}
+
+	public int getOrdinal() {
+		return _ordinal;
+	}
 }

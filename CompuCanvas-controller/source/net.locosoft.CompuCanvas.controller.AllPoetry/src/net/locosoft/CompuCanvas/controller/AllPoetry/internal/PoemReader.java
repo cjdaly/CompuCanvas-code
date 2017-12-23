@@ -157,7 +157,11 @@ public class PoemReader extends MonitorThread {
 
 	private String scrubString(String inputText) {
 		String scrubText = inputText;
-		scrubText = scrubText.replace("&nbsp;", "");
+		scrubText = scrubText.replace("&nbsp;", " ");
+		scrubText = scrubText.replace("&quot;", "\"");
+		scrubText = scrubText.replace("&amp;", "&");
+		scrubText = scrubText.replace("&lt;", "<");
+		scrubText = scrubText.replace("&gt;", ">");
 		scrubText = scrubText.replace("&mdash;", "-");
 		scrubText = scrubText.replace((char) 160, ' ');
 		scrubText = scrubText.replace((char) 8211, '-');

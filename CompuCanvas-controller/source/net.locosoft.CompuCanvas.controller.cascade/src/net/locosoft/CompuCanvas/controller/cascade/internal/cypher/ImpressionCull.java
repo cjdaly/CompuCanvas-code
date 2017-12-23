@@ -19,13 +19,13 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ImpressionCull extends WheelOfCypher.Cog {
 
-	private static final long _CULL_MILLIS = 10 * 1000;
+	private static final long _CULL_MILLIS = 60 * 1000;
 
 	public Cypher newCypher() {
 		Cypher cypher = new Cypher() {
 
 			public String getText() {
-				return "MATCH (n:Impression) WHERE (n.timeValue < $cullTime) DETACH DELETE n";
+				return "MATCH (n:Impression) WHERE (n.timeMillis < $cullTime) DETACH DELETE n";
 			}
 
 			protected void handle(StatementResult result) {

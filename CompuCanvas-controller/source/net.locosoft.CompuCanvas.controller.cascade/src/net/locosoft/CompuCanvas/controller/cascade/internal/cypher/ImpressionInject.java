@@ -19,7 +19,6 @@ import org.neo4j.driver.v1.summary.ResultSummary;
 
 import net.locosoft.CompuCanvas.controller.Neo4j.Cypher;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDBuffer;
-import net.locosoft.CompuCanvas.controller.core.tsd.TSDGroup;
 import net.locosoft.CompuCanvas.controller.core.tsd.TSDValue;
 import net.locosoft.CompuCanvas.controller.util.C3Util;
 
@@ -51,35 +50,30 @@ public class ImpressionInject extends WheelOfCypher.Cog {
 		for (TSDValue tsdValue : tsdValues) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 
-			map.put("timeValue", tsdValue.getTime());
+			map.put("timeMillis", tsdValue.getTime());
+			map.put("type", tsdValue.getType().getOrdinal());
 			switch (tsdValue.getType()) {
 			case String:
-				if (tsdValue.isArray())
-					map.put("stringValues", tsdValue.asStrings());
-				else
-					map.put("stringValue", tsdValue.asString());
+				map.put("value", tsdValue.asString());
+				break;
+			case StringArray:
+				map.put("value", tsdValue.asStrings());
 				break;
 			case Long:
-				if (tsdValue.isArray())
-					map.put("longValues", tsdValue.asLongs());
-				else
-					map.put("longValue", tsdValue.asLong());
+				map.put("value", tsdValue.asLong());
+				break;
+			case LongArray:
+				map.put("value", tsdValue.asLongs());
 				break;
 			case Double:
-				if (tsdValue.isArray())
-					map.put("doubleValues", tsdValue.asDoubles());
-				else
-					map.put("doubleValue", tsdValue.asDouble());
+				map.put("value", tsdValue.asDouble());
+				break;
+			case DoubleArray:
+				map.put("value", tsdValue.asDoubles());
 				break;
 			}
 			TSDBuffer tsdBuffer = tsdValue.getBuffer();
-			map.put("pathValue", tsdBuffer.getHashKey());
-
-			map.put("units", tsdBuffer.getUnits());
-			map.put("buffer", tsdBuffer.getId());
-			TSDGroup tsdGroup = tsdBuffer.getGroup();
-			map.put("group", tsdGroup.getId());
-			map.put("service", tsdGroup.getService().getServiceId());
+			map.put("path", tsdBuffer.getHashKey());
 
 			impressionMap[i] = map;
 			i++;
