@@ -19,7 +19,7 @@ import net.locosoft.CompuCanvas.controller.util.C3Util;
 
 public class ImpressionBind extends WheelOfCypher.Cog {
 
-	private static final String _ImpressionLimit = "LIMIT 24";
+	private static final String _ImpressionLimit = "LIMIT 32";
 	private static final int _ChainCount = 8;
 	private int _chainIndex = -1;
 
@@ -38,8 +38,7 @@ public class ImpressionBind extends WheelOfCypher.Cog {
 				" UNWIND range(0,length(imps)-1) as idx" + //
 				" WITH imps[idx] as imp, idx" + //
 				" MERGE (r:Impressor { strandIndex:imp.path, chainIndex:$chainIndex, linkIndex:idx })" + //
-				" ON CREATE SET r.timeMillis = imp.timeMillis, r.value = imp.value, r.type = imp.type" + //
-				" ON MATCH SET r.timeMillis = imp.timeMillis, r.value = imp.value, r.type = imp.type" + //
+				" MERGE (imp)-[:ImpressionBind]->(r)" + //
 				"";
 			}
 
