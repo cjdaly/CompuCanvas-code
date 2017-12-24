@@ -87,14 +87,14 @@ Invoking `c3.sh` with no arguments will show a usage message which, in addition 
 
 ## new system configuration
 
-First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) Jessie image onto a microSD, [configure for ssh](https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/), boot and login (`user:pi` ; `pw:raspberry`), then run the following command to set a new password:
+First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) image onto a microSD, [configure for ssh](https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/), boot and login (`user:pi` ; `pw:raspberry`), then run the following command to set a new password:
 
     sudo passwd pi
 
 Next, run `sudo raspi-config` and:
 * in Localization Options, set Timezone
 * in Advanced Options, set Memory Split to 16 for GPU
-* tweak other settings as desired
+* tweak other settings as desired, then reboot!
 
 Finally, clone the CompuCanvas code and run the system setup script:
 
