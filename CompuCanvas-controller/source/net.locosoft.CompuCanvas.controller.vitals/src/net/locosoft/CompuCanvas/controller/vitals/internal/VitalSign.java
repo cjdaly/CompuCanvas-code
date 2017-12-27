@@ -139,11 +139,14 @@ public abstract class VitalSign {
 		}
 	}
 
-	private static final double _SystemTempMax = 78.0;
-
 	public static class CPUTemp extends VitalSign {
-		public CPUTemp(TSDGroup group) {
+		private float _CPUTemp_Warn;
+		private float _CPUTemp_Max;
+
+		public CPUTemp(TSDGroup group, VitalsService vitalsService) {
 			super("system.temp.CPU", "Celsius", TSDType.Double, group);
+			_CPUTemp_Warn = vitalsService.serviceGetConfigFloat("CPU.temp.warn", (float) 76.0);
+			_CPUTemp_Max = vitalsService.serviceGetConfigFloat("CPU.temp.stop", (float) 79.0);
 		}
 
 		public void update(Date date) {
@@ -155,7 +158,10 @@ public abstract class VitalSign {
 			int cpuTemp1000 = C3Util.parseInt(processOut.toString().trim(), -1);
 			double cpuTemp = (double) cpuTemp1000 / 1000.0;
 			_buffer.update(date.getTime(), cpuTemp);
-			if (cpuTemp > _SystemTempMax) {
+			if (cpuTemp >= _CPUTemp_Warn) {
+				C3Util.log("!!! CPU temp: " + cpuTemp + "C ; C3 will stop at " + _CPUTemp_Max + "!");
+			}
+			if (cpuTemp >= _CPUTemp_Max) {
 				C3Util.log("!!! CPU temp: " + cpuTemp + "C ; stopping C3 now!");
 				C3Util.stopC3();
 			}
@@ -163,8 +169,13 @@ public abstract class VitalSign {
 	}
 
 	public static class GPUTemp extends VitalSign {
-		public GPUTemp(TSDGroup group) {
+		private float _GPUTemp_Warn;
+		private float _GPUTemp_Max;
+
+		public GPUTemp(TSDGroup group, VitalsService vitalsService) {
 			super("system.temp.GPU", "Celsius", TSDType.Double, group);
+			_GPUTemp_Warn = vitalsService.serviceGetConfigFloat("GPU.temp.warn", (float) 76.0);
+			_GPUTemp_Max = vitalsService.serviceGetConfigFloat("GPU.temp.stop", (float) 79.0);
 		}
 
 		private Pattern _gpuTempPattern = Pattern.compile("temp=([0-9.]+)'C");
@@ -180,7 +191,10 @@ public abstract class VitalSign {
 				String gpuTempText = matcher.group(1);
 				double gpuTemp = C3Util.parseDouble(gpuTempText, -1);
 				_buffer.update(date.getTime(), gpuTemp);
-				if (gpuTemp > _SystemTempMax) {
+				if (gpuTemp >= _GPUTemp_Warn) {
+					C3Util.log("!!! GPU temp: " + gpuTemp + "C ; C3 will stop at " + _GPUTemp_Max + "!");
+				}
+				if (gpuTemp >= _GPUTemp_Max) {
 					C3Util.log("!!! GPU temp: " + gpuTemp + "C ; stopping C3 now!");
 					C3Util.stopC3();
 				}

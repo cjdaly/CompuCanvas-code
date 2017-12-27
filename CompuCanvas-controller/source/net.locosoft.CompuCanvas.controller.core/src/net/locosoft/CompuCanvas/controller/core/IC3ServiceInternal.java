@@ -31,6 +31,8 @@ public interface IC3ServiceInternal extends IC3Service {
 
 	public int serviceGetConfigInt(String keySuffix, int defaultValue);
 
+	public float serviceGetConfigFloat(String keySuffix, float defaultValue);
+
 	public String serviceGetContentDir();
 
 	public boolean serviceIsLoggingEnabled(String keySuffix);

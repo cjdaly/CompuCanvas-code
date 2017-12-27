@@ -66,6 +66,11 @@ public abstract class AbstractC3Service implements IC3ServiceInternal {
 		return C3Util.parseInt(value, defaultValue);
 	}
 
+	public final float serviceGetConfigFloat(String keySuffix, float defaultValue) {
+		String value = serviceGetConfig(keySuffix, "");
+		return C3Util.parseFloat(value, defaultValue);
+	}
+
 	public String serviceGetContentDir() {
 		return C3Util.getC3ContentDir() + "/service/" + getServiceId();
 	}
