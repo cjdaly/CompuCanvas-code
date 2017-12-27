@@ -87,7 +87,7 @@ Invoking `c3.sh` with no arguments will show a usage message which, in addition 
 
 ## new system configuration
 
-First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) image onto a microSD, [configure for ssh](https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/), boot and login (`user:pi` ; `pw:raspberry`), then run the following command to set a new password:
+First, burn [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) image onto a microSD; [enable ssh login](https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/) by creating an emtpy file named `ssh` at the top-level; boot and login (`user:pi` ; `pw:raspberry`); then run the following command to set a new password:
 
     sudo passwd pi
 
