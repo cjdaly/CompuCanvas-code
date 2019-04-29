@@ -11,7 +11,7 @@
 ####
 
 function espeaker() {
-  espeak "$@" 2>/dev/null
+  espeak -a 20 "$@" 2>/dev/null
 }
 
 IP_ADDR=`hostname -I`
@@ -42,5 +42,5 @@ espeaker "repeating I P address"
 espeaker -s 100 "$ESPEAK_IP_ADDR"
 sleep 1
 
-blinkstick --index 0 blue
-blinkstick --index 1 green
+blinkstick --index 0 --limit 5 blue
+blinkstick --index 1 --limit 5 green
